@@ -1,3 +1,4 @@
+from cProfile import label
 from tkinter import CASCADE
 from turtle import home
 from django.db import models
@@ -10,12 +11,12 @@ class Client(models.Model):
         db_table = 'core_client'
     
 
-    first_name = models.CharField(max_length=20, null=False, blank=False)
-    last_name = models.CharField(max_length=20, null=False, blank=False)
-    email = models.EmailField()
-    DOB = models.DateField()
-    mobile = models.IntegerField()
-    home_phone = models.IntegerField()
+    first_name = models.CharField(max_length=50, null=False, blank=False)
+    last_name = models.CharField(max_length=50, null=True, blank=True)
+    email = models.EmailField(null=False, blank=False, unique=True)
+    DOB = models.DateField(null=True, blank=True)
+    mobile = models.IntegerField(null=True, blank=True, unique=True)
+    home_phone = models.IntegerField(null=True, blank=True, unique=True)
 
     def __str__(self):
         return self.first_name
@@ -36,6 +37,7 @@ class RemedialClientInfo(models.Model):
     emergency_contact_number = models.IntegerField()
     emergency_contact_name = models.TextField()
 
-
+    def __str__(self):
+        return self.client.first_name
 class RemedialMedicalHistory(models.Model):
     pass

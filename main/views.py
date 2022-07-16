@@ -1,3 +1,4 @@
+import email
 from lib2to3.pgen2 import token
 from urllib import response
 from django.shortcuts import render, redirect
@@ -18,7 +19,8 @@ from django.conf import settings
 
 from django.http import HttpResponse
 from django.template import loader, RequestContext
-
+import main.models as m
+import main.forms as f
 import jwt 
 
 import json
@@ -134,9 +136,27 @@ def check_in(request):
 
 
 def customer_check_in_form(request):
-    context = {}
+    if request.method == "POST":
+        form = f.CustomerCheckInForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            redirect("/form_submitted/")
+        
+        # m.objects.filter()
+    else:
+        form = f.CustomerCheckInForm()
+
+    context = {
+        'form':form
+    }
     return render(request, 'form/customer_check_in_form.html', context)
 
 def remedial_check_in_form(request):
+    context = {}
+    return render(request, 'form/remedial_check_in_form.html', context)
+
+
+def form_submitted(request):
     context = {}
     return render(request, 'form/remedial_check_in_form.html', context)
