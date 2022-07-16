@@ -1,0 +1,39 @@
+{% extends "main/layout.html"%}
+
+{% block title %}Customers{% endblock %}
+
+{%block head_extra%}
+
+    <style>
+        #search-card{
+            height: 100px;
+        }
+
+        #customer-list-card{
+            height: 400px;
+        }
+
+        .cards{
+            border-radius: 5px;
+            background: #FFFFFF;
+            box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+        }
+
+    </style>
+{%endblock%}
+
+{%block content%}
+
+    <div class="grid">
+
+        <div id="search-card" class="cards g-col-12">
+            
+        </div>
+
+        <div id="customer-list-card" class="cards g-col-12">
+
+        </div>
+        
+    </div>
+
+{%endblock%}

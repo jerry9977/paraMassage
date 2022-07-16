@@ -1,0 +1,18 @@
+$primary-font: "Open Sans", sans-serif;          /* IJV 20220321  -  added for the system wide font typefaces */
+$primary-button-font: "Open Sans", sans-serif;   /* IJV 20220321  -  added for the system wide font typefaces, currently unused */
+$primary-background-color: var(--primary-colour);            /* IJV 20220328  -  added for system wide secondary hover color on buttons etc. */
+$default-hyperlink-hover-color: #ED7E22;                  /* IJV 20220617  -  added for system wide default hover color on hyperlinks. */
+$secondary-button-background-color: #FFFFFF;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+$secondary-button-background-hover: #ED7E22;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+$secondary-button-foreground-color: #363636;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+$secondary-button-foreground-hover: #FFFFFF;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+
+$primary-text-colour: #FFFFFF;
+$primary-button-colour: #363636;
+
+$secondary-colour: #2F2F2F;
+$secondary-text-colour: #FFFFFF;
+
+$tertiary-colour: #A8A8A8;
+$tertiary-text-colour: #2F2F2F;
+

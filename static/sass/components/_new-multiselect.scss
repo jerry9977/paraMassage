@@ -1,0 +1,163 @@
+.snf5-secondary-button-left-arrow{
+    background-image: url('../icons/arrow-left-icon.svg');
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    padding-left: 30px;
+    width: 80px;
+}
+
+.snf5-secondary-button-left-arrow:hover{
+    background-image: url('../icons/arrow-left-icon-white.svg');
+
+}
+
+.snf5-secondary-button-right-arrow{
+    background-image: url('../icons/arrow-right-icon.svg');
+    background-repeat: no-repeat;
+    background-position: 80px center;
+    padding-right: 30px;
+    width: 80px;
+}
+
+.snf5-secondary-button-right-arrow:hover{
+    background-image: url('../icons/arrow-right-icon-white.svg');
+
+}
+
+
+
+
+/* select list */
+
+.snf5-select-list{
+    width: 415px;
+    height: 500px;
+    border: 1px solid #C4C4C4;
+    border-radius: 5px;
+}
+
+.snf5-select-list-search{
+    /*display: flex;*/
+
+    /*align-items: center;
+    justify-content: space-between;*/
+    width: 100%;
+    border-bottom: 1px solid #C4C4C4;
+    height: 40px;
+}
+
+.snf5-select-list-amount{
+    position: absolute;
+    height: 40px;
+    width: fit-content;
+    padding-left:20px;
+    line-height: 40px !important;
+}
+
+.snf5-select-list-filter{
+    position: absolute;
+    height: 40px;
+    width: fit-content;
+}
+
+.snf5-select-list-filter > input{
+    width: 50px;
+    height: 100%;
+    margin-left: 290px;
+    padding: 0;
+    padding-left: 60px;
+    border:none;
+    outline: none;
+    transition:margin-left 0.5s, width 0.5s;
+    border-radius: 5px;
+    /*transition:margin-right 3s;*/
+}
+
+.snf5-select-list-filter > input:focus{
+    margin-left: 0px;
+    width:320px;
+}
+
+.snf5-select-list-options{
+    display: inline-block;
+    width: 100%;
+    height: 460px;
+    overflow: auto;
+    
+}
+.snf5-select-list-option{
+    display:flex;
+    width: fit-content;
+    height: fit-content;
+    margin-left:35px;
+    margin-right:35px;
+}
+
+.snf5-select-list-option > .snf5-select-container{
+    padding-left: 50px;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.snf5-select-list-option-all{
+    display:flex;
+    width: fit-content;
+    height: fit-content;
+    margin-left:35px;
+    margin-right:35px;
+}
+
+
+.snf5-select-list-option-all > .snf5-select-container{
+    padding-left: 50px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+.snf5-select-list-option .snf5-checkmark{
+    top: -2px;
+}
+
+
+.snf5-select-list-options::-webkit-scrollbar {
+    width: 6px;
+    background-color: #E5E5E5;
+}
+
+.snf5-select-list-options::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.snf5-select-list-options::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 20px 0px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+}
+
+.snf5-select-list-wrapper{
+    display: flex;
+    width: 1000px;
+    height: 500px;
+}
+
+.snf5-select-list-buttons{
+    width:200px;
+    padding-top: 150px;
+}
+.snf5-select-list-buttons div{
+    margin-top:20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+// use in component new multi-select
+.snf5-input-search{
+    background-image: url('../icons/search-icon.svg');
+    background-repeat: no-repeat;
+    background-position: 30px center;
+    padding-left:60px;
+    width: 160px;
+}

@@ -1,0 +1,31 @@
+/* loading button */
+.snf5-button-loading:after{
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+
+    margin-left: -15px;
+    margin-top:10px;
+    border: 4px solid transparent;
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: snf5-button-loading-spinner 1s ease infinite;
+}
+
+@keyframes snf5-button-loading-spinner {
+    from {
+      transform: rotate(0turn);
+    }
+  
+    to {
+      transform: rotate(1turn);
+    }
+}
+
+/* useful quick css */
+.snf5-hidden {
+    display: none;
+    visibility: hidden;
+}
+

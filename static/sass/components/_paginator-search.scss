@@ -1,0 +1,49 @@
+
+
+/* private css for paginator page*/
+
+._snf5-search-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+._snf5-paginator-container{
+    display: inline;
+    float: right;
+}
+
+._snf5-search-title{
+    margin-bottom: 5px;
+}
+
+._snf5-search-field{
+    width: 200px;
+    margin-bottom: 14px;
+    margin-right: 20px;
+}
+
+._snf5-search-input{
+    width: calc(100%);
+}
+
+._snf5-select-input{
+    width: calc(100%);
+}
+
+._snf5-field-inline{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+._snf5-search-button{
+    margin: 40px 0;
+}
+._snf5-list-container{
+    width: fit-content;
+}
+/* end of private css for paginator page */
+
+
+
+
+

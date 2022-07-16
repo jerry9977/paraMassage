@@ -1,0 +1,63 @@
+/* dialog */
+.snf5-dialog {
+    font-family: var(--primary-font) !important;
+    padding: 0;
+    background-color: white;
+    border:none !important;
+    border-radius: 8px 8px 8px 8px;
+    font-size: 14px;
+    -webkit-box-shadow: 18px 25px 37px 3px rgba(0,0,0,0.12);
+    box-shadow: 18px 25px 37px 3px rgba(0,0,0,0.12);
+}
+
+.snf5-dialog-title {
+    font-size: 14px;
+    font-weight: 600;
+    background-color: #363636;
+    border-radius: 8px 8px 0 0;
+    color: white !important;
+    font-family: var(--primary-font) !important;
+    padding: 10px 17px !important;
+    letter-spacing: 0.3px;
+    line-height: 22px;
+    border:none;
+}
+
+.snf5-dialog-content{
+    border:none;
+    padding: 30px !important;
+}
+
+.snf5-dialog .ui-icon-closethick {
+    background: url('../icons/dialog-cross-icon.png') !important; 
+    background-repeat: no-repeat !important;
+}  
+.snf5-dialog .ui-dialog-titlebar-close{
+    margin-right: 12px;
+    border: none;
+    background-color: #363636;
+}
+
+.snf5-dialog .snf5-input{
+    font-size: 14px;
+    line-height: 19px;
+    font-family: "Open Sans";
+}
+
+.snf5-dialog ::-webkit-scrollbar {
+    width: 6px;
+    background-color: #E5E5E5;
+}
+
+.snf5-dialog ::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.snf5-dialog ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 20px 0px rgb(0 0 0 / 20%);
+    border-radius: 10px;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    outline: 0;
+}

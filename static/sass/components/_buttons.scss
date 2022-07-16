@@ -1,0 +1,68 @@
+@use '../utilities/_extends';
+
+
+// BUTTONS START
+.snf5-primary-button,
+input.snf5-primary-button[type=submit],
+input.snf5-primary-button[type=button] {
+    @extend %base-button;
+
+    min-width: 110px;
+    height: 45px;
+    background: #363636; 
+    color: white;
+    line-height: 45px;
+
+   /* override seeknfindv1 css */
+    border: none;
+}
+
+.snf5-secondary-button,
+input.snf5-secondary-button[type=submit], 
+input.snf5-secondary-button[type=button] {
+    @extend %base-button;
+    
+    min-width: 110px;
+    height: 45px;
+    background: #FFFFFF;
+    border: 1px solid #C4C4C4;
+    color: var(--secondary-button-foreground-color);
+    line-height: 43px;
+
+    /* override seeknfindv1 css */
+    margin: 0px;
+}
+
+.snf5-tertiary-button,
+input.snf5-tertiary-button[type=submit],
+input.snf5-tertiary-button[type=button] {
+    @extend %base-button;
+    
+    min-width: 80px;
+    height: 32px;
+    background: #363636;
+    color: white;  
+    line-height: 32px;
+
+    /* override seeknfindv1 css */
+    margin: 0px;
+}
+
+.snf5-primary-button:hover,
+input.snf5-primary-button[type=submit]:hover,
+input.snf5-primary-button[type=button]:hover,
+.snf5-tertiary-button:hover,
+input.snf5-tertiary-button[type=submit]:hover,
+input.snf5-tertiary-button[type=button]:hover {
+    background-color: #ED7E22;
+}
+
+
+.snf5-secondary-button:hover,
+input.snf5-secondary-button[type=submit]:hover, 
+input.snf5-secondary-button[type=button]:hover {
+    background-color: #ED7E22;
+    border-color: #ED7E22;
+    color: #FFFFFF;
+}
+// BUTTONS END

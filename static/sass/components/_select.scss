@@ -1,0 +1,157 @@
+@use '../utilities/_extends';
+
+// default select icon css properties
+%select-icon{
+    position: absolute;
+    font-size: 30px;
+    line-height: 32px;
+    font-weight: 100;
+    transform: rotate(90deg);
+    right: 10px;
+}
+
+
+
+
+/* select options */
+.snf5-select-option-wrapper{
+    @extend %no-highlight;
+    position: relative;
+    width: 200px;
+
+    
+
+    ::-webkit-scrollbar{
+        width: 6px;
+        background-color: #E5E5E5;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        box-shadow: inset 0 0 20px 0px rgb(0 0 0 / 20%);
+        border-radius: 10px;
+    }
+}
+
+// end of select options
+
+
+
+// selected div
+.snf5-selected-option{
+    @extend %base-input;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 30px 0 15px;
+    cursor: pointer;
+    background-color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+
+    // up down icon css
+    &:after{
+        @extend %select-icon;
+        opacity: 1;
+        content:"\203A";
+        top: 0px;
+    }
+
+    &:before{
+        @extend %select-icon;
+        opacity: 0;
+        content:"\2039";
+    }
+
+    &.snf5-selected-option-active:after{
+        opacity: 0;
+    }
+
+    &.snf5-selected-option-active:before{
+        opacity: 1;
+    }
+}
+
+
+
+// select drop down list
+.snf5-select-option-list{
+    @extend %base-input;
+
+    position: absolute;
+    display: none;
+    cursor: pointer;
+    background-color: white;
+
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    z-index: 999;
+    max-height: 300px;
+    overflow: auto;
+
+    > li{
+        min-height: 30px;
+        word-wrap: break-word;
+        padding: 0 15px;
+        line-height: 30px;
+        
+    }
+
+    > li:hover{
+        background-color: #eeeeee;
+    }
+
+    > li:focus{
+        background-color: #eeeeee;
+        outline: none;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* search select */
+
+// search select drop down icon
+.snf5-select-icon{
+    cursor: pointer;
+    font-family: "Open sans";
+
+    &:after{
+        @extend %select-icon;
+        opacity: 1;
+        content:"\203A";
+    }
+
+    &:before{
+        @extend %select-icon;
+        opacity: 0;
+        content:"\2039";
+    }
+
+    &.snf5-selected-option-active:after{
+        opacity: 0;
+    }
+
+    &.snf5-selected-option-active:before{
+
+        opacity: 1;
+    }
+    
+}
+
+/* end of search select */
+

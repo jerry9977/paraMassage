@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-migrate-1.4.1.js' %}"></script>
+        <!-- Vue -->
+        {% if DEBUG %}
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.global.js"></script>
+        {% else %}
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.global.prod.js"></script>
+        {% endif %}
+
+        <!-- Axios -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <!-- open sans -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,700&display=swap">
+
+
+        <script type="text/javascript" src="{%static 'lib/bootstrap/bootstrap.js'%}"></script>
+        <script type="text/javascript" src="{%static 'js/toast.js'%}"></script>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+        <link rel='stylesheet' type='text/css' href="{%static 'global_css/global.css'%}" />
+        {% block head_extra %}{% endblock %}
+
+
+        
+    </head>
+
+    <body>
+        <div id="header"></div>
+          <div id="main-content container h-100">
+            <div id="app" class="grid" v-cloak>
+              <div class="g-col-12 g-col-md-6">
+            
+                <div style="width: 50%; margin-left: auto; margin-right: auto; margin-top: 25%;">
+            
+                  
+                  <form method="POST">
+                    {% csrf_token %}
+                    <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
+                    <div class="form-floating mb-3 input-group-sm">
+                      <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Username" >
+                      <label for="floatingInput">username</label>
+                    </div>
+              
+                    <div class="form-floating mb-3">
+                        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" >
+                        <label for="floatingPassword">Password</label>
+                    </div>
+              
+                  
+              
+                    <div class="pt-1 mb-4">
+                      <button class="btn btn-outline-primary" type="submit" >Login</button>
+                    </div>
+              
+                    <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Forgot password? Contact..</a></p>
+                  </form>
+
+                </div>
+                  
+              </div>
+              
+              <div class="d-none d-md-block g-col-md-6 order-3">
+                <img src="{% static 'img/login_cover.jpg' %}"
+                alt="Login image" class="w-100 vh-100" style="object-fit:cover; object-position: left;">
+            
+              </div>
+            
+            </div>
+            
+            <script>
+                $(document).ready(function(){
+
+                    var error = {{error|safe}};
+                    if(error){
+                        
+                        openErrorToast({
+                            message:error
+                        })
+                    }
+                })
+              
+            </script>
+            <!-- <script>
+            
+              const app = Vue.createApp({
+            
+                  data() {
+                      return {
+                          username: null,
+                          password: null,
+                      }
+                  },
+            
+                  methods: {
+                      loginRequest(){
+                        let url = "../api/login/"
+                        let data = {
+                          "username":this.username,
+                          "password":this.password
+                        }
+                        removeToast($("#loading-toast"))
+                        openLoadingToast({
+                          id:"loading-toast",
+                          message: "Waiting for response..."
+                        })
+                        
+                        axios
+                          .post(url, data)
+                          .then(response =>{
+                            removeToast($("#loading-toast"))
+                          })
+                          .then(response => {
+                            window.location.href = '../dashboard/';
+                          })
+                          .catch(function (error) {
+                            console.log(error)
+                            removeToast($("#loading-toast"))
+                            openErrorToast({
+                              message:"Failed to contact server."
+                            })
+                          });
+                          
+            
+                      }
+                  }
+            
+              })
+            
+              app.config.compilerOptions.delimiters = ['[[', ']]'];
+              app.config.devtools = true
+              app.mount("#app")
+            
+            </script> -->
+          </div>
+
+        <!-- toast wrapper -->
+        <div id="_snf5-toast-message-global-wrapper" class="" ></div>
+
+        <div id="footer"></div>
+    </body>
+
+</html>
+
+
+{%block content%}
+
+
+{%endblock%}

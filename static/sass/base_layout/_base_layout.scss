@@ -1,0 +1,17 @@
+
+body{
+    margin: 0px;
+    padding: 0px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--primary-font);
+    // overflow-y: scroll;
+    // font-size: 10px;
+}
+
+[v-cloak] {display: none}
+
+#main-content{
+    
+}

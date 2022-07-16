@@ -1,0 +1,111 @@
+// @use 'components/_buttons';
+// @use 'components/_checkbox-radio-btns';
+// @use 'components/_confirmation-dialog';
+// @use 'components/_dialog';
+// @use 'components/_ellipse-dropdown';
+@use 'components/_fonts';
+// @use 'components/_inputs';
+// @use 'components/_misc';
+// @use 'components/_new-multiselect';
+// @use 'components/_paginator-search';
+// @use 'components/_paginator';
+// @use 'components/_select';
+// @use 'components/_tables';
+
+@use 'components/toast';
+@use 'base_layout/base_layout';
+@use 'base_layout/_main_header';
+@use 'base_layout/_form_header';
+
+// bootstrap 
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "bootstrap/functions";
+
+
+
+
+
+// 2. Include any default variable overrides here
+$enable-grid-classes: false;
+$enable-cssgrid: true;
+$font-family-base: "'Open Sans'";
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "bootstrap/variables";
+
+// 4. Include any default map overrides here
+
+// $form-floating-height: add(2.5rem, $input-height-border);
+// $form-floating-input-padding-t:   0;
+
+
+
+// 5. Include remainder of required parts
+@import "bootstrap/maps";
+@import "bootstrap/mixins";
+@import "bootstrap/root";
+@import "bootstrap/reboot";
+
+// 6. Optionally include any other parts as needed
+@import "bootstrap/utilities";
+@import "bootstrap/utilities/api";
+@import "bootstrap/containers";
+@import "bootstrap/grid";
+
+@import "bootstrap/forms";
+
+@import "bootstrap/card";
+@import "bootstrap/buttons";
+@import "bootstrap/nav";
+// @import "bootstrap/bootstrap";
+
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+
+// 8. Add additional custom code here
+
+/* Define colours to use through css */
+:root {
+    --primary-font: "Open Sans", sans-serif;          /* IJV 20220321  -  added for the system wide font typefaces */
+    --primary-button-font: "Open Sans", sans-serif;   /* IJV 20220321  -  added for the system wide font typefaces, currently unused */
+    --primary-background-color: var(--primary-colour);            /* IJV 20220328  -  added for system wide secondary hover color on buttons etc. */
+    --default-hyperlink-hover-color: #ED7E22;                  /* IJV 20220617  -  added for system wide default hover color on hyperlinks. */
+    --secondary-button-background-color: #FFFFFF;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+    --secondary-button-background-hover: #ED7E22;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+    --secondary-button-foreground-color: #363636;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+    --secondary-button-foreground-hover: #FFFFFF;              /* IJV 20220401  -  added for the .report_form multi-select buttons */
+
+	--primary-text-colour: #FFFFFF;
+	--primary-button-colour: #363636;
+
+	--secondary-colour: #2F2F2F;
+	--secondary-text-colour: #FFFFFF;
+
+	--tertiary-colour: #A8A8A8;
+	--tertiary-text-colour: #2F2F2F;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <script type="text/javascript" src="{% static 'js/jquery-1.12.4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/jquery-migrate-1.4.1.js' %}"></script>
+
+
+        <!-- Vue -->
+        {% if DEBUG %}
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.global.js"></script>
+        {% else %}
+            <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.global.prod.js"></script>
+        {% endif %}
+
+        <!-- Axios -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+        <!-- open sans -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,700&display=swap">
+
+        <script type="text/javascript" src="{%static 'lib/bootstrap/bootstrap.js'%}"></script>
+        <script type="text/javascript" src="{%static 'js/toast.js'%}"></script>
+        <link rel='stylesheet' type='text/css' href="{%static 'global_css/global.css'%}" />
+        {% block head_extra %}{% endblock %}
+
+
+        
+    </head>
+
+    <body>
+
+        <div id="core-content-wrapper">
+            <div id="core-content" class="w-100 h-100">
+                <div id="form-menu-bar" class="">
+                    <div class="container w-100 h-100">
+                        <div id="menu-wrapper">
+                            <div id="form-logo-wrapper">
+                                <img src="{% static 'img/logo.png' %}"
+                            alt="Logo" class="" height="100" style="">
+                            </div>
+                            <div id="form-menu-title">{% block title %}{% endblock %}</div>
+                        </div>
+                    </div>
+                    
+
+                    
+                </div>
+                <div id="" class="container w-100 h-100">
+                        {% block content %}{% endblock %}
+                </div>
+            </div>
+            
+        </div>
+        
+        
+
+        <!-- toast wrapper -->
+        <div id="_snf5-toast-message-global-wrapper" class="" ></div>
+
+        <div id="footer"></div>
+    </body>
+
+</html>

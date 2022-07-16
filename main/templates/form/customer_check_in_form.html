@@ -1,0 +1,56 @@
+{% extends "form/layout.html"%}
+
+{% block title %}Client Intake Form{% endblock %}
+
+{%block head_extra%}
+<style>
+    
+</style>
+{%endblock%}
+
+{%block content%}
+<div id="form-card">
+    <div class="cutsomer-form-wrapper">
+        <form>
+            <div class="grid"  style="row-gap: 20px;">
+
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput" class="form-label fw-semibold">First Name</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="First Name">
+                </div>
+
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput2" class="form-label fw-semibold">Last Name</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Last Name">
+                </div>
+
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput2" class="form-label fw-semibold">DOB</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="DOB">
+                </div>
+
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput" class="form-label fw-semibold">Email</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Email">
+                </div>
+                
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput2" class="form-label fw-semibold">Mobile</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Mobile">
+                </div>
+
+                <div class="g-col-12 g-col-md-6">
+                    <label for="formGroupExampleInput2" class="form-label fw-semibold">Home Phone</label>
+                    <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Home Phone">
+                </div>
+
+                
+            </div>
+            <div style="margin-top: 40px;">
+                <button class="btn btn-primary" type="submit" >Login</button>
+            </div>
+        </form>
+        
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,42 @@
+@use '_mixins' as mixins;
+@use '_variables' as variables;
+
+// disable text highlight
+%no-highlight {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+
+
+
+// base button
+%base-button {
+    @extend %no-highlight;
+    @include mixins.border-radius;
+    display: inline-block;
+    width: fit-content;
+    padding: 0 15px;
+    box-sizing: border-box;
+    font-size: 12px;
+    font-family: variables.$primary-font;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+// base input
+%base-input {
+    @include mixins.border-radius;
+    box-sizing: border-box;
+    border: 1px solid #C4C4C4;
+    color: #000000;
+    font-family: variables.$primary-font;
+    font-size: 14px;
+    font-weight: 400;
+}

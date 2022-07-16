@@ -1,0 +1,100 @@
+
+/* paginator */
+
+.snf5-paginator{
+    /* display: inline-block; */
+    display: flex;
+    flex-direction: row;
+    height: 32px;
+    font-family: var(--primary-font);
+    font-size: 14px;
+    line-height: 18px;
+    min-width: 240px;
+    /* max-width: 360px; */
+    justify-content: space-between;
+}
+
+
+.snf5-paginator-nav{
+    display: inline-block;
+    padding: 6px 8px;
+    border: 1px solid #ADADAD;
+    border-radius: 4px;
+    cursor: pointer;
+    color:#4680F7;
+    background-color: white;
+    margin: 0 5px;
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.snf5-paginator-nav-inactive{
+    display: inline-block;
+    padding: 6px 8px;
+    border: 1px solid #F1F1F1;
+    border-radius: 4px;
+    cursor: default;
+    color: #5A5A5A;
+    background-color: white;
+    margin: 0 5px;
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+
+.snf5-paginator-page{
+    display: inline-block;
+    min-width: 19px;
+    padding: 6px 8px;
+    border: 1px solid #beb2b2;
+    color:#4680F7;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+
+    margin: 0 5px;
+
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+.snf5-paginator-page-inactive{
+    display: inline-block;
+    min-width: 19px;
+    padding: 6px 8px;
+    border: 1px solid #F1F1F1;
+    border-radius: 4px;
+    color: #5A5A5A;
+    background-color: white;
+    cursor: default;
+    text-align: center;
+
+    margin: 0 5px;
+
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
+
+
+.snf5-paginator-skip:after{
+    content:"...";
+    color: #4680F7;
+    line-height: 25px;
+    font-size: 20px;
+    letter-spacing: 2px;
+
+}

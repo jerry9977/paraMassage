@@ -1,0 +1,77 @@
+
+.snf5-dropdown {
+    position: absolute;
+    background-color: white;
+
+    /* color:red; */
+    min-width: 100px;
+    /* max-width: 200px; */
+    /* right:277px; */
+    margin-top:30px;
+    max-height: 0px;
+    font-family: "Open Sans", sans-serif !important;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 10px;
+    line-height: 14px;
+    list-style: none;
+    padding: 0;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity 300ms ease;
+}
+
+.snf5-dropdown>li{
+    padding: 9px 16px 9px 16px;
+    border-bottom:1px solid #EBEBEB;
+    color: #5A5A5A;
+}
+.snf5-dropdown>li:hover {
+    color:#FF9000;
+    cursor: pointer;
+}
+.snf5-dropdown>li:active:hover {
+    background-color:#FF9000;
+    color:white;
+}
+
+.snf5-dropdown>li>a{
+    display: block;
+    color: #5A5A5A;
+
+}
+
+.snf5-dropdown>li:hover>a{
+    color:#FF9000;
+    cursor: pointer;
+}
+
+.snf5-dropdown>li:active:hover>a {
+    background-color:#FF9000;
+    color:white;
+}
+
+.snf5-dropdown> .disable{
+    color:#C4C4C4;
+}
+
+.snf5-dropdown>.disable:hover{
+    cursor:auto;
+    color:#C4C4C4;
+}
+
+.snf5-dropdown>.disable:active:hover{
+    cursor:auto;
+    background-color:white;
+    color:#C4C4C4;
+}
+
+
+
+/* shape */
+.snf5-ellipsis:after{
+    content: '\22EF';
+    font-size: 20px;
+    cursor: pointer;
+}
