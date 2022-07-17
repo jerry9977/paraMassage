@@ -1,8 +1,6 @@
-from cProfile import label
-from tkinter import CASCADE
-from turtle import home
-from django.db import models
 
+from django.db import models
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
@@ -13,7 +11,7 @@ class Client(models.Model):
 
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=50, null=True, blank=True)
-    email = models.EmailField(null=False, blank=False, unique=True)
+    email = models.EmailField(null=True, blank=True, unique=True)
     DOB = models.DateField(null=True, blank=True)
     mobile = models.IntegerField(null=True, blank=True, unique=True)
     home_phone = models.IntegerField(null=True, blank=True, unique=True)
@@ -21,6 +19,14 @@ class Client(models.Model):
     def __str__(self):
         return self.first_name
 
+    def clean(self):
+        if self.mobile is None and self.home_phone is None and self.email is None:
+            raise ValidationError({
+                "mobile":ValidationError(message=''),
+                "home_phone":ValidationError(message=''),
+                "email":ValidationError(message='')
+            })
+            
 class RemedialClientInfo(models.Model):
     class Meta:
         db_table = 'core_remedial_client_info'

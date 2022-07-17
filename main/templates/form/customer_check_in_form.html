@@ -11,7 +11,14 @@
 {%block content%}
 <div id="form-card">
     <div class="cutsomer-form-wrapper">
-        <div style="color:#959595; font-size: 12px; margin-bottom: 30px;">* Required information</div>
+        <div style="margin-bottom: 30px;">
+            <div style="color:#959595; font-size: 12px; ">* Required information</div>
+            {% for error in form.non_field_errors %}
+                    <span style="color:red">{{ error|escape }}</span>
+            {% endfor %}
+        </div>
+        
+        <!-- <div style="color:#959595; font-size: 12px; margin-bottom: 30px;">Please provide at least one contact detail. Email, mobile or home phone.</div> -->
         <form method="POST" novalidate>
             {% csrf_token %}
             <div class="grid"  style="row-gap: 20px;">
