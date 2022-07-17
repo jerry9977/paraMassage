@@ -136,10 +136,8 @@ def check_in(request):
 
 
 def customer_check_in_form(request):
-    print("=========")
     if request.method == "POST":
         form = f.CustomerCheckInForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
             form.save()
             return redirect("/form_submitted/", request)
@@ -149,16 +147,25 @@ def customer_check_in_form(request):
     context = {
         'form':form
     }
-
-    print("=====asdasd====")
     return render(request, 'form/customer_check_in_form.html', context)
 
 def remedial_check_in_form(request):
-    context = {}
+
+    if request.method =="POST":
+        form = f.RemedialCheckInForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/form_submitted/", request)
+    else:
+        form = f.RemedialCheckInForm()
+    
+    
+    context = {
+        "form":form
+    }
     return render(request, 'form/remedial_check_in_form.html', context)
 
 
 def form_submitted(request):
     context = {}
-    print("=========")
     return render(request, 'form/remedial_check_in_form.html', context)

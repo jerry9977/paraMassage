@@ -28,7 +28,8 @@ SECRET_KEY = 'django-insecure--qsy6lzawpve(7skc1s(x@d9=qvthr@vaa-n9r56yhdbjx5owv
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    '192.168.1.19'
 ]
 
 
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'main',
-    'qr_code'
+    'qr_code',
+    'jsignature'
 ]
 
 MIDDLEWARE = [
@@ -201,6 +203,10 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 
-# CSRF_COOKIE_HTTPONLY = True
-# CSRF_COOKIE_AGE = 10
+# login session age in second
 SESSION_COOKIE_AGE = 43200
+
+
+
+JSIGNATURE_WIDTH = 500
+JSIGNATURE_HEIGHT = 200

@@ -3,6 +3,8 @@ from turtle import width
 from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
+from jsignature.forms import JSignatureField
+from jsignature.widgets import JSignatureWidget
 
 import main.models as m
 from main.widget import DatePickerInput, DateTimePickerInput, TimePickerInput
@@ -34,3 +36,17 @@ class CustomerCheckInForm(forms.ModelForm):
         if mobile is None and home_phone is None and email is None:
 
             raise ValidationError(message='Please provide at least one contact detail. Mobile, Email or Home Phone')
+
+
+
+
+
+class RemedialCheckInForm(forms.ModelForm):
+    # signature = JSignatureField(widget=JSignatureWidget(jsignature_attrs={'color': '#e0b642', 'height': '200px'}), name="123")
+    class Meta:
+        model = m.RemedialClientInfo
+        fields = ["signature"]
+
+        labels= {
+            "signature": "SIGNATURE"
+        }

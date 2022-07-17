@@ -1,6 +1,8 @@
 
 from django.db import models
 from django.core.exceptions import ValidationError
+
+from jsignature.fields import JSignatureField
 # Create your models here.
 
 
@@ -15,6 +17,7 @@ class Client(models.Model):
     DOB = models.DateField(null=True, blank=True)
     mobile = models.IntegerField(null=True, blank=True, unique=True)
     home_phone = models.IntegerField(null=True, blank=True, unique=True)
+    date_created = models.DateField()
 
     def __str__(self):
         return self.first_name
@@ -39,6 +42,8 @@ class RemedialClientInfo(models.Model):
     children = models.IntegerField()
     occupation = models.TextField()
     address = models.TextField()
+
+    signature = JSignatureField()
 
     emergency_contact_number = models.IntegerField()
     emergency_contact_name = models.TextField()
