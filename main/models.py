@@ -35,18 +35,15 @@ class RemedialClientInfo(models.Model):
         db_table = 'core_remedial_client_info'
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    gender = models.TextField()
-    weight = models.DecimalField(max_digits=500, decimal_places=2)
-    height = models.DecimalField(max_digits=300, decimal_places=2)
-    martial_status = models.TextField()
-    children = models.IntegerField()
-    occupation = models.TextField()
-    address = models.TextField()
-
-    signature = JSignatureField()
-
-    emergency_contact_number = models.IntegerField()
-    emergency_contact_name = models.TextField()
+    gender = models.TextField(null=True, blank=True)
+    weight = models.DecimalField(max_digits=500, decimal_places=2, null=True, blank=True)
+    height = models.DecimalField(max_digits=300, decimal_places=2, null=True, blank=True)
+    martial_status = models.TextField(null=True, blank=True)
+    children = models.IntegerField(null=True, blank=True)
+    occupation = models.TextField(null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    emergency_contact_number = models.IntegerField(null=True, blank=True)
+    emergency_contact_name = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.client.first_name

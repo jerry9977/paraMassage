@@ -152,16 +152,19 @@ def customer_check_in_form(request):
 def remedial_check_in_form(request):
 
     if request.method =="POST":
-        form = f.RemedialCheckInForm(request.POST)
-        if form.is_valid():
-            form.save()
+        remedial_form = f.RemedialCheckInForm(request.POST)
+        client_form = f.CustomerCheckInForm(request.POST)
+        if remedial_form.is_valid() and client_form.is_valid():
+            remedial_form.save()
             return redirect("/form_submitted/", request)
     else:
-        form = f.RemedialCheckInForm()
-    
+        client_form = f.CustomerCheckInForm() 
+        remedial_form = f.RemedialCheckInForm()
+        
     
     context = {
-        "form":form
+        "client_form": client_form,
+        "remedial_form":remedial_form
     }
     return render(request, 'form/remedial_check_in_form.html', context)
 

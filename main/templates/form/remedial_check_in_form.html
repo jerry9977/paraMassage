@@ -52,8 +52,16 @@
         background: transparent;
         height: 40px;
     }
+
+    .js-paint{
+        touch-action:none;
+    }
+
+    input[type="date"]{ 
+        -webkit-appearance: none;
+    }
 </style>
-{{ form.media }}
+<!-- {{ form.media }} -->
 {%endblock%}
 
 {%block content%}
@@ -61,22 +69,24 @@
     <div class="cutsomer-form-wrapper">
         <div style="margin-bottom: 30px;">
             <div style="color:#959595; font-size: 12px; ">* Required information</div>
-            {% for error in form.non_field_errors %}
+            {% for error in client_form.non_field_errors %}
+                    <span style="color:red">{{ error|escape }}</span>
+            {% endfor %}
+            {% for error in remedial_form.non_field_errors %}
                     <span style="color:red">{{ error|escape }}</span>
             {% endfor %}
         </div>
-        <!-- {{form}} -->
-        <!-- <input type="color"  class="js-color-picker  color-picker"> -->
-        <!-- <input type="range" class="js-line-range" min="1" max="72" value="1"> -->
-        <!-- <label class="js-range-value">1</label>Px -->
-        <canvas class="js-paint  paint-canvas" width="600" height="300"></canvas>
+        
+        
+
+
 
         <form method="POST" novalidate>
             {% csrf_token %}
             <div class="grid"  style="row-gap: 20px;">
                 
-
-                {% for field in form %}
+                
+                {% for field in client_form %}
                     
    
                     {% if field.errors %}
@@ -108,11 +118,55 @@
                     
                 {% endfor %}
 
+
+
+                {% for field in remedial_form %}
+                    
+   
+                    {% if field.errors %}
+                        <div class="g-col-12 g-col-md-6">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
+                            <input type="{{ field.field.widget.input_type }}" class="form-control is-invalid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        
+                    {% elif field.value %}
+                        <div class="g-col-12 g-col-md-6">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
+                            <input type="{{ field.field.widget.input_type }}" class="form-control is-valid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                            
+                        </div>
+                        
+                    {% else %}
+                        <div class="g-col-12 g-col-md-6">
+                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
+                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                        </div>
+                        
+                    {% endif %}
+                    
+                {% endfor %}
                 
+                <div class="g-col-12">
+                    <canvas class="js-paint front" width="300" height="600"></canvas>
+                    <canvas class="js-paint back" width="300" height="600"></canvas>
+                </div>
+                
+                <div id="test"></div>
             </div>
+
+            
+
             <div style="margin-top: 40px;">
                 <button class="btn btn-primary" type="submit" >Submit</button>
             </div>
+
+
         </form>
         
     </div>
@@ -120,44 +174,143 @@
 
 
 <script>
-    const paintCanvas = document.querySelector( '.js-paint' );
-    const context = paintCanvas.getContext( '2d' );
-    context.lineCap = 'round';
 
-    const colorPicker = document.querySelector( '.js-color-picker');
+    // define canvas
+    const frontCanvas = document.querySelector('.js-paint.front')
+    const frontContext = frontCanvas.getContext('2d')
+    frontContext.lineCap = 'round';
+    frontContext.strokeStyle = '#000000'; 
+    frontContext.lineWidth = 1;
+    
+    const backCanvas = document.querySelector('.js-paint.back')
+    const backContext = backCanvas.getContext('2d')
+    backContext.lineCap = 'round';
+    backContext.strokeStyle = '#000000'; 
+    backContext.lineWidth = 1;
+
+    
+    // load image
+    let frontImage = new Image();
+    let backImage = new Image();
+    frontImage.src = '../static/img/front_body.png';
+    backImage.src = '../static/img/back_body.png';
 
 
+    frontImage.onload = function(){
+        frontContext.drawImage(frontImage, 0, 0, 300 ,600);
+    }
 
-    const lineWidthRange = document.querySelector( '.js-line-range' );
-    const lineWidthLabel = document.querySelector( '.js-range-value' );
+    backImage.onload = function(){
+        backContext.drawImage(backImage, 0, 0, 300 ,600);
+    }
+    
 
-    context.strokeStyle = '#000000'; 
-    context.lineWidth = 1;
+    // initialize state 
     let x = 0, y = 0;
     let isMouseDown = false;
+    let isBack = false;
+    let isFront = false;
+    let pointerAmount = []
 
-    const stopDrawing = () => { isMouseDown = false; }
+    const stopDrawing = () => { 
+        isMouseDown = false; 
+        isBack = false; 
+        isFront=false;
+        pointerAmount = [];
+    }
+
     const startDrawing = event => {
         isMouseDown = true;   
-    [x, y] = [event.offsetX, event.offsetY];  
+        [x, y] = [event.offsetX, event.offsetY];  
     }
+
+    const drawingFront = event => {
+        pointerAmount.push(event)
+
+        let eventAmount = 0
+        for(let i = 0 ; i < pointerAmount.length; i++){
+            if(event instanceof PointerEvent){
+                eventAmount ++
+            }
+        }
+
+        if(eventAmount > 1){
+            frontCanvas.style.touchAction = "auto"
+            isMouseDown = false; 
+        }else{
+            frontCanvas.style.touchAction = "None"
+            isFront = true
+        }
+        
+    }
+
+    const drawingBack = event => {
+        pointerAmount.push(event)
+
+        let eventAmount = 0
+        for(let i = 0 ; i < pointerAmount.length; i++){
+            if(event instanceof PointerEvent){
+                eventAmount ++
+            }
+        }
+
+        if(eventAmount > 1){
+            backCanvas.style.touchAction = "auto"
+            isMouseDown = false; 
+        }else{
+            backCanvas.style.touchAction = "None"
+            isBack = true
+        }
+    }
+
     const drawLine = event => {
         if ( isMouseDown ) {
             const newX = event.offsetX;
             const newY = event.offsetY;
+
+            let context;
+
+            if(isFront){
+                context = frontContext
+            }else{
+                context = backContext
+            }
+            
             context.beginPath();
             context.moveTo( x, y );
             context.lineTo( newX, newY );
             context.stroke();
-            //[x, y] = [newX, newY];
+            
             x = newX;
             y = newY;
         }
     }
 
-    paintCanvas.addEventListener( 'mousedown', startDrawing );
-    paintCanvas.addEventListener( 'mousemove', drawLine );
-    paintCanvas.addEventListener( 'mouseup', stopDrawing );
-    paintCanvas.addEventListener( 'mouseout', stopDrawing );
+    
+    frontCanvas.addEventListener( 'mousedown', startDrawing );
+    frontCanvas.addEventListener( 'mousedown', drawingFront );
+    frontCanvas.addEventListener( 'mousemove', drawLine );
+    frontCanvas.addEventListener( 'mouseup', stopDrawing );
+    frontCanvas.addEventListener( 'mouseout', stopDrawing );
+
+    backCanvas.addEventListener( 'mousedown', startDrawing );
+    backCanvas.addEventListener( 'mousedown', drawingBack );
+    backCanvas.addEventListener( 'mousemove', drawLine );
+    backCanvas.addEventListener( 'mouseup', stopDrawing );
+    backCanvas.addEventListener( 'mouseout', stopDrawing );
+
+    frontCanvas.addEventListener( 'pointerdown', startDrawing );
+    frontCanvas.addEventListener( 'pointerdown', drawingFront );
+    frontCanvas.addEventListener( 'pointermove', drawLine );
+    frontCanvas.addEventListener( 'pointerup', stopDrawing );
+    frontCanvas.addEventListener( 'pointerout', stopDrawing );
+
+    backCanvas.addEventListener( 'pointerdown', startDrawing );
+    backCanvas.addEventListener( 'pointerdown', drawingBack );
+    backCanvas.addEventListener( 'pointermove', drawLine );
+    backCanvas.addEventListener( 'pointerup', stopDrawing );
+    backCanvas.addEventListener( 'pointerout', stopDrawing );
+
+
 </script>
 {%endblock%}
