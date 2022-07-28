@@ -42,8 +42,8 @@ class CustomerCheckInForm(forms.ModelForm):
 
 class RemedialCheckInForm(forms.ModelForm):
     class Meta:
-        model = m.RemedialClientInfo
+        model = m.RemedialMedicalHistory
         fields = '__all__'
-        exclude = ['client']
+        exclude = ['remedial_client_info']
 
         

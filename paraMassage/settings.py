@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'main',
     'qr_code',
-    'jsignature'
+    'jsignature',
+    'multiselectfield'
 ]
 
 MIDDLEWARE = [
