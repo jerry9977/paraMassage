@@ -1,5 +1,8 @@
 
 from configparser import DuplicateSectionError
+from os import F_OK
+from re import T
+from unicodedata import decimal
 from django.db import models
 from django.core.exceptions import ValidationError
 from multiselectfield import MultiSelectField
@@ -12,11 +15,31 @@ class Client(models.Model):
     
 
     first_name = models.CharField(max_length=50, null=False, blank=False)
-    last_name = models.CharField(max_length=50, null=True, blank=True)
+    last_name = models.CharField(max_length=50, null=False, blank=False)
     email = models.EmailField(null=True, blank=True, unique=True)
     DOB = models.DateField(null=True, blank=True)
-    mobile = models.IntegerField(null=True, blank=True, unique=True)
-    home_phone = models.IntegerField(null=True, blank=True, unique=True)
+    
+    mobile = models.DecimalField(   
+        null=True, 
+        blank=True, 
+        unique=True, 
+        max_digits=20, 
+        decimal_places=0, 
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+
+    home_phone = models.DecimalField(   
+        null=True, 
+        blank=True, 
+        unique=True, 
+        max_digits=20, 
+        decimal_places=0,
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
     date_created = models.DateField()
 
     def __str__(self):
@@ -29,22 +52,48 @@ class Client(models.Model):
                 "home_phone":ValidationError(message=''),
                 "email":ValidationError(message='')
             })
+        
+        
             
 class RemedialClientInfo(models.Model):
     class Meta:
         db_table = 'core_remedial_client_info'
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    gender = models.TextField(null=True, blank=True)
+    
+    health_insurance_number = models.DecimalField(
+        null=False, 
+        blank=False, 
+        unique=True, 
+        max_digits=25, 
+        decimal_places=0, 
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+
+    suffix = models.DecimalField(
+        null=False, 
+        blank=False,
+        max_digits=4, 
+        decimal_places=0, 
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+
+    gender = models.IntegerField(null=True, blank=True)
+    martial_status = models.IntegerField(null=True, blank=True)
     weight = models.DecimalField(max_digits=500, decimal_places=2, null=True, blank=True)
     height = models.DecimalField(max_digits=300, decimal_places=2, null=True, blank=True)
-    martial_status = models.TextField(null=True, blank=True)
+    
     children = models.IntegerField(null=True, blank=True)
     occupation = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
+    job = models.TextField(null=True, blank=True)
     emergency_contact_number = models.IntegerField(null=True, blank=True)
     emergency_contact_name = models.TextField(null=True, blank=True)
-    job = models.TextField(null=True, blank=True)
+    
 
     def __str__(self):
         return self.client.first_name
@@ -82,12 +131,35 @@ SYMPTOM_CHOICES = (
     (29, "INSOMNIA"),
     (30, "PREGNANCY"),
     (31, "PMS SYNDROME"),
-    (32, "SLEEP DISORDERS")
+    (32, "SLEEP DISORDERS"),
+    (33, "OTHER")
 )
 class RemedialMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_remedial_medical_history'
     remedial_client_info = models.ForeignKey(RemedialClientInfo, on_delete=models.CASCADE)
     area_of_soreness = models.TextField(null=True, blank=True)
-    reason_of_visit = models.TextField(null=True, blank=True)
+    reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES)
+    medication = models.TextField(
+        null=True, 
+        blank=True, 
+        max_length=500,
+        verbose_name="Are you currently taking any medication? If so please provide the medication name."
+    )
+    health_care = models.TextField(
+        null=True, 
+        blank=True, 
+        max_length=500,
+        verbose_name="Are you currently under the care of a health care professional? If so please provide physicians name and phone number."
+    )
+
+    additional_comments = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+    )
+    signature = models.TextField(null=False, blank=False)
+
+    def __str__(self):
+        return self.remedial_client_info.client.first_name

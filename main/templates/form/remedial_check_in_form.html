@@ -1,4 +1,5 @@
 {% extends "form/layout.html"%}
+{% load filter_tag %}
 
 {% block title %}Client Intake Form{% endblock %}
 
@@ -75,6 +76,9 @@
             {% for error in remedial_form.non_field_errors %}
                     <span style="color:red">{{ error|escape }}</span>
             {% endfor %}
+            {% for error in remedial_history_form.non_field_errors %}
+                    <span style="color:red">{{ error|escape }}</span>
+            {% endfor %}
         </div>
         
         
@@ -88,84 +92,176 @@
                 
                 {% for field in client_form %}
                     
-   
-                    {% if field.errors %}
-                        <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control is-invalid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                    <div class="g-col-12 g-col-md-6">
+                        <label  for="{{ field.id_for_label }}" 
+                                class="form-label fw-semibold">
+                                {{field.label}}
+
+                                {% if field.field.required %}
+                                    <span style="color:red;">*</span>
+                                {% endif %}
+
+                        </label>
+                        
+                        <input  type="{{ field.field.widget.input_type }}" 
+                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                id="{{ field.id_for_label }}" 
+                                name="{{field.html_name}}" 
+                                value="{{field.value|default_if_none:''}}"
+                                maxlength="{{field.field.max_length}}">
+                        
+                        {% if field.errors %} 
                             <div class="invalid-feedback">
                                 {% for error in field.errors %}
                                     {{ error|escape }}
                                 {% endfor %}
                             </div>
-                        </div>
+                        {% endif %}    
+                    </div>
+
+                {% endfor %}
+
+                {% for field in remedial_form %}
+                    
+                    <div class="g-col-12 g-col-md-6">
+                        <label  for="{{ field.id_for_label }}" 
+                                class="form-label fw-semibold">
+                                {{field.label}}
+
+                                {% if field.field.required %}
+                                    <span style="color:red;">*</span>
+                                {% endif %}
+
+                        </label>
+
+                        {%if field|fieldtype == "Select" %}
+                            <select type="{{ field.field.widget.input_type }}" 
+                                    class="form-select" 
+                                    id="{{ field.id_for_label }}" 
+                                    name="{{field.html_name}}" 
+                                    value="{{field.value|default_if_none:''}}"
+                                    maxlength="{{field.field.max_length}}">
+                                {% for value, label in field.field.widget.choices %}
+                                <option value="{{value}}">{{label}}</option>
+                                {% endfor %}
+                            </select>
+                        {% else %}
+                            <input  type="{{ field.field.widget.input_type }}" 
+                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                id="{{ field.id_for_label }}" 
+                                name="{{field.html_name}}" 
+                                value="{{field.value|default_if_none:''}}"
+                                maxlength="{{field.field.max_length}}">
+                        {%endif%}
                         
                         
-                    {% elif field.value %}
-                        <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control is-valid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
-                            
-                        </div>
-                        
-                    {% else %}
-                        <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
-                        </div>
-                        
-                    {% endif %}
+                        {% if field.errors %} 
+                            <div class="invalid-feedback">
+                                {% for error in field.errors %}
+                                    {{ error|escape }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}    
+                    </div>
                     
                 {% endfor %}
 
 
-
-                {% for field in remedial_form %}
-                    
+                {% for field in remedial_history_form %}
                     {% if field.field.choices %}
                         <div class="g-col-12 fw-semibold"> Please tick if you have any following symptoms / conditions </div>
                         {% for value, text in field.field.choices %}
-                            <div class="form-check g-col-6 g-col-sm-6 g-col-md-4 g-col-xl-3">
+                            <div class="form-check g-col-6 g-col-sm-6 g-col-md-6 g-col-xl-3">
                                 <input class="form-check-input" id="id_providers_{{ forloop.counter0 }}" name="{{ field.name }}" type="checkbox" value="{{ value }}">
                                 <label class="form-check-label" for="id_providers_{{ forloop.counter0 }}">{{ text }}</label>
                             </div>
                         {% endfor %}
-        
-                    {% elif field.errors %}
-                        <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control is-invalid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
-                            <div class="invalid-feedback">
-                                {% for error in field.errors %}
-                                    {{ error|escape }}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        
-                        
-                    {% elif field.value %}
-                        <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control is-valid" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                    
+                    {% elif field.field.widget.attrs.input_type == "textarea" %}
+                        <div class="g-col-12 ">
+                            <label  for="{{ field.id_for_label }}" 
+                                    class="form-label fw-semibold">
+                                    {{field.label}}
+
+                                    {% if field.field.required %}
+                                        <span style="color:red;">*</span>
+                                    {% endif %}
+
+                            </label>
+                            
+                            <textarea
+                                    class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                    id="{{ field.id_for_label }}" 
+                                    name="{{field.html_name}}" 
+                                    value=""
+                                    rows="{{ field.field.widget.attrs.rows }}"
+                                    maxlength="{{field.field.max_length}}"
+                                    {% if field.field.widget.attrs.sore_area or field.field.widget.attrs.signature %}hidden{% endif %}>{{field.value|default_if_none:''}}</textarea>
+                            
+                            {% if field.errors %} 
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}    
+
                             
                         </div>
-                        
+
+                        {% if field.field.widget.attrs.sore_area %}
+                           
+                            <div class="text-center text-md-start g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1" style="margin-top:-20px; margin-bottom: 20px;">
+                                <canvas class="js-paint front" width="300" height="600"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+
+                            </div>
+
+                            <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px">
+                                <canvas class="js-paint back" width="300" height="600"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+                            </div>
+                            
+                                
+                        {% elif field.field.widget.attrs.signature  %}
+                            <div class="text-md-start g-col-2" style="margin-top:-20px">
+                                <canvas class="js-paint back" width="300" height="70"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+                            </div>
+                        {% endif %}
                     {% else %}
                         <div class="g-col-12 g-col-md-6">
-                            <label for="{{ field.id_for_label }}" class="form-label fw-semibold">{{field.label}} {% if field.field.required %}<span style="color:red;">*</span>{% endif %}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{field.html_name}}" value="{{field.value|default_if_none:''}}">
+                            <label  for="{{ field.id_for_label }}" 
+                                    class="form-label fw-semibold">
+                                    {{field.label}}
+
+                                    {% if field.field.required %}
+                                        <span style="color:red;">*</span>
+                                    {% endif %}
+
+                            </label>
+                            
+                            <input  type="{{ field.field.widget.input_type }}" 
+                                    class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                    id="{{ field.id_for_label }}" 
+                                    name="{{field.html_name}}" 
+                                    value="{{field.value|default_if_none:''}}"
+                                    maxlength="{{field.field.max_length}}">
+                            
+                            {% if field.errors %} 
+                                <div class="invalid-feedback">
+                                    {% for error in field.errors %}
+                                        {{ error|escape }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}    
                         </div>
                         
                     {% endif %}
                     
                 {% endfor %}
                 
-                <div class="g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1">
-                    <canvas class="js-paint front" width="300" height="600"></canvas>
-                </div>
-                <div class="g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-5">
-                    <canvas class="js-paint back" width="300" height="600"></canvas>
-                </div>
+                
                 <!-- <div class="g-col-12"></div>
                     <input type="file" style="width: 80px;" accept="image/*;capture=camera">
                 </div> -->
