@@ -139,6 +139,7 @@ class RemedialMedicalHistory(models.Model):
         db_table = 'core_remedial_medical_history'
     remedial_client_info = models.ForeignKey(RemedialClientInfo, on_delete=models.CASCADE)
     area_of_soreness = models.TextField(null=True, blank=True)
+    # area_of_soreness_back = models.TextField(null=True, blank=True)
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES)
     medication = models.TextField(

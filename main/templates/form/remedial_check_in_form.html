@@ -281,7 +281,21 @@
 
 
 <script>
+    
+    let frontBackCanvas;
+    let signature = $("#id_signature").val();
 
+   
+
+    if($("#id_area_of_soreness").val()){
+        frontBackCanvas = JSON.parse($("#id_area_of_soreness").val())
+    }else{
+        frontBackCanvas = {
+            frontDataUrl:"",
+            backDataUrl: "",
+        }
+    }
+    
     // define canvas
     const frontCanvas = document.querySelector('.js-paint.front')
     const frontContext = frontCanvas.getContext('2d')
@@ -304,11 +318,16 @@
 
     
     // load image
+    let originalFrontImage = new Image();
+    let originalBackImage = new Image();
+
+    originalFrontImage.src = '../static/img/front_body.png';
+    originalBackImage.src = '../static/img/back_body.png';
+
     let frontImage = new Image();
     let backImage = new Image();
-    frontImage.src = '../static/img/front_body.png';
-    backImage.src = '../static/img/back_body.png';
-
+    frontImage.src = frontBackCanvas.frontDataUrl != "" ? frontBackCanvas.frontDataUrl:originalFrontImage.src;
+    backImage.src = frontBackCanvas.backDataUrl != "" ? frontBackCanvas.backDataUrl: originalBackImage.src;
 
     frontImage.onload = function(){
         frontContext.drawImage(frontImage, 0, 0, 300 ,600);
@@ -318,6 +337,16 @@
         backContext.drawImage(backImage, 0, 0, 300 ,600);
     }
     
+    if(signature){
+        
+        let signatureImage = new Image();
+        signatureImage.src = signature
+
+        signatureImage.onload = function(){
+            signatureContext.drawImage(signatureImage, 0, 0, 300, 70)
+        }
+        
+    }
 
     // initialize state 
     let x = 0, y = 0;
@@ -333,6 +362,11 @@
         isFront = false;
         isSignature = false;
         pointerAmount = [];
+
+        frontBackCanvas.backDataUrl = backCanvas.toDataURL()
+        frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
+        $("#id_signature").val(signatureCanvas.toDataURL())
+        $("#id_area_of_soreness").val(JSON.stringify(frontBackCanvas))
     }
 
     const startDrawing = event => {
@@ -408,7 +442,7 @@
 
             if(isFront){
                 context = frontContext
-            }if(isBack){
+            }else if(isBack){
                 context = backContext
             }else{
                 context = signatureContext
@@ -418,7 +452,6 @@
             context.moveTo( x, y );
             context.lineTo( newX, newY );
             context.stroke();
-            console.log(x, y)
             x = newX;
             y = newY;
         }
@@ -462,19 +495,27 @@
     signatureCanvas.addEventListener( 'pointerout', stopDrawing );
 
     function clearFrontCanvas(){
-        frontContext.clearRect(0,0,300,600)
-        frontContext.drawImage(frontImage, 0, 0, 300 ,600);
 
+        
+
+        frontContext.clearRect(0,0,300,600)
+        frontContext.drawImage(originalFrontImage, 0, 0, 300 ,600);
+        
+        frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
+        $("#id_area_of_soreness").val(JSON.stringify(frontBackCanvas))
     }
 
     function clearBackCanvas(){
-        backContext.clearRect(0,0,300,600)
-        backContext.drawImage(backImage, 0, 0, 300 ,600);
 
+        backContext.clearRect(0,0,300,600)
+        backContext.drawImage(originalBackImage, 0, 0, 300 ,600);
+        frontBackCanvas.backDataUrl = backCanvas.toDataURL()
+        $("#id_area_of_soreness").val(JSON.stringify(frontBackCanvas))
     }
 
     function clearSignatureCanvas(){
         signatureContext.clearRect(0,0,300,70)
+        $("#id_signature").val("")
     }
 </script>
 {%endblock%}

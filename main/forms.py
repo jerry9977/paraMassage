@@ -81,6 +81,7 @@ class RemedialHistoryForm(forms.ModelForm):
 
         widgets = {
             'area_of_soreness': forms.Textarea(attrs={"sore_area":True,"input_type":"textarea"}),
+            # 'area_of_soreness_back': forms.Textarea(attrs={"sore_area":True,"input_type":"textarea"}),
             'reason_of_visit': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'medication': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'health_care': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
