@@ -213,20 +213,20 @@
                            
                             <div class="text-center text-md-start g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1" style="margin-top:-20px; margin-bottom: 20px;">
                                 <canvas class="js-paint front" width="300" height="600"></canvas>
-                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+                                <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearFrontCanvas()">Reset</button>
 
                             </div>
 
                             <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px">
                                 <canvas class="js-paint back" width="300" height="600"></canvas>
-                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+                                <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearBackCanvas()">Reset</button>
                             </div>
                             
                                 
                         {% elif field.field.widget.attrs.signature  %}
                             <div class="text-md-start g-col-2" style="margin-top:-20px">
-                                <canvas class="js-paint back" width="300" height="70"></canvas>
-                                <button class="btn btn-secondary" style="width:302px" type="button">Reset</button>
+                                <canvas class="js-paint signature" width="300" height="70"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
                             </div>
                         {% endif %}
                     {% else %}
@@ -295,6 +295,13 @@
     backContext.strokeStyle = '#000000'; 
     backContext.lineWidth = 1;
 
+
+    const signatureCanvas = document.querySelector('.js-paint.signature')
+    const signatureContext = signatureCanvas.getContext('2d')
+    signatureContext.lineCap = 'round';
+    signatureContext.strokeStyle = '#000000'; 
+    signatureContext.lineWidth = 1;
+
     
     // load image
     let frontImage = new Image();
@@ -317,12 +324,14 @@
     let isMouseDown = false;
     let isBack = false;
     let isFront = false;
+    let isSignature = false;
     let pointerAmount = []
 
     const stopDrawing = () => { 
         isMouseDown = false; 
         isBack = false; 
-        isFront=false;
+        isFront = false;
+        isSignature = false;
         pointerAmount = [];
     }
 
@@ -370,6 +379,26 @@
         }
     }
 
+    const drawingSignature = event => {
+        pointerAmount.push(event)
+
+        let eventAmount = 0
+        for(let i = 0 ; i < pointerAmount.length; i++){
+            if(event instanceof PointerEvent){
+                eventAmount ++
+            }
+        }
+
+        if(eventAmount > 1){
+            signatureCanvas.style.touchAction = "auto"
+            isMouseDown = false; 
+        }else{
+            signatureCanvas.style.touchAction = "None"
+            isSignature = true
+        }
+    }
+   
+   
     const drawLine = event => {
         if ( isMouseDown ) {
             const newX = event.offsetX;
@@ -379,15 +408,17 @@
 
             if(isFront){
                 context = frontContext
-            }else{
+            }if(isBack){
                 context = backContext
+            }else{
+                context = signatureContext
             }
             
             context.beginPath();
             context.moveTo( x, y );
             context.lineTo( newX, newY );
             context.stroke();
-            
+            console.log(x, y)
             x = newX;
             y = newY;
         }
@@ -406,6 +437,12 @@
     backCanvas.addEventListener( 'mouseup', stopDrawing );
     backCanvas.addEventListener( 'mouseout', stopDrawing );
 
+    signatureCanvas.addEventListener( 'mousedown', startDrawing );
+    signatureCanvas.addEventListener( 'mousedown', drawingSignature );
+    signatureCanvas.addEventListener( 'mousemove', drawLine );
+    signatureCanvas.addEventListener( 'mouseup', stopDrawing );
+    signatureCanvas.addEventListener( 'mouseout', stopDrawing );
+
     frontCanvas.addEventListener( 'pointerdown', startDrawing );
     frontCanvas.addEventListener( 'pointerdown', drawingFront );
     frontCanvas.addEventListener( 'pointermove', drawLine );
@@ -418,6 +455,26 @@
     backCanvas.addEventListener( 'pointerup', stopDrawing );
     backCanvas.addEventListener( 'pointerout', stopDrawing );
 
+    signatureCanvas.addEventListener( 'pointerdown', startDrawing );
+    signatureCanvas.addEventListener( 'pointerdown', drawingSignature );
+    signatureCanvas.addEventListener( 'pointermove', drawLine );
+    signatureCanvas.addEventListener( 'pointerup', stopDrawing );
+    signatureCanvas.addEventListener( 'pointerout', stopDrawing );
 
+    function clearFrontCanvas(){
+        frontContext.clearRect(0,0,300,600)
+        frontContext.drawImage(frontImage, 0, 0, 300 ,600);
+
+    }
+
+    function clearBackCanvas(){
+        backContext.clearRect(0,0,300,600)
+        backContext.drawImage(backImage, 0, 0, 300 ,600);
+
+    }
+
+    function clearSignatureCanvas(){
+        signatureContext.clearRect(0,0,300,70)
+    }
 </script>
 {%endblock%}
