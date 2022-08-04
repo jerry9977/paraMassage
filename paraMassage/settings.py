@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os.path
+import os
+import psycopg2
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,8 +31,10 @@ SECRET_KEY = 'django-insecure--qsy6lzawpve(7skc1s(x@d9=qvthr@vaa-n9r56yhdbjx5owv
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost',
-    '192.168.1.19'
+    '0.0.0.0', 
+    'localhost', 
+    '127.0.0.1',            
+    'paramassage.herokuapp.com'
 ]
 
 
@@ -213,3 +218,10 @@ SESSION_COOKIE_AGE = 43200
 
 JSIGNATURE_WIDTH = 500
 JSIGNATURE_HEIGHT = 200
+
+
+
+DATABASE_URL = os.environ['DATABASE_URL']
+
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
