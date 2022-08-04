@@ -22,3 +22,4 @@ segno==1.5.2
 sqlparse==0.4.2
 typing_extensions==4.3.0
 tzdata==2022.1
+dj-database-url==1.0.0
