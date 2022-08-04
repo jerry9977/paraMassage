@@ -1,6 +1,3 @@
-import email
-from lib2to3.pgen2 import token
-from urllib import response
 from django.shortcuts import render, redirect
 
 from rest_framework import status

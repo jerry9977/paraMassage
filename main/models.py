@@ -1,8 +1,4 @@
 
-from configparser import DuplicateSectionError
-from os import F_OK
-from re import T
-from unicodedata import decimal
 from django.db import models
 from django.core.exceptions import ValidationError
 from multiselectfield import MultiSelectField
