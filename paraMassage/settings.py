@@ -217,6 +217,9 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://paramassage.herokuapp.com"
+]
 
 # login session age in second
 SESSION_COOKIE_AGE = 43200
