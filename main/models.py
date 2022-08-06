@@ -1,5 +1,4 @@
 
-from tokenize import blank_re
 from django.db import models
 from django.core.exceptions import ValidationError
 from multiselectfield import MultiSelectField
