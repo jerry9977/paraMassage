@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'main',
     'qr_code',
     'jsignature',
-    'multiselectfield'
+    'multiselectfield',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -87,6 +88,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'paraMassage.wsgi.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -225,3 +231,7 @@ DATABASE_URL = os.environ['DATABASE_URL']
 
 conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
+
+
+ASGI_APPLICATION = "paraMassage.asgi.application"

@@ -1,4 +1,5 @@
 
+from tokenize import blank_re
 from django.db import models
 from django.core.exceptions import ValidationError
 from multiselectfield import MultiSelectField
@@ -36,7 +37,7 @@ class Client(models.Model):
             "invalid":"Please enter only digits"
         }
     )
-    date_created = models.DateField()
+    date_created = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.first_name
@@ -137,7 +138,7 @@ class RemedialMedicalHistory(models.Model):
     area_of_soreness = models.TextField(null=True, blank=True)
     # area_of_soreness_back = models.TextField(null=True, blank=True)
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
-    symptoms = MultiSelectField(choices=SYMPTOM_CHOICES)
+    symptoms = MultiSelectField(choices=SYMPTOM_CHOICES, null=True, blank=True)
     medication = models.TextField(
         null=True, 
         blank=True, 

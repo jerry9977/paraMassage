@@ -13,7 +13,7 @@
         }
 
         #recent-added-card{
-            height: 250px;
+            height: fit-content;
         }
 
         .cards{
@@ -22,25 +22,149 @@
             box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
         }
 
+        [v-cloak] {display: none}
+
     </style>
 {%endblock%}
 
 {%block content%}
 
-    <div class="grid">
+    <div id="app" v-cloak>
+        <div class="grid">
 
-        <div id="new-member-card" class="cards g-col-4">
-            123
-        </div>
+            <div id="new-member-card" class="cards g-col-4 py-3 px-4">
+                <div class="grid">
+                    <div class="g-col-12 fs-2 fw-semibold ">NEW MEMBER</div>
+                </div>
+            </div>
 
-        <div id="status-card" class="cards g-col-8">
-            123
-        </div>
+            <div id="status-card" class="cards g-col-8 py-3 px-4">
+                <div class="grid">
+                    <div class="g-col-12 fs-2 fw-semibold ">NEW CUSTOMER STATS</div>
+                </div>
+            </div>
 
-        <div id="recent-added-card" class="cards g-col-12">
-            123
+            <div id="recent-added-card" class="cards g-col-12 py-3 px-4">
+                <div class="grid">
+                    <div class="g-col-12 fs-2 fw-semibold ">RECENTLY CHECKED IN</div>
+                    <div class="g-col-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Remedial Number / Suffix</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="!recentlyCheckedInClient.length">
+                                    <td colspan="3">No Entries Found.</td>
+                                </tr>
+                                <tr v-else v-for="client in recentlyCheckedInClient">
+                                    <td>[[client.first_name]]</td>
+                                    <td>[[client.last_name]]</td>
+                                    <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                
+            </div>
+            
         </div>
-        
     </div>
+    
 
+    <script>
+        
+        
+
+    </script>
+
+    <script>
+        const app = Vue.createApp({
+
+            data() {
+                
+                return {
+                    delay: 1000, 
+                    recentlyCheckedInClient: [],
+
+                }
+            },
+            
+            methods: {
+
+                dashboardConnectSocket(){
+                    let _this = this
+                    const dashboardSocket = new WebSocket(
+                        'ws://'
+                        + window.location.host
+                        + '/ws/dashboard_update/'
+                    );
+
+                    dashboardSocket.onopen = function(e){
+                        delay = 1000
+                        console.log('dashboard websocket connected successfully')
+                    }
+
+
+                    dashboardSocket.onmessage = function(e) {
+                        const data = JSON.parse(e.data);
+                        console.log(data)
+                        console.log(e)
+                        _this.dashboardWebsocketHandler(data)
+                    };
+
+                    dashboardSocket.onclose = function(e) {
+                        
+                        
+                        console.error('update socket closed unexpectedly');
+                        console.log(`Socket is closed. Reconnect will be attempted in ${delay/1000} second.`, e.reason);
+                        setTimeout(function() {
+                            delay = delay * 2
+                            _this.dashboardConnectSocket();
+                        }, delay);
+                    };
+                },  
+
+                dashboardWebsocketHandler(data){
+                    if(!data.action_type && !data.payload){
+                        console.err("Bad response message")
+                        return
+                    }
+
+                    switch (data.action_type){
+                        case "init_remedial_client":
+                            this.initRemedialClientHandler(data.payload)
+                            break
+                        case "add_remedial_client":
+                            this.addRemedialClientHandler(data.payload)
+                            break
+
+                        default:
+                            
+                    }
+                },
+
+                initRemedialClientHandler(data){
+                    this.recentlyCheckedInClient = data
+                },
+
+                addRemedialClientHandler(data){
+                    this.recentlyCheckedInClient.push(data)
+                }
+
+            },
+            mounted() {
+                this.dashboardConnectSocket()
+            },
+        })
+
+        app.config.compilerOptions.delimiters = ['[[', ']]'];
+        app.config.devtools = true
+        app.mount("#app")
+    </script>
 {%endblock%}
