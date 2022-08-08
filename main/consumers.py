@@ -11,12 +11,12 @@ class DashboardConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)('dashboard_consumer', self.channel_name)
         
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
-        
+                    
         recently_added_client = m.RemedialClientInfo.objects\
             .select_related("client")\
-            .filter(client__date_created__gte=today)\
-            .order_by("client__date_created")\
-            .values("client__first_name", "client__last_name", "health_insurance_number", "suffix")
+            .filter(date_created__gte=today)\
+            .order_by("date_created")\
+            .values("client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
 
         recently_added_client_container = []
         for client in recently_added_client:
@@ -25,8 +25,9 @@ class DashboardConsumer(WebsocketConsumer):
                 "last_name": client["client__last_name"],
                 "health_insurance_number": str(client["health_insurance_number"]),
                 "suffix": str(client["suffix"]),
+                "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M:%S")
             })
-        # print(list(recently_added_client))
+            
         self.send(text_data=json.dumps({
             "action_type": "init_remedial_client",
             "payload": recently_added_client_container

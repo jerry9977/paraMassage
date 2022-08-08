@@ -152,13 +152,9 @@ def remedial_check_in_form(request):
         remedial_history_form = f.RemedialHistoryForm(request.POST)
         client_form = f.CustomerCheckInForm(request.POST)
         remedial_form = f.RemedialCustomerCheckInForm(request.POST)
-        print(remedial_history_form.is_valid())
-        print(remedial_history_form.errors)
-        print(client_form.is_valid())
-        print(remedial_form.is_valid())
+
         if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
-            print("=====================")
-            print("okok")
+
             client = client_form.save()
             remedial_client_info = remedial_form.save(commit=False)
             remedial_client_history = remedial_history_form.save(commit=False)

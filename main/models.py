@@ -36,8 +36,8 @@ class Client(models.Model):
             "invalid":"Please enter only digits"
         }
     )
-    date_created = models.DateField(auto_now_add=True)
-
+    date_created = models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
         return self.first_name
 
@@ -89,7 +89,7 @@ class RemedialClientInfo(models.Model):
     job = models.TextField(null=True, blank=True)
     emergency_contact_number = models.IntegerField(null=True, blank=True)
     emergency_contact_name = models.TextField(null=True, blank=True)
-    
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.client.first_name
@@ -157,6 +157,8 @@ class RemedialMedicalHistory(models.Model):
         max_length=500,
     )
     signature = models.TextField(null=False, blank=False)
+
+    date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.remedial_client_info.client.first_name

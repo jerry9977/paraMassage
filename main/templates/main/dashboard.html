@@ -33,9 +33,8 @@
         <div class="grid">
 
             <div id="new-member-card" class="cards g-col-4 py-3 px-4">
-                <div class="grid">
-                    <div class="g-col-12 fs-2 fw-semibold ">NEW MEMBER</div>
-                </div>
+                <div class="fs-2 fw-semibold " style="min-width:222px">NEW MEMBER</div>
+                <div class="fw-semibold text-center" style="font-size: 6.5rem;">[[newRemedialClient.length]]</div>
             </div>
 
             <div id="status-card" class="cards g-col-8 py-3 px-4">
@@ -46,7 +45,7 @@
 
             <div id="recent-added-card" class="cards g-col-12 py-3 px-4">
                 <div class="grid">
-                    <div class="g-col-12 fs-2 fw-semibold ">RECENTLY CHECKED IN</div>
+                    <div class="g-col-12 fs-2 fw-semibold ">NEW REMEDIAL CLIENT</div>
                     <div class="g-col-12">
                         <table class="table table-striped table-hover">
                             <thead>
@@ -54,16 +53,48 @@
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Remedial Number / Suffix</th>
+                                    <th>Created At</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-if="!recentlyCheckedInClient.length">
-                                    <td colspan="3">No Entries Found.</td>
+                                <tr v-if="!newRemedialClient.length">
+                                    <td colspan="4">No Entries Found.</td>
                                 </tr>
-                                <tr v-else v-for="client in recentlyCheckedInClient">
+                                <tr v-else v-for="client in newRemedialClient">
                                     <td>[[client.first_name]]</td>
                                     <td>[[client.last_name]]</td>
                                     <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
+                                    <td>[[client.date_created]]</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="g-col-12 fs-2 fw-semibold ">REQUIRE REMEDIAL RECEIPT</div>
+                    <div class="g-col-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Remedial Number / Suffix</th>
+                                    <th>Created At</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="!newRemedialClient.length">
+                                    <td colspan="5">No Entries Found.</td>
+                                </tr>
+                                <tr v-else v-for="client in newRemedialClient">
+                                    <td class="align-middle">[[client.first_name]]</td>
+                                    <td class="align-middle">[[client.last_name]]</td>
+                                    <td class="align-middle">[[client.health_insurance_number]]/[[client.suffix]]</td>
+                                    <td class="align-middle">[[client.date_created]]</td>
+                                    <td class="align-middle">
+                                        <input type="file" class="" id="receipt-upload">
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -89,8 +120,8 @@
             data() {
                 
                 return {
-                    delay: 1000, 
-                    recentlyCheckedInClient: [],
+                    delay: 1000,
+                    newRemedialClient: [],
 
                 }
             },
@@ -100,7 +131,7 @@
                 dashboardConnectSocket(){
                     let _this = this
                     const dashboardSocket = new WebSocket(
-                        'wss://'
+                        'ws://'
                         + window.location.host
                         + '/ws/dashboard_update/'
                     );
@@ -113,8 +144,7 @@
 
                     dashboardSocket.onmessage = function(e) {
                         const data = JSON.parse(e.data);
-                        console.log(data)
-                        console.log(e)
+
                         _this.dashboardWebsocketHandler(data)
                     };
 
@@ -150,11 +180,11 @@
                 },
 
                 initRemedialClientHandler(data){
-                    this.recentlyCheckedInClient = data
+                    this.newRemedialClient = data
                 },
 
                 addRemedialClientHandler(data){
-                    this.recentlyCheckedInClient.push(data)
+                    this.newRemedialClient.push(data)
                 }
 
             },
