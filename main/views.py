@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from paraMassage.settings import BASE_DIR
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -21,6 +22,7 @@ import main.forms as f
 import jwt 
 
 import json
+import os
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -149,10 +151,25 @@ def customer_check_in_form(request):
 def remedial_check_in_form(request):
 
     if request.method =="POST":
+
+        
+
+        post = request.POST.copy() # to make it mutable
+        area_of_soreness = request.POST.get("area_of_soreness")
+        print(area_of_soreness)
+        # or set several values from dict
+        # post.update({'postvar': 'some_value', 'var': 'value'})
+        # # or set list
+        # post.setlist('list_var', ['some_value', 'other_value']))
+
+        # # and update original POST in the end
+        # request.POST = post
+
         remedial_history_form = f.RemedialHistoryForm(request.POST)
         client_form = f.CustomerCheckInForm(request.POST)
         remedial_form = f.RemedialCustomerCheckInForm(request.POST)
-
+        # print(request.POST)
+        # print(remedial_history_form.is_valid())
         if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
 
             client = client_form.save()
@@ -182,3 +199,60 @@ def remedial_check_in_form(request):
 def form_submitted(request):
     context = {}
     return render(request, 'form/remedial_check_in_form.html', context)
+
+
+def upload_receipt(request):
+
+    if request.method == "POST":
+
+        if request.FILES.get("image", None) is not None:
+            remedial_history_id = request.POST.get("id")
+            img = request.FILES["image"]
+            
+            try:
+                print("==============")
+                print("==============")
+                print("==============")
+                print("==============")
+                
+                # img_file = open(os.path.join(settings.MEDIA_ROOT, "123"),'wb')
+                
+                print("1")
+                # img_file.write(img.read())
+                
+                remedial_history = m.RemedialMedicalHistory.objects.get(pk=remedial_history_id)
+                
+                print("2")
+                remedial_history.receipt_image.save(
+                    "remedial_receipt.jpg",
+                    img
+                )
+
+                print("3")
+                remedial_history.save()
+                # print(settings.BASE_DIR)
+                # print(os)
+                # print(os.path)
+                # print(os.path.join(settings.MEDIA_ROOT))
+                # print()
+
+                print(remedial_history.receipt_image.name)
+                print(remedial_history.receipt_image.path)
+                # print(remedial_history.recept_image.path)
+                print("==============")
+                print("==============")
+
+                response = HttpResponse()
+                response['Content-Type'] = 'application/json'
+                return response
+
+            except Exception as e:
+                print(e)
+                pass
+
+            
+    response = HttpResponse()
+    response['Content-Type'] = 'application/json'
+    return response
+
+

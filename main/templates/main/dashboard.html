@@ -34,7 +34,7 @@
 
             <div id="new-member-card" class="cards g-col-4 py-3 px-4">
                 <div class="fs-2 fw-semibold " style="min-width:222px">NEW MEMBER</div>
-                <div class="fw-semibold text-center" style="font-size: 6.5rem;">[[newRemedialClient.length]]</div>
+                <div class="fw-semibold text-center" style="font-size: 6.5rem;">[[newRemedialClient.size]]</div>
             </div>
 
             <div id="status-card" class="cards g-col-8 py-3 px-4">
@@ -57,10 +57,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-if="!newRemedialClient.length">
+                                <tr v-if="!newRemedialClient.size">
                                     <td colspan="4">No Entries Found.</td>
                                 </tr>
-                                <tr v-else v-for="client in newRemedialClient">
+                                <tr v-else v-for="[clientId, client] in newRemedialClient">
                                     <td>[[client.first_name]]</td>
                                     <td>[[client.last_name]]</td>
                                     <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
@@ -78,22 +78,22 @@
                                 <tr>
                                     <th>First Name</th>
                                     <th>Last Name</th>
-                                    <th>Remedial Number / Suffix</th>
                                     <th>Created At</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-if="!newRemedialClient.length">
+                                <tr v-if="!newRemedialHistory.size">
                                     <td colspan="5">No Entries Found.</td>
                                 </tr>
-                                <tr v-else v-for="client in newRemedialClient">
-                                    <td class="align-middle">[[client.first_name]]</td>
-                                    <td class="align-middle">[[client.last_name]]</td>
-                                    <td class="align-middle">[[client.health_insurance_number]]/[[client.suffix]]</td>
-                                    <td class="align-middle">[[client.date_created]]</td>
+                                <tr v-else v-for="[historyId, history] in newRemedialHistory">
+                                    <td class="align-middle">[[history.first_name]]</td>
+                                    <td class="align-middle">[[history.last_name]]</td>
+                                    <td class="align-middle">[[history.date_created]]</td>
+                                    <td class="align-middle"></td>
                                     <td class="align-middle">
-                                        <input type="file" class="" id="receipt-upload">
+                                        <input type="file" class="" id="receipt-upload" @change="uploadReceipt([[history.id]])">
                                     </td>
                                 </tr>
                             </tbody>
@@ -108,10 +108,9 @@
     </div>
     
 
+    {% csrf_token %}
     <script>
-        
-        
-
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     </script>
 
     <script>
@@ -121,17 +120,39 @@
                 
                 return {
                     delay: 1000,
-                    newRemedialClient: [],
+                    newRemedialClient: new Map(),
+                    newRemedialHistory: new Map()
 
                 }
             },
             
             methods: {
+                uploadReceipt(id){
+                    let image = event.target.files[0]
+                    let url = "../upload_receipt/"
+                    let data = new FormData()
+                    data.append("image", image)
+                    data.append("id", id)
 
+                    let config = {
+                        headers: {
+                            "X-CSRFToken": csrftoken,
+                            "content-type": "multipart/form-data"
+                        }
+                    }
+
+                    axios
+                        .post(url, data, config)
+                        .then(response=>{
+
+                        })
+
+
+                },
                 dashboardConnectSocket(){
                     let _this = this
                     const dashboardSocket = new WebSocket(
-                        'wss://'
+                        'ws://'
                         + window.location.host
                         + '/ws/dashboard_update/'
                     );
@@ -165,26 +186,45 @@
                         console.err("Bad response message")
                         return
                     }
-
+                    console.log(data.action_type)
                     switch (data.action_type){
                         case "init_remedial_client":
                             this.initRemedialClientHandler(data.payload)
                             break
                         case "add_remedial_client":
-                            this.addRemedialClientHandler(data.payload)
+                            this.setRemedialClientHandler(data.payload)
                             break
-
+                        case "init_remedial_history":
+                            this.initRemedialHistoryHandler(data.payload)
+                            break
+                        case "add_remedial_history":
+                            this.setRemedialHistoryHandler(data.payload)
+                            break
                         default:
                             
                     }
                 },
 
                 initRemedialClientHandler(data){
-                    this.newRemedialClient = data
+                    data.forEach(client =>{
+                        this.newRemedialClient.set(client.id, client)
+                    })
+                    
                 },
 
-                addRemedialClientHandler(data){
-                    this.newRemedialClient.push(data)
+                setRemedialClientHandler(client){
+                    this.newRemedialClient.set(client.id, client)
+                },
+
+                initRemedialHistoryHandler(data){
+                    data.forEach(history=>{
+                        this.newRemedialHistory.set(history.id, history)
+                    })
+                },
+
+                setRemedialHistoryHandler(history){
+                    
+                    this.newRemedialHistory.set(history.id, history)
                 }
 
             },

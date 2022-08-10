@@ -11,29 +11,59 @@ class DashboardConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)('dashboard_consumer', self.channel_name)
         
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
-                    
+
+        # recently added remedial client  
         recently_added_client = m.RemedialClientInfo.objects\
             .select_related("client")\
             .filter(date_created__gte=today)\
             .order_by("date_created")\
-            .values("client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
+            .values("id", "client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
 
         recently_added_client_container = []
+        
         for client in recently_added_client:
             recently_added_client_container.append({
+                "id": client["id"],
                 "first_name": client["client__first_name"],
                 "last_name": client["client__last_name"],
                 "health_insurance_number": str(client["health_insurance_number"]),
                 "suffix": str(client["suffix"]),
-                "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M:%S")
+                "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M")
             })
-            
+
         self.send(text_data=json.dumps({
             "action_type": "init_remedial_client",
             "payload": recently_added_client_container
         }))
 
+
+        # require receipt 
+        require_receipts = m.RemedialMedicalHistory.objects\
+            .select_related("remedial_client_info","remedial_client_info__client")\
+            .filter(receipt_image__exact='')\
+            .values(
+                "id",
+                "remedial_client_info__client__first_name",
+                "remedial_client_info__client__last_name",
+                "date_created",
+                "receipt_image"
+            )
         
+        require_receipt_container = []
+
+        for require_receipt in require_receipts:
+            require_receipt_container.append({
+                "id":require_receipt["id"],
+                "first_name":require_receipt["remedial_client_info__client__first_name"],
+                "last_name":require_receipt["remedial_client_info__client__last_name"],
+                "date_created":datetime.datetime.strftime(require_receipt["date_created"], "%d %b %Y %H:%M"),
+                "receipt_image": require_receipt["receipt_image"]
+            })
+        
+        self.send(text_data=json.dumps({
+            "action_type": "init_remedial_history",
+            "payload": require_receipt_container
+        }))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)('dashboard_consumer', self.channel_name) 
@@ -49,6 +79,9 @@ class DashboardConsumer(WebsocketConsumer):
             'message': message
         }))
     def send_data(self, data, type="send_data"):
+        
+        print("===================1231231@")
+        print(data)
         self.send(text_data=json.dumps(data))
     # def send(self, data):
     #     self.send(text_date=json.dumps(data))

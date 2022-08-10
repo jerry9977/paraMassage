@@ -231,11 +231,14 @@ JSIGNATURE_HEIGHT = 200
 
 
 
-DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = os.environ['DATABASE_URL']
 
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 
 ASGI_APPLICATION = "paraMassage.asgi.application"
+
+
+MEDIA_ROOT = BASE_DIR / "mediafiles/"

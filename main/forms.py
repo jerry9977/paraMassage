@@ -73,16 +73,33 @@ class RemedialHistoryForm(forms.ModelForm):
     class Meta:
         model = m.RemedialMedicalHistory
         fields = '__all__'
-        exclude = ['remedial_client_info']
+        exclude = ['remedial_client_info', 'receipt_image']
 
         widgets = {
-            'area_of_soreness': forms.Textarea(attrs={"sore_area":True,"input_type":"textarea"}),
-            # 'area_of_soreness_back': forms.Textarea(attrs={"sore_area":True,"input_type":"textarea"}),
+            'area_of_soreness_front': forms.TextInput(attrs={"sore_area_front":True,"input_type":"hidden"}),
+            'area_of_soreness_back': forms.TextInput(attrs={"sore_area_back":True,"input_type":"hidden"}),
             'reason_of_visit': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'medication': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'health_care': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
-            'signature': forms.Textarea(attrs={"signature":True,"input_type":"textarea"}),
+            'signature': forms.TextInput(attrs={"signature":True,"input_type":"hidden"}),
             'additional_comments': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"})
         }
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+        print("====================")
+        print("====================")
+        print("====================")
+        print("====================")
+        print(cleaned_data)
+    def clean_area_of_soreness(self):
+        print("=========================")
+        print("=========================")
+        print("=========================")
+        print(self.cleaned_data)
+        # print(self)
+        # data = self.cleaned_data["area_of_soreness"]
+        pass
 
         

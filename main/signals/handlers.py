@@ -16,10 +16,35 @@ def historyPostSave(sender, instance, **kwargs):
             'type': 'send_data',
             'action_type': 'add_remedial_client',
             'payload':{
+                'id': remedial_client_info.id,
                 'first_name':remedial_client_info.client.first_name,
                 'last_name':remedial_client_info.client.last_name,
-                'health_insurance_number':remedial_client_info.health_insurance_number,
-                'suffix': remedial_client_info.suffix
+                'health_insurance_number':str(remedial_client_info.health_insurance_number),
+                'suffix': str(remedial_client_info.suffix)
+            }
+            
+        }
+    )
+
+
+
+@receiver(post_save, sender=m.RemedialMedicalHistory)
+def historyPostSave(sender, instance, **kwargs):
+
+    remedial_client_info = instance.remedial_client_info
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'dashboard_consumer',
+        {
+            'type': 'send_data',
+            'action_type': 'add_remedial_client',
+            'payload':{
+                'id': remedial_client_info.id,
+                'first_name':remedial_client_info.client.first_name,
+                'last_name':remedial_client_info.client.last_name,
+                'health_insurance_number':str(remedial_client_info.health_insurance_number),
+                'suffix': str(remedial_client_info.suffix)
             }
             
         }

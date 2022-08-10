@@ -1,4 +1,5 @@
 
+from turtle import back
 from django.db import models
 from django.core.exceptions import ValidationError
 from multiselectfield import MultiSelectField
@@ -134,8 +135,9 @@ class RemedialMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_remedial_medical_history'
     remedial_client_info = models.ForeignKey(RemedialClientInfo, on_delete=models.CASCADE)
-    area_of_soreness = models.TextField(null=True, blank=True)
-    # area_of_soreness_back = models.TextField(null=True, blank=True)
+    area_of_soreness_front = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+    area_of_soreness_back = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES, null=True, blank=True)
     medication = models.TextField(
@@ -156,9 +158,27 @@ class RemedialMedicalHistory(models.Model):
         blank=True,
         max_length=500,
     )
-    signature = models.TextField(null=False, blank=False)
+    signature = models.ImageField(upload_to='signature/%Y/%m/%d/', null=False, blank=False)
 
     date_created = models.DateTimeField(auto_now_add=True)
 
+    receipt_image = models.ImageField(upload_to='receipt/%Y/%m/%d/', null=True, blank=True)
+
     def __str__(self):
-        return self.remedial_client_info.client.first_name
+        return str(self.id)
+
+    def clean_area_of_soreness(self):
+        print("=========================")
+        print("=========================")
+        print("===========model123==============")
+        print(self)
+        # data = self
+        pass
+
+    def clean(self):
+        cleaned_data = super().clean()
+        print("=========================")
+        print("=========================")
+        print("==============model===========")
+        print(self)
+        pass
