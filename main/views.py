@@ -1,3 +1,5 @@
+import base64
+from inspect import signature
 from django.shortcuts import render, redirect
 from paraMassage.settings import BASE_DIR
 
@@ -23,7 +25,8 @@ import jwt
 
 import json
 import os
-
+from urllib import request as req
+from django.core.files.uploadedfile import InMemoryUploadedFile
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
@@ -154,9 +157,27 @@ def remedial_check_in_form(request):
 
         
 
-        post = request.POST.copy() # to make it mutable
-        area_of_soreness = request.POST.get("area_of_soreness")
-        print(area_of_soreness)
+        # post = request.POST.copy() # to make it mutable
+        area_of_soreness_front = request.POST.get("area_of_soreness_front")
+        area_of_soreness_back = request.POST.get("area_of_soreness_back")
+        signature = request.POST.get("signature")
+        # print(area_of_soreness)
+        with req.urlopen(area_of_soreness_front) as response:
+            data = response.read()
+
+        with open("image.png", "wb") as area_of_soreness_front_image:
+            area_of_soreness_front_image.write(data)
+
+        with req.urlopen(area_of_soreness_back) as response:
+            data1 = response.read()
+        with open("image2.png", "wb") as area_of_soreness_back_image:
+            area_of_soreness_back_image.write(data1)
+
+        # area_of_soreness_front_image.close()
+        request.FILES["area_of_soreness_front"] = InMemoryUploadedFile(file=data, field_name="front_image", name="front", content_type="image/jpg",size=data, charset="base64")
+        request.FILES["area_of_soreness_back"] = InMemoryUploadedFile(file=data, field_name="front_image", name="front", content_type="image/jpg",size=data, charset="base64")
+        area_of_soreness_front_image.close()
+        print(request.FILES)
         # or set several values from dict
         # post.update({'postvar': 'some_value', 'var': 'value'})
         # # or set list
@@ -165,7 +186,7 @@ def remedial_check_in_form(request):
         # # and update original POST in the end
         # request.POST = post
 
-        remedial_history_form = f.RemedialHistoryForm(request.POST)
+        remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
         client_form = f.CustomerCheckInForm(request.POST)
         remedial_form = f.RemedialCustomerCheckInForm(request.POST)
         # print(request.POST)
