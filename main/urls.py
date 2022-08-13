@@ -10,7 +10,7 @@ urlpatterns=[
     path('dashboard/', views.dashboard),
     path('customers/', views.customer_list),
     path('checkin/', views.check_in),
-    path('customer_check_in_form/', views.customer_check_in_form),
+    # path('customer_check_in_form/', views.customer_check_in_form),
     path('remedial_check_in_form/', views.remedial_check_in_form),
     path('form_submitted/', views.form_submitted),
     path('upload_receipt/', views.upload_receipt)

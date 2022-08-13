@@ -24,9 +24,9 @@ import main.forms as f
 import jwt 
 
 import json
-import os
-from urllib import request as req
-from django.core.files.uploadedfile import InMemoryUploadedFile
+
+from main.image_verifier.image_verifier import ImageVerifier
+
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
     return {
@@ -155,59 +155,71 @@ def remedial_check_in_form(request):
 
     if request.method =="POST":
 
+        area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
+        area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
+        signature = request.POST.get("signature_hidden")
+
         
-
-        # post = request.POST.copy() # to make it mutable
-        area_of_soreness_front = request.POST.get("area_of_soreness_front")
-        area_of_soreness_back = request.POST.get("area_of_soreness_back")
-        signature = request.POST.get("signature")
-        # print(area_of_soreness)
-        with req.urlopen(area_of_soreness_front) as response:
-            data = response.read()
-
-        with open("image.png", "wb") as area_of_soreness_front_image:
-            area_of_soreness_front_image.write(data)
-
-        with req.urlopen(area_of_soreness_back) as response:
-            data1 = response.read()
-        with open("image2.png", "wb") as area_of_soreness_back_image:
-            area_of_soreness_back_image.write(data1)
-
-        # area_of_soreness_front_image.close()
-        request.FILES["area_of_soreness_front"] = InMemoryUploadedFile(file=data, field_name="front_image", name="front", content_type="image/jpg",size=data, charset="base64")
-        request.FILES["area_of_soreness_back"] = InMemoryUploadedFile(file=data, field_name="front_image", name="front", content_type="image/jpg",size=data, charset="base64")
-        area_of_soreness_front_image.close()
-        print(request.FILES)
-        # or set several values from dict
-        # post.update({'postvar': 'some_value', 'var': 'value'})
-        # # or set list
-        # post.setlist('list_var', ['some_value', 'other_value']))
-
-        # # and update original POST in the end
-        # request.POST = post
-
+       
         remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
         client_form = f.CustomerCheckInForm(request.POST)
         remedial_form = f.RemedialCustomerCheckInForm(request.POST)
-        # print(request.POST)
-        # print(remedial_history_form.is_valid())
-        if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
 
-            client = client_form.save()
-            remedial_client_info = remedial_form.save(commit=False)
-            remedial_client_history = remedial_history_form.save(commit=False)
-            
-            remedial_client_info.client = client
-            remedial_client_info.save()
+        front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
+        back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
+        signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
 
-            remedial_client_history.remedial_client_info = remedial_client_info
-            remedial_client_history.save()
 
-            return redirect("/form_submitted/", request)
+        if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
+            if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
+
+                client = client_form.save()
+                remedial_client_info = remedial_form.save(commit=False)
+                remedial_client_history = remedial_history_form.save(commit=False)
+                
+                remedial_client_info.client = client
+                remedial_client_info.save()
+
+                
+                remedial_client_history.remedial_client_info = remedial_client_info
+                
+                if front_image.memory_file:
+
+                    remedial_client_history.area_of_soreness_front.save(
+                        "remedial_front.jpg",
+                        front_image.memory_file
+                    )
+                if back_image.memory_file:
+
+                    remedial_client_history.area_of_soreness_back.save(
+                        "remedial_back.jpg",
+                        back_image.memory_file
+                    )
+
+                remedial_client_history.signature.save(
+                    "remedial_signature.jpg",
+                    signature_image.memory_file
+                )
+                remedial_client_history.save()
+
+                return redirect("/form_submitted/", request)
+            else:
+                remedial_history_form = f.RemedialHistoryForm(
+                request.POST, 
+                request.FILES, 
+                initial={
+                    "area_of_soreness_front":area_of_soreness_front,
+                    "area_of_soreness_back": area_of_soreness_back,
+                    "signature":signature
+                }
+            )
+
     else:
         client_form = f.CustomerCheckInForm() 
         remedial_history_form = f.RemedialHistoryForm()
         remedial_form = f.RemedialCustomerCheckInForm()
+    
+    # print(request.POST)
     
     context = {
         "client_form": client_form,

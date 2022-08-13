@@ -51,9 +51,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'main',
     'qr_code',
-    'jsignature',
     'multiselectfield',
-    'channels'
+    'channels',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -226,11 +226,6 @@ SESSION_COOKIE_AGE = 43200
 
 
 
-JSIGNATURE_WIDTH = 500
-JSIGNATURE_HEIGHT = 200
-
-
-
 # DATABASE_URL = os.environ['DATABASE_URL']
 
 # conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -242,3 +237,6 @@ ASGI_APPLICATION = "paraMassage.asgi.application"
 
 
 MEDIA_ROOT = BASE_DIR / "mediafiles/"
+
+RECAPTCHA_PUBLIC_KEY = '6Le513EhAAAAALJYECpzIXylAj14mhvx_F6WcXVJ'
+RECAPTCHA_PRIVATE_KEY = '6Le513EhAAAAADZCm2mDWF2p7-5Ymf0sicMidISt'

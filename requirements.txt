@@ -5,7 +5,6 @@ cssselect==1.1.0
 channels==3.0.5
 Django==4.0.5
 django-cors-headers==3.13.0
-django-jsignature==0.11
 django-multiselectfield==0.1.12
 django-qr-code==3.1.0
 django-rest-knox==4.2.0
@@ -25,3 +24,4 @@ typing_extensions==4.3.0
 tzdata==2022.1
 urllib3==1.26.11
 dj-database-url==1.0.0
+django-recaptcha==3.0.0

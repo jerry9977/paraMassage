@@ -2,6 +2,7 @@
 from turtle import back
 from django.db import models
 from django.core.exceptions import ValidationError
+
 from multiselectfield import MultiSelectField
 # Create your models here.
 
@@ -131,6 +132,8 @@ SYMPTOM_CHOICES = (
     (32, "SLEEP DISORDERS"),
     (33, "OTHER")
 )
+
+
 class RemedialMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_remedial_medical_history'
@@ -158,7 +161,7 @@ class RemedialMedicalHistory(models.Model):
         blank=True,
         max_length=500,
     )
-    signature = models.ImageField(upload_to='signature/%Y/%m/%d/', null=False, blank=False)
+    signature = models.ImageField(upload_to='signature/%Y/%m/%d/', null=False, blank=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -167,18 +170,20 @@ class RemedialMedicalHistory(models.Model):
     def __str__(self):
         return str(self.id)
 
-    def clean_area_of_soreness(self):
-        print("=========================")
-        print("=========================")
-        print("===========model123==============")
-        print(self)
-        # data = self
-        pass
+    # def clean_area_of_soreness(self):
+    #     print("=========================")
+    #     print("=========================")
+    #     print("===========model123==============")
+    #     print(self)
+    #     # data = self
+    #     pass
 
-    def clean(self):
-        cleaned_data = super().clean()
-        print("=========================")
-        print("=========================")
-        print("==============model===========")
-        print(self)
-        pass
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     print("=========================")
+    #     print("=========================")
+    #     print("==============model===========")
+    #     print(type(self.area_of_soreness_front))
+    #     pass
+
+

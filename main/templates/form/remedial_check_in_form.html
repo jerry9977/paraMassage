@@ -85,7 +85,7 @@
 
 
 
-        <form method="POST" enctype="multipart/form-data" novalidate>
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="grid"  style="row-gap: 20px;">
                 
@@ -195,10 +195,9 @@
                                 <input
                                         class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
                                         id="{{ field.id_for_label }}" 
-                                        name="{{field.html_name}}" 
+                                        name="{{field.html_name}}_hidden" 
                                         value="{{field.value|default_if_none:''}}"
                                         rows="{{ field.field.widget.attrs.rows }}"
-                                        maxlength="{{field.field.max_length}}"
                                         type="hidden">
                                 <!-- <input
                                         class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
@@ -216,39 +215,39 @@
                                     </div>
                                 {% endif %}    
                             </div>
-                                <div class="text-center text-md-start g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1" style="margin-top:-20px; margin-bottom: 20px;">
-                                    <canvas class="js-paint front" width="300" height="600"></canvas>
-                                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearFrontCanvas()">Reset</button>
-    
-                                </div>
+                            <div class="text-center text-md-start g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1" style="margin-top:-20px; margin-bottom: 20px;">
+                                <canvas class="js-paint front" width="300" height="600"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearFrontCanvas()">Reset</button>
+                            </div>
 
                                 
                             
                             
                         {% elif field.field.widget.attrs.sore_area_back %}
                                 
-                                <input
-                                    class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
-                                    id="{{ field.id_for_label }}" 
-                                    name="{{field.html_name}}" 
-                                    value="{{field.value|default_if_none:''}}"
-                                    rows="{{ field.field.widget.attrs.rows }}"
-                                    maxlength="{{field.field.max_length}}"
-                                    type="hidden">
-                                <!-- <input
-                                    class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
-                                    id="{{ field.id_for_label }}" 
-                                    name="{{field.html_name}}" 
-                                    value="{{field.value|default_if_none:''}}"
-                                    rows="{{ field.field.widget.attrs.rows }}"
-                                    maxlength="{{field.field.max_length}}"
-                                    type="file"> -->
+                            <input
+                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                id="{{ field.id_for_label }}" 
+                                name="{{field.html_name}}_hidden" 
+                                value="{{field.value|default_if_none:''}}"
+                                rows="{{ field.field.widget.attrs.rows }}"
+                                type="hidden">
 
-                                <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px; margin-bottom: 20px;">
-                                    <canvas class="js-paint back" width="300" height="600"></canvas>
-                                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearBackCanvas()">Reset</button>
-    
-                                </div>
+                                <!-- {{field.value|default_if_none:''}} -->
+                            <!-- <input
+                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                id="{{ field.id_for_label }}" 
+                                name="{{field.html_name}}" 
+                                value="{{field.value|default_if_none:''}}"
+                                rows="{{ field.field.widget.attrs.rows }}"
+                                maxlength="{{field.field.max_length}}"
+                                type="file"> -->
+
+                            <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px; margin-bottom: 20px;">
+                                <canvas class="js-paint back" width="300" height="600"></canvas>
+                                <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearBackCanvas()">Reset</button>
+
+                            </div>
                                 
                                 
                             <!-- </div> -->
@@ -258,7 +257,7 @@
 
                             
 
-                            <div class="text-md-start g-col-6" style="margin-top:-20px">
+                            <div class="text-md-start g-col-3" style="margin-top:-20px">
                                 <label  for="{{ field.id_for_label }}" 
                                         class="form-label fw-semibold">
                                         {{field.label}}
@@ -272,10 +271,8 @@
                                 <input
                                     class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
                                     id="{{ field.id_for_label }}" 
-                                    name="{{field.html_name}}" 
+                                    name="{{field.html_name}}_hidden" 
                                     value="{{field.value|default_if_none:''}}"
-                                    rows="{{ field.field.widget.attrs.rows }}"
-                                    maxlength="{{field.field.max_length}}"
                                     hidden>
 
                                     {% if field.errors %} 
@@ -285,9 +282,12 @@
                                         {% endfor %}
                                     </div>
                                 {% endif %} 
-                                <canvas class="js-paint signature" width="300" height="70"></canvas>
+                                <canvas class="js-paint signature" width="300" height="100"></canvas>
                                 <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
                             </div>
+                        {% elif field.field.widget.attrs.recaptcha %}
+                            {{field}}
+
                         {% endif %}
 
                     {% elif field.field.widget.attrs.input_type == "textarea" %}
@@ -303,13 +303,12 @@
                             </label>
                             
                             <textarea
-                                    class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
-                                    id="{{ field.id_for_label }}" 
-                                    name="{{field.html_name}}" 
-                                    value=""
-                                    rows="{{ field.field.widget.attrs.rows }}"
-                                    maxlength="{{field.field.max_length}}"
-                                    {% if field.field.widget.attrs.sore_area or field.field.widget.attrs.signature %}hidden{% endif %}>{{field.value|default_if_none:''}}</textarea>
+                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                                id="{{ field.id_for_label }}" 
+                                name="{{field.html_name}}" 
+                                value=""
+                                rows="{{ field.field.widget.attrs.rows }}"
+                                maxlength="{{field.field.max_length}}">{{field.value|default_if_none:''}}</textarea>
                             
                             {% if field.errors %} 
                                 <div class="invalid-feedback">
@@ -355,8 +354,6 @@
                 {% endfor %}
                 
             </div>
-
-            
 
             <div style="margin-top: 40px;">
                 <button class="btn btn-primary" type="submit" >Submit</button>
@@ -434,7 +431,7 @@
         signatureImage.src = signature
 
         signatureImage.onload = function(){
-            signatureContext.drawImage(signatureImage, 0, 0, 300, 70)
+            signatureContext.drawImage(signatureImage, 0, 0, 300, 100)
         }
         
     }
@@ -448,17 +445,28 @@
     let pointerAmount = []
 
     const stopDrawing = () => {
+        
         if(isMouseDown){
+            frontBackCanvas.backDataUrl = backCanvas.toDataURL()
+            frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
             isMouseDown = false; 
+            if (isBack){
+                $("#id_area_of_soreness_back").val(frontBackCanvas.backDataUrl)
+            }else if(isFront){
+                $("#id_area_of_soreness_front").val(frontBackCanvas.frontDataUrl)
+            }else if(isSignature){
+                $("#id_signature").val(signatureCanvas.toDataURL())
+            }
             isBack = false; 
             isFront = false;
             isSignature = false;
             pointerAmount = [];
-            frontBackCanvas.backDataUrl = backCanvas.toDataURL()
-            frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
-            $("#id_signature").val(signatureCanvas.toDataURL())
-            $("#id_area_of_soreness_front").val(frontBackCanvas.frontDataUrl)
-            $("#id_area_of_soreness_back").val(frontBackCanvas.backDataUrl)
+            
+            
+            
+            
+            
+            
         }
     }
 
@@ -477,13 +485,14 @@
             }
         }
 
-        if(eventAmount > 1){
-            frontCanvas.style.touchAction = "auto"
-            isMouseDown = false; 
-        }else{
-            frontCanvas.style.touchAction = "None"
-            isFront = true
-        }
+        // if(eventAmount > 1){
+        //     frontCanvas.style.touchAction = "auto"
+        //     isMouseDown = false; 
+        // }else{
+            
+        // }
+        frontCanvas.style.touchAction = "None"
+        isFront = true
         
     }
 
@@ -497,13 +506,15 @@
             }
         }
 
-        if(eventAmount > 1){
-            backCanvas.style.touchAction = "auto"
-            isMouseDown = false; 
-        }else{
-            backCanvas.style.touchAction = "None"
-            isBack = true
-        }
+        // if(eventAmount > 1){
+        //     backCanvas.style.touchAction = "auto"
+        //     isMouseDown = false; 
+        // }else{
+            
+        // }
+
+        backCanvas.style.touchAction = "None"
+        isBack = true
     }
 
     const drawingSignature = event => {
@@ -516,13 +527,15 @@
             }
         }
 
-        if(eventAmount > 1){
-            signatureCanvas.style.touchAction = "auto"
-            isMouseDown = false; 
-        }else{
-            signatureCanvas.style.touchAction = "None"
-            isSignature = true
-        }
+        signatureCanvas.style.touchAction = "None"
+        isSignature = true
+
+        // if(eventAmount > 1){
+        //     signatureCanvas.style.touchAction = "auto"
+        //     isMouseDown = false; 
+        // }else{
+            
+        // }
     }
    
    
@@ -595,7 +608,7 @@
         frontContext.drawImage(originalFrontImage, 0, 0, 300 ,600);
         
         frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
-        $("#id_area_of_soreness_front").val(frontBackCanvas.frontDataUrl)
+        $("#id_area_of_soreness_front").val("")
     }
 
     function clearBackCanvas(){
@@ -603,11 +616,11 @@
         backContext.clearRect(0,0,300,600)
         backContext.drawImage(originalBackImage, 0, 0, 300 ,600);
         frontBackCanvas.backDataUrl = backCanvas.toDataURL()
-        $("#id_area_of_soreness_back").val(frontBackCanvas.backDataUrl)
+        $("#id_area_of_soreness_back").val("")
     }
 
     function clearSignatureCanvas(){
-        signatureContext.clearRect(0,0,300,70)
+        signatureContext.clearRect(0,0,300,100)
         $("#id_signature").val("")
     }
 </script>

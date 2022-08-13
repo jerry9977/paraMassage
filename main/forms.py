@@ -4,8 +4,9 @@ from django.core.exceptions import ValidationError
 
 
 import main.models as m
-from main.widget import DatePickerInput, DateTimePickerInput, TimePickerInput
-
+from main.widget import DatePickerInput, DateTimePickerInput, TimePickerInput, CustomImageField
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 GENDER_CHOICES = [
     (0, ""),
     (1, "Male"),
@@ -69,7 +70,15 @@ class RemedialCustomerCheckInForm(forms.ModelForm):
 
 
 class RemedialHistoryForm(forms.ModelForm):
-     
+    captcha = ReCaptchaField(
+        widget=ReCaptchaV3(
+        attrs={
+            'required_score':0.85,
+            'recaptcha': True,
+            'input_type': "hidden"
+        }
+    ))
+
     class Meta:
         model = m.RemedialMedicalHistory
         fields = '__all__'
@@ -86,20 +95,20 @@ class RemedialHistoryForm(forms.ModelForm):
         }
 
 
-    def clean(self):
-        cleaned_data = super().clean()
-        print("====================")
-        print("====================")
-        print("====================")
-        print("====================")
-        print(cleaned_data)
-    def clean_area_of_soreness(self):
-        print("=========================")
-        print("=========================")
-        print("=========================")
-        print(self.cleaned_data)
-        # print(self)
-        # data = self.cleaned_data["area_of_soreness"]
-        pass
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     print("====================")
+    #     print("====================")
+    #     print("====================")
+    #     print("====================")
+    #     print(cleaned_data)
+    # def clean_area_of_soreness(self):
+    #     print("=========================")
+    #     print("=========================")
+    #     print("=========================")
+    #     print(self.cleaned_data)
+    #     # print(self)
+    #     # data = self.cleaned_data["area_of_soreness"]
+    #     pass
 
         
