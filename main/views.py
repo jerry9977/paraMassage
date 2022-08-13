@@ -202,7 +202,7 @@ def remedial_check_in_form(request):
                 )
                 remedial_client_history.save()
 
-                return redirect("/form_submitted/", request)
+                return redirect("form_submitted", title="Client Intake Form")
             else:
                 remedial_history_form = f.RemedialHistoryForm(
                 request.POST, 
@@ -229,9 +229,9 @@ def remedial_check_in_form(request):
     return render(request, 'form/remedial_check_in_form.html', context)
 
 
-def form_submitted(request):
-    context = {}
-    return render(request, 'form/remedial_check_in_form.html', context)
+def form_submitted(request, title):
+    context = {"title":title}
+    return render(request, 'form/form_submitted.html', context)
 
 
 def upload_receipt(request):

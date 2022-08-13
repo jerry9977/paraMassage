@@ -63,7 +63,7 @@
                                 <tr v-else v-for="[clientId, client] in newRemedialClient">
                                     <td>[[client.first_name]]</td>
                                     <td>[[client.last_name]]</td>
-                                    <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
+                                    <td>[[client.health_insurance_number]] / [[client.suffix]]</td>
                                     <td>[[client.date_created]]</td>
                                 </tr>
                             </tbody>
@@ -152,7 +152,7 @@
                 dashboardConnectSocket(){
                     let _this = this
                     const dashboardSocket = new WebSocket(
-                        'wss://'
+                        'ws://'
                         + window.location.host
                         + '/ws/dashboard_update/'
                     );

@@ -243,6 +243,7 @@ body {
   display: flex;
   flex-direction: column;
   font-family: var(--primary-font);
+  overflow-y: hidden !important;
 }
 
 [v-cloak] {

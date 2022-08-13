@@ -21,6 +21,7 @@ def historyPostSave(sender, instance, **kwargs):
                 'last_name':remedial_client_info.client.last_name,
                 'health_insurance_number':str(remedial_client_info.health_insurance_number),
                 'suffix': str(remedial_client_info.suffix)
+                
             }
             
         }

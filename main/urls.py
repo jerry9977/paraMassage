@@ -12,7 +12,7 @@ urlpatterns=[
     path('checkin/', views.check_in),
     # path('customer_check_in_form/', views.customer_check_in_form),
     path('remedial_check_in_form/', views.remedial_check_in_form),
-    path('form_submitted/', views.form_submitted),
+    path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),
     path('upload_receipt/', views.upload_receipt)
 
 ] 

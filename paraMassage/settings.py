@@ -33,7 +33,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '0.0.0.0', 
     'localhost', 
-    '127.0.0.1',            
+    '127.0.0.1',
+    '192.168.1.19',
     'paramassage.herokuapp.com'
 ]
 
@@ -211,6 +212,7 @@ SIMPLE_JWT = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://192.168.1.19:8000",
     "https://paramassage.herokuapp.com"
 ]
 
@@ -226,9 +228,9 @@ SESSION_COOKIE_AGE = 43200
 
 
 # heroku need this, local doesnt
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASE_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 
