@@ -1,5 +1,4 @@
 
-from turtle import back
 from django.db import models
 from django.core.exceptions import ValidationError
 
