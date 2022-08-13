@@ -225,11 +225,10 @@ CSRF_TRUSTED_ORIGINS = [
 SESSION_COOKIE_AGE = 43200
 
 
-
-# DATABASE_URL = os.environ['DATABASE_URL']
-
-# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# heroku need this, local doesnt
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 
