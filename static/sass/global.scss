@@ -47,6 +47,7 @@ $font-family-base: "'Open Sans'";
 @import "bootstrap/reboot";
 
 // 6. Optionally include any other parts as needed
+@import "bootstrap/transitions";
 @import "bootstrap/helpers/color-bg";
 @import "bootstrap/helpers/position";
 @import "bootstrap/badge";
@@ -62,6 +63,7 @@ $font-family-base: "'Open Sans'";
 @import "bootstrap/nav";
 
 @import "bootstrap/tables";
+@import "bootstrap/accordion";
 
 // @import "bootstrap/bootstrap";
 

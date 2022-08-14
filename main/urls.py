@@ -10,6 +10,7 @@ urlpatterns=[
     path('dashboard/', views.dashboard),
     path('customers/', views.customer_list),
     path('checkin/', views.check_in),
+    path('customers/<int:id>/', views.customer_view),
     # path('customer_check_in_form/', views.customer_check_in_form),
     path('remedial_check_in_form/', views.remedial_check_in_form),
     path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),

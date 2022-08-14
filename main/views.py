@@ -1,6 +1,6 @@
 import base64
 from inspect import signature
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from paraMassage.settings import BASE_DIR
 
 from rest_framework import status
@@ -22,7 +22,7 @@ from django.template import loader, RequestContext
 import main.models as m
 import main.forms as f
 import jwt 
-
+import datetime
 import json
 
 from main.image_verifier.image_verifier import ImageVerifier
@@ -118,6 +118,66 @@ def customer_list(request):
 
     context = {}
     return render(request, 'main/customer_list.html', context)
+
+def customer_view(request, id):
+    client = m.Client.objects.filter(pk=id)
+    client_remedial_detail = m.RemedialClientInfo.objects.filter(client=client.first())
+    client_remedial_history = m.RemedialMedicalHistory.objects.filter(remedial_client_info=client_remedial_detail.first())
+    
+    client = client.values().first()
+    client_remedial_detail = client_remedial_detail.values().first()
+    client_remedial_history = client_remedial_history
+
+    # print(client["id"])
+    client_info = {
+        "first_name": client["first_name"],
+        "last_name": client["last_name"],
+        "email": client["email"],
+        "DOB": client["DOB"],
+        "mobile": str(client["mobile"]),
+        "home_phone": str(client["home_phone"]),
+        "health_insurance_number": str(client_remedial_detail["health_insurance_number"]),
+        "suffix": str(client_remedial_detail["suffix"]),
+        "gender": client_remedial_detail["gender"],
+        "martial_status": client_remedial_detail["martial_status"],
+        "weight": str(client_remedial_detail["weight"]),
+        "height": str(client_remedial_detail["height"]),
+        "children": client_remedial_detail["children"],
+        "occupation": client_remedial_detail["occupation"],
+        "address": client_remedial_detail["address"],
+        "job": client_remedial_detail["job"],
+        "emergency_contact_number": client_remedial_detail["emergency_contact_number"],
+        "emergency_contact_name": client_remedial_detail["emergency_contact_name"],
+        "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M"),
+    }
+
+    history_container = []
+    for history in client_remedial_history:
+        history_container.append({
+            "id": history.id,
+            "area_of_soreness_front":history.area_of_soreness_front.url if history.area_of_soreness_front else "",
+            "area_of_soreness_back":history.area_of_soreness_back.url if history.area_of_soreness_back else "",
+            "reason_of_visit": history.reason_of_visit,
+            "symptoms": history.symptoms,
+            "medication": history.medication,
+            "health_care": history.health_care,
+            "additional_comments": history.additional_comments,
+
+            # "reason_of_visit": hist_val["reason_of_visit"],
+            # "symptoms": hist_val["symptoms"],
+            # "medication": hist_val["medication"],
+            # "health_care": hist_val["health_care"],
+            # "additional_comments": hist_val["additional_comments"],
+            "signature": history.signature.url if history.signature else "",
+            "date_created": datetime.datetime.strftime(history.date_created, "%d %b %Y %H:%M")
+            # "date_created": datetime.datetime.strftime(hist_val["date_created"], "%d %b %Y %H:%M")
+        })
+
+    context = {
+        "client_info": client_info,
+        "client_remedial_history": json.dumps(history_container)
+    }
+    return render(request, 'main/customer_view.html', context)
 
 
 @login_required(login_url='/login/')

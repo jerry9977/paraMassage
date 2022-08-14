@@ -1,0 +1,234 @@
+{% extends "main/layout.html"%}
+
+{% block title %}Customer{% endblock %}
+
+{%block head_extra%}
+<style>
+    .cards {
+        border-radius: 5px;
+        background: #FFFFFF;
+        box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+    }
+</style>
+{%endblock%}
+
+{%block content%}
+    <div id="app" v-cloak>
+        <div class="grid">
+            <div class="cards g-col-12 py-3 px-4">
+                <div class="fs-2 fw-semibold " style="margin-bottom: 30px;">CUSTOMER DETAIL</div>
+                <div class="grid">
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">First Name</div>
+                            <div class="g-col-8">{{client_info.first_name}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Last Name</div>
+                            <div class="g-col-8">{{client_info.last_name}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Email</div>
+                            <div class="g-col-8">{{client_info.email|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">DOB</div>
+                            <div class="g-col-8">{{client_info.DOB|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Mobile</div>
+                            <div class="g-col-8">{{client_info.mobile|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Home Phone</div>
+                            <div class="g-col-8">{{client_info.home_phone|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Health Insurance / Suffix</div>
+                            <div class="g-col-8">{{client_info.health_insurance_number}} / {{client_info.suffix}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Gender</div>
+                            <div class="g-col-8">{{client_info.gender|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Martial Status</div>
+                            <div class="g-col-8">{{client_info.martial_status|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Weight / Height</div>
+                            <div class="g-col-8">{{client_info.Weight|default:"N/A"}} / {{client_info.Height|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Children</div>
+                            <div class="g-col-8">{{client_info.Children|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Occupation</div>
+                            <div class="g-col-8">{{client_info.occupation|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Address</div>
+                            <div class="g-col-8">{{client_info.address|default:"N/A"}}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Emergency Contact Name</div>
+                            <div class="g-col-8">{{client_info.emergency_contact_name|default:"N/A"}}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Emergency Contact Number</div>
+                            <div class="g-col-8">{{client_info.emergency_contact_number|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Date Created</div>
+                            <div class="g-col-8">{{client_info.date_created}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cards g-col-12 py-3 px-4">
+                <div class="fs-2 fw-semibold " style="margin-bottom: 30px;">REMEDIAL HISTORY</div>
+                <div class="grid" style="margin-bottom: 30px">
+
+                    <div class="accordion g-col-12" id="according-wrapper">
+                        <div v-for="history in histories" class="accordion-item">
+                            <h2 class="accordion-header" :id="'history-' + history.id">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" :data-bs-target="'#history-collapse-' + history.id" aria-expanded="false" :aria-controls="'history-collapse-' + history.id">
+                                [[history.date_created]]
+                                </button>
+                            </h2>
+                            <div :id="'history-collapse-' + history.id" class="accordion-collapse collapse" :aria-labelledby="'history-' + history.id" data-bs-parent="#according-wrapper">
+                                <div class="grid px-4 py-4">
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Reason of Visit</div>
+                                            <div class="g-col-8" v-if="history.reason_of_visit.length">[[history.reason_of_visit]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Symptoms</div>
+                                            <div class="g-col-8" v-if="history.symptoms.length">[[history.symptoms]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Currently taking any medication?</div>
+                                            <div class="g-col-8" v-if="history.medication.length">[[history.medication]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Currently under the care of a health care professional?</div>
+                                            <div class="g-col-8" v-if="history.health_care.length">[[history.health_care]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Additional comments</div>
+                                            <div class="g-col-8" v-if="history.additional_comments.length">[[history.additional_comments]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Signature</div>
+                                            <img :src="history.signature" v-if="history.signature.length">
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+
+
+    <script>
+        const histories = JSON.parse('{{client_remedial_history|safe}}')
+        const app = Vue.createApp({
+
+            data() {
+                
+                return {
+                    histories: histories
+                }
+            },
+            
+            methods: {
+
+
+            },
+            mounted() {
+            },
+        })
+
+        app.config.compilerOptions.delimiters = ['[[', ']]'];
+        app.config.devtools = true
+        app.mount("#app")
+    </script>
+{%endblock%}
