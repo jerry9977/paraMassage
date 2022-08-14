@@ -79,7 +79,7 @@
                                     <th>First Name</th>
                                     <th>Last Name</th>
                                     <th>Created At</th>
-                                    <th>Status</th>
+                                    <th class="text-center">Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -91,9 +91,49 @@
                                     <td class="align-middle">[[history.first_name]]</td>
                                     <td class="align-middle">[[history.last_name]]</td>
                                     <td class="align-middle">[[history.date_created]]</td>
-                                    <td class="align-middle"></td>
+                                    <td class="align-middle text-center">
+                                        <span v-if="history.receipt_image" class="badge bg-success">Uploaded</span>
+                                        <span v-else class="badge bg-danger">Require</span>
+                                    </td>
                                     <td class="align-middle">
-                                        <input type="file" class="" id="receipt-upload" @change="uploadReceipt([[history.id]])">
+                                        <div style="width:200px">
+                                            <input class="form-control form-control-sm" id="formFileSm" type="file" @change="uploadReceipt([[history.id]])">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="g-col-12 fs-2 fw-semibold ">MISSING REMEDIAL RECEIPT</div>
+                    <div class="g-col-12">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Created At</th>
+                                    <th class="text-center">Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="!missingRemedialReceipt.size">
+                                    <td colspan="5">No Entries Found.</td>
+                                </tr>
+                                <tr v-else v-for="[historyId, history] in missingRemedialReceipt">
+                                    <td class="align-middle">[[history.first_name]]</td>
+                                    <td class="align-middle">[[history.last_name]]</td>
+                                    <td class="align-middle">[[history.date_created]]</td>
+                                    <td class="align-middle text-center">
+                                        <span v-if="history.receipt_image" class="badge bg-success">Uploaded</span>
+                                        <span v-else class="badge bg-danger">Require</span>
+                                    </td>
+                                    <td class="align-middle">
+                                        <div style="width:200px">
+                                            <input class="form-control form-control-sm" id="formFileSm" type="file" @change="uploadReceipt([[history.id]])">
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -121,7 +161,8 @@
                 return {
                     delay: 1000,
                     newRemedialClient: new Map(),
-                    newRemedialHistory: new Map()
+                    newRemedialHistory: new Map(),
+                    missingRemedialReceipt: new Map()
 
                 }
             },
@@ -200,6 +241,13 @@
                         case "add_remedial_history":
                             this.setRemedialHistoryHandler(data.payload)
                             break
+                        case "init_missing_receipt":
+                            this.initMissingRemedialReceiptHandler(data.payload)
+                            break
+                        case "add_missing_receipt":
+                            this.setMissingRemedialReceiptHandler(data.payload)
+                            break
+                
                         default:
                             
                     }
@@ -225,6 +273,18 @@
                 setRemedialHistoryHandler(history){
                     
                     this.newRemedialHistory.set(history.id, history)
+                },
+
+                initMissingRemedialReceiptHandler(data){
+                    console.log(data)
+                    data.forEach(history=>{
+                        this.missingRemedialReceipt.set(history.id, history)
+                    })
+                },
+                
+                setMissingRemedialReceiptHandler(history){
+                    console.log(history)
+                    this.missingRemedialReceipt.set(history.id, history)
                 }
 
             },

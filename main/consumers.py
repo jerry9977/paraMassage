@@ -40,7 +40,7 @@ class DashboardConsumer(WebsocketConsumer):
         # require receipt 
         require_receipts = m.RemedialMedicalHistory.objects\
             .select_related("remedial_client_info","remedial_client_info__client")\
-            .filter(receipt_image__exact='')\
+            .filter(date_created__gte=today)\
             .values(
                 "id",
                 "remedial_client_info__client__first_name",
@@ -63,6 +63,34 @@ class DashboardConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             "action_type": "init_remedial_history",
             "payload": require_receipt_container
+        }))
+
+        # missing receipt 
+        missing_receipts = m.RemedialMedicalHistory.objects\
+            .select_related("remedial_client_info","remedial_client_info__client")\
+            .filter(receipt_image="",date_created__lte=today)\
+            .values(
+                "id",
+                "remedial_client_info__client__first_name",
+                "remedial_client_info__client__last_name",
+                "date_created",
+                "receipt_image"
+            )
+        
+        missing_receipt_container = []
+
+        for missing_receipt in missing_receipts:
+            missing_receipt_container.append({
+                "id":missing_receipt["id"],
+                "first_name":missing_receipt["remedial_client_info__client__first_name"],
+                "last_name":missing_receipt["remedial_client_info__client__last_name"],
+                "date_created":datetime.datetime.strftime(missing_receipt["date_created"], "%d %b %Y %H:%M"),
+                "receipt_image": missing_receipt["receipt_image"]
+            })
+        
+        self.send(text_data=json.dumps({
+            "action_type": "init_missing_receipt",
+            "payload": missing_receipt_container
         }))
 
     def disconnect(self, close_code):

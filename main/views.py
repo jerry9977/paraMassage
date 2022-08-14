@@ -187,18 +187,21 @@ def remedial_check_in_form(request):
 
                     remedial_client_history.area_of_soreness_front.save(
                         "remedial_front.jpg",
-                        front_image.memory_file
+                        front_image.memory_file,
+                        save=False
                     )
                 if back_image.memory_file:
 
                     remedial_client_history.area_of_soreness_back.save(
                         "remedial_back.jpg",
-                        back_image.memory_file
+                        back_image.memory_file,
+                        save=False
                     )
 
                 remedial_client_history.signature.save(
                     "remedial_signature.jpg",
-                    signature_image.memory_file
+                    signature_image.memory_file,
+                    save=False
                 )
                 remedial_client_history.save()
 
@@ -258,7 +261,8 @@ def upload_receipt(request):
                 print("2")
                 remedial_history.receipt_image.save(
                     "remedial_receipt.jpg",
-                    img
+                    img,
+                    save=False
                 )
 
                 print("3")
