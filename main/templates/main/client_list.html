@@ -33,7 +33,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Client's Name" aria-label="Client's Name" aria-describedby="search-btn">
                     <button class="btn btn-outline-primary" type="button" id="search-btn">Search</button>
-                  </div>
+                </div>
             </div>
 
             <div id="customer-list-card" class="cards g-col-12 py-3 px-4">
@@ -47,10 +47,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="">
+
+
+                        <tr v-if="!clients.length">
                             <td colspan="4">No Entries Found.</td>
                         </tr>
-                        <tr v-else v-for="">
+                        <tr v-else v-for="client in clients">
                             <td>[[client.first_name]]</td>
                             <td>[[client.last_name]]</td>
                             <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
@@ -66,13 +68,14 @@
     
 
     <script>
+        const clients = JSON.parse('{{client_json|safe}}')
         const app = Vue.createApp({
 
             data() {
                 
                 return {
                     delay: 1000, 
-                    clients: [],
+                    clients: clients,
 
                 }
             },

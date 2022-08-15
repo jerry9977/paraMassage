@@ -1,5 +1,6 @@
 import base64
 from inspect import signature
+from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from paraMassage.settings import BASE_DIR
 
@@ -177,7 +178,7 @@ def customer_view(request, id):
         "client_info": client_info,
         "client_remedial_history": json.dumps(history_container)
     }
-    return render(request, 'main/customer_view.html', context)
+    return render(request, 'main/client_view.html', context)
 
 
 @login_required(login_url='/login/')
@@ -352,4 +353,28 @@ def upload_receipt(request):
     response['Content-Type'] = 'application/json'
     return response
 
+
+
+
+class ClientListView(ListView):
+    model = m.RemedialClientInfo
+    template_name = 'main/client_list.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(context)
+        client_json = []
+        for remedial_client in context["object_list"]:
+            client_json.append({
+                "id": remedial_client.client.id,
+                "first_name": remedial_client.client.first_name,
+                "last_name": remedial_client.client.last_name,
+                "health_insurance_number": str(remedial_client.health_insurance_number),
+                "suffix": str(remedial_client.suffix),
+                "date_created": datetime.datetime.strftime(remedial_client.client.date_created, "%d %b %Y %H:%M")
+
+            })
+        context["client_json"] = json.dumps(client_json)
+        print(context)
+        # context['now'] = timezone.now()
+        return context
 
