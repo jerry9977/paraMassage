@@ -17,4 +17,4 @@ urlpatterns=[
     path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),
     path('upload_receipt/', views.upload_receipt)
 
-] 
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

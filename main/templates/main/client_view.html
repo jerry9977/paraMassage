@@ -149,6 +149,26 @@
                                 <div class="grid px-4 py-4">
                                     <div class="g-col-12">
                                         <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Area of soreness (Front)</div>
+                                            <img :src="history.area_of_soreness_front" v-if="history.area_of_soreness_front.length">
+                                            <div class="g-col-8" v-else>N/A</div>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Area of soreness (Back)</div>
+                                            <img :src="history.area_of_soreness_back" v-if="history.area_of_soreness_back.length">
+                                            <div class="g-col-8" v-else>N/A</div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
                                             <div class="g-col-4 fw-semibold">Reason of Visit</div>
                                             <div class="g-col-8" v-if="history.reason_of_visit.length">[[history.reason_of_visit]]</div>
                                             <div class="g-col-8" v-else>N/A</div>

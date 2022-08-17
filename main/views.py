@@ -359,9 +359,9 @@ def upload_receipt(request):
 class ClientListView(ListView):
     model = m.RemedialClientInfo
     template_name = 'main/client_list.html'
+    paginate_by = 2
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(context)
         client_json = []
         for remedial_client in context["object_list"]:
             client_json.append({
@@ -374,7 +374,32 @@ class ClientListView(ListView):
 
             })
         context["client_json"] = json.dumps(client_json)
+        
+        paginator = context["page_obj"]
+
+        start_page, end_page = self._get_start_end_page(paginator.paginator.num_pages, paginator.number)
+        context["paginator_range"] = range(start_page, end_page + 1)
         print(context)
-        # context['now'] = timezone.now()
         return context
 
+    def _get_start_end_page(self, total_pages, current_page):
+        max_page = 5
+
+        if total_pages <= max_page:
+            start_page = 1
+            end_page = total_pages
+        else:
+            max_page_before_current = 2
+            max_page_after_current = 2
+
+            if current_page <= max_page_before_current + 1:
+                start_page = 1
+                end_page = max_page
+            elif current_page + max_page_after_current >= total_pages:
+                start_page = total_pages - max_page + 1
+                end_page = total_pages
+            else:
+                start_page = current_page - max_page_before_current
+                end_page = current_page + max_page_after_current
+        
+        return start_page, end_page
