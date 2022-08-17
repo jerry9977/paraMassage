@@ -163,15 +163,8 @@ def customer_view(request, id):
             "medication": history.medication,
             "health_care": history.health_care,
             "additional_comments": history.additional_comments,
-
-            # "reason_of_visit": hist_val["reason_of_visit"],
-            # "symptoms": hist_val["symptoms"],
-            # "medication": hist_val["medication"],
-            # "health_care": hist_val["health_care"],
-            # "additional_comments": hist_val["additional_comments"],
             "signature": history.signature.url if history.signature else "",
             "date_created": datetime.datetime.strftime(history.date_created, "%d %b %Y %H:%M")
-            # "date_created": datetime.datetime.strftime(hist_val["date_created"], "%d %b %Y %H:%M")
         })
 
     context = {
