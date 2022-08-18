@@ -21,6 +21,7 @@ def historyPostSave(sender, instance, created, **kwargs):
             'action_type': "add_remedial_client",
             'payload':{
                 'id': instance.id,
+                'client_id': instance.client.id,
                 'first_name':instance.client.first_name,
                 'last_name':instance.client.last_name,
                 'health_insurance_number': str(instance.health_insurance_number),
@@ -55,6 +56,7 @@ def historyPostSave(sender, instance, **kwargs):
             'action_type': action_type,
             'payload':{
                 'id': instance.id,
+                'client_id': remedial_client_info.client.id,
                 'first_name':remedial_client_info.client.first_name,
                 'last_name':remedial_client_info.client.last_name,
                 'date_created': datetime.datetime.strftime(instance.date_created, "%d %b %Y %H:%M"),

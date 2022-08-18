@@ -17,13 +17,14 @@ class DashboardConsumer(WebsocketConsumer):
             .select_related("client")\
             .filter(date_created__gte=today)\
             .order_by("date_created")\
-            .values("id", "client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
+            .values("id", "client__id", "client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
 
         recently_added_client_container = []
         
         for client in recently_added_client:
             recently_added_client_container.append({
                 "id": client["id"],
+                "client_id": client["client__id"],
                 "first_name": client["client__first_name"],
                 "last_name": client["client__last_name"],
                 "health_insurance_number": str(client["health_insurance_number"]),
@@ -43,6 +44,7 @@ class DashboardConsumer(WebsocketConsumer):
             .filter(date_created__gte=today)\
             .values(
                 "id",
+                "remedial_client_info__client__id",
                 "remedial_client_info__client__first_name",
                 "remedial_client_info__client__last_name",
                 "date_created",
@@ -54,6 +56,7 @@ class DashboardConsumer(WebsocketConsumer):
         for require_receipt in require_receipts:
             require_receipt_container.append({
                 "id":require_receipt["id"],
+                "client_id": require_receipt["remedial_client_info__client__id"],
                 "first_name":require_receipt["remedial_client_info__client__first_name"],
                 "last_name":require_receipt["remedial_client_info__client__last_name"],
                 "date_created":datetime.datetime.strftime(require_receipt["date_created"], "%d %b %Y %H:%M"),
@@ -71,6 +74,7 @@ class DashboardConsumer(WebsocketConsumer):
             .filter(receipt_image="",date_created__lte=today)\
             .values(
                 "id",
+                "remedial_client_info__client__id",
                 "remedial_client_info__client__first_name",
                 "remedial_client_info__client__last_name",
                 "date_created",
@@ -82,6 +86,7 @@ class DashboardConsumer(WebsocketConsumer):
         for missing_receipt in missing_receipts:
             missing_receipt_container.append({
                 "id":missing_receipt["id"],
+                "client_id": missing_receipt["remedial_client_info__client__id"],
                 "first_name":missing_receipt["remedial_client_info__client__first_name"],
                 "last_name":missing_receipt["remedial_client_info__client__last_name"],
                 "date_created":datetime.datetime.strftime(missing_receipt["date_created"], "%d %b %Y %H:%M"),

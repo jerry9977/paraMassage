@@ -17,6 +17,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 
+from django.utils.decorators import method_decorator
 
 from django.http import HttpResponse
 from django.template import loader, RequestContext
@@ -27,6 +28,8 @@ import datetime
 import json
 
 from main.image_verifier.image_verifier import ImageVerifier
+from django.db.models import Q
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -120,6 +123,7 @@ def customer_list(request):
     context = {}
     return render(request, 'main/customer_list.html', context)
 
+@login_required(login_url='/login/')
 def customer_view(request, id):
     client = m.Client.objects.filter(pk=id)
     client_remedial_detail = m.RemedialClientInfo.objects.filter(client=client.first())
@@ -163,6 +167,7 @@ def customer_view(request, id):
             "medication": history.medication,
             "health_care": history.health_care,
             "additional_comments": history.additional_comments,
+            "receipt_image": history.receipt_image.url if history.receipt_image else "",
             "signature": history.signature.url if history.signature else "",
             "date_created": datetime.datetime.strftime(history.date_created, "%d %b %Y %H:%M")
         })
@@ -352,7 +357,7 @@ def upload_receipt(request):
 class ClientListView(ListView):
     model = m.RemedialClientInfo
     template_name = 'main/client_list.html'
-    paginate_by = 2
+    paginate_by = 20
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_json = []
@@ -372,8 +377,25 @@ class ClientListView(ListView):
 
         start_page, end_page = self._get_start_end_page(paginator.paginator.num_pages, paginator.number)
         context["paginator_range"] = range(start_page, end_page + 1)
+        context["filter"] = self.request.GET.get('filter', '')
         print(context)
         return context
+
+    @method_decorator(login_required(login_url='/login/'))
+    def dispatch(self, request, *args, **kwargs):        
+        return super(ClientListView, self).dispatch(request, *args, **kwargs)
+    
+    
+    def get_queryset(self):
+        filter_val = self.request.GET.get('filter', '')
+
+        new_context = m.RemedialClientInfo.objects.filter(
+            Q(client__first_name__icontains=filter_val) | 
+            Q(client__last_name__icontains=filter_val) | 
+            Q(health_insurance_number__icontains=filter_val))
+        
+        return new_context
+
 
     def _get_start_end_page(self, total_pages, current_page):
         max_page = 5

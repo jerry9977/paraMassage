@@ -131,7 +131,12 @@
                             <div class="g-col-8">{{client_info.date_created}}</div>
                         </div>
                     </div>
+
+                    <div class="g-col-12">
+                        <a class="btn btn-outline-primary" href="../">Back</a>
+                    </div>
                 </div>
+                
             </div>
 
             <div class="cards g-col-12 py-3 px-4">
@@ -204,6 +209,14 @@
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Additional comments</div>
                                             <div class="g-col-8" v-if="history.additional_comments.length">[[history.additional_comments]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Receipt</div>
+                                            <img :src="history.receipt_image" v-if="history.receipt_image.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>

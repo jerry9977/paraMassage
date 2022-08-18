@@ -24,16 +24,19 @@
 {%endblock%}
 
 {%block content%}
-
+{% load qr_code %}
     <div id="app" v-cloak>
 
         <div class="grid">
 
             <div id="search-card" class="cards g-col-12 py-3 px-4">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Client's Name" aria-label="Client's Name" aria-describedby="search-btn">
-                    <button class="btn btn-outline-primary" type="button" id="search-btn">Search</button>
-                </div>
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="filter" placeholder="Search by first name, last name, and health insurance number" aria-label="Client's Name" aria-describedby="search-btn" value="{{filter}}">
+                        <button class="btn btn-outline-primary" type="button" id="search-btn">Search</button>
+                    </div>
+                </form>
+                
             </div>
 
             <div id="customer-list-card" class="cards g-col-12 py-3 px-4">
@@ -43,6 +46,7 @@
                             <th>Name</th>
                             <th>Remedial Number / Suffix</th>
                             <th>Created At</th>
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -52,9 +56,14 @@
                             <td colspan="4">No Entries Found.</td>
                         </tr>
                         <tr v-else v-for="client in clients">
-                            <td><a :href="client.id + '/'">[[client.first_name]] [[client.last_name]]</a></td>
-                            <td>[[client.health_insurance_number]]/[[client.suffix]]</td>
-                            <td>[[client.date_created]]</td>
+                            <td class="align-middle"><a :href="client.id + '/'">[[client.first_name]] [[client.last_name]]</a></td>
+                            <td class="align-middle">[[client.health_insurance_number]]/[[client.suffix]]</td>
+                            <td class="align-middle">[[client.date_created]]</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" v-on:click="setQRCode('{% qr_url_from_text "Hello World!"  border="0" %}')">
+                                    Check In
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -105,6 +114,27 @@
             </div>
             
         </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Existing Client Check In</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid">
+                        <div class="g-col-12">
+                            <img class="position-relative top-50 start-50 translate-middle" :src="qrCode">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
     
 
@@ -117,13 +147,16 @@
                 return {
                     delay: 1000, 
                     clients: clients,
+                    qrCode: "",
 
                 }
             },
             
             methods: {
 
-                
+                setQRCode(qrCode){
+                    this.qrCode = qrCode
+                }
 
             },
             mounted() {
