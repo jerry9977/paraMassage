@@ -117,11 +117,11 @@ def dashboard(request):
     return render(request, 'main/dashboard.html', context)
 
 
-@login_required(login_url='/login/')
-def customer_list(request):
+# @login_required(login_url='/login/')
+# def customer_list(request):
 
-    context = {}
-    return render(request, 'main/customer_list.html', context)
+#     context = {}
+#     return render(request, 'main/customer_list.html', context)
 
 @login_required(login_url='/login/')
 def customer_view(request, id):
@@ -291,6 +291,86 @@ def remedial_check_in_form(request):
     return render(request, 'form/remedial_check_in_form.html', context)
 
 
+def existing_remedial_check_in_form(request, token):
+    if request.method =="POST":
+
+        
+
+        area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
+        area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
+        signature = request.POST.get("signature_hidden")
+
+        
+       
+        remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
+
+
+        front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
+        back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
+        signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
+
+
+        if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
+            if remedial_history_form.is_valid():
+
+                client = client_form.save()
+                remedial_client_info = remedial_form.save(commit=False)
+                remedial_client_history = remedial_history_form.save(commit=False)
+                
+                remedial_client_info.client = client
+                remedial_client_info.save()
+
+                
+                remedial_client_history.remedial_client_info = remedial_client_info
+                
+                if front_image.memory_file:
+
+                    remedial_client_history.area_of_soreness_front.save(
+                        "remedial_front.jpg",
+                        front_image.memory_file,
+                        save=False
+                    )
+                if back_image.memory_file:
+
+                    remedial_client_history.area_of_soreness_back.save(
+                        "remedial_back.jpg",
+                        back_image.memory_file,
+                        save=False
+                    )
+
+                remedial_client_history.signature.save(
+                    "remedial_signature.jpg",
+                    signature_image.memory_file,
+                    save=False
+                )
+                remedial_client_history.save()
+
+                return redirect("form_submitted", title="Client Intake Form")
+            else:
+                remedial_history_form = f.RemedialHistoryForm(
+                request.POST, 
+                request.FILES, 
+                initial={
+                    "area_of_soreness_front":area_of_soreness_front,
+                    "area_of_soreness_back": area_of_soreness_back,
+                    "signature":signature
+                }
+            )
+
+    else:
+        client_form = f.CustomerCheckInForm() 
+        remedial_history_form = f.RemedialHistoryForm()
+        remedial_form = f.RemedialCustomerCheckInForm()
+    
+    # print(request.POST)
+    
+    context = {
+        "client_form": client_form,
+        "remedial_history_form":remedial_history_form,
+        "remedial_form": remedial_form
+    }
+    return render(request, 'form/remedial_check_in_form.html', context)
+
 def form_submitted(request, title):
     context = {"title":title}
     return render(request, 'form/form_submitted.html', context)
@@ -362,14 +442,23 @@ class ClientListView(ListView):
         context = super().get_context_data(**kwargs)
         client_json = []
         for remedial_client in context["object_list"]:
+            jwt_token = jwt.encode(
+                {
+                    "id": remedial_client.id, 
+                    "time": datetime.datetime.now().strftime("%H:%M:S")
+                }, 
+                settings.SECRET_KEY, 
+                algorithm="HS256"
+            )
+
             client_json.append({
                 "id": remedial_client.client.id,
                 "first_name": remedial_client.client.first_name,
                 "last_name": remedial_client.client.last_name,
                 "health_insurance_number": str(remedial_client.health_insurance_number),
                 "suffix": str(remedial_client.suffix),
-                "date_created": datetime.datetime.strftime(remedial_client.client.date_created, "%d %b %Y %H:%M")
-
+                "date_created": datetime.datetime.strftime(remedial_client.client.date_created, "%d %b %Y %H:%M"),
+                "token": jwt_token
             })
         context["client_json"] = json.dumps(client_json)
         

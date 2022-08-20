@@ -60,7 +60,7 @@
                             <td class="align-middle">[[client.health_insurance_number]]/[[client.suffix]]</td>
                             <td class="align-middle">[[client.date_created]]</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" v-on:click="setQRCode('{% qr_url_from_text "Hello World!"  border="0" %}')">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" v-on:click="setQRCode(client.token)">
                                     Check In
                                 </button>
                             </td>
@@ -125,7 +125,8 @@
                 <div class="modal-body">
                     <div class="grid">
                         <div class="g-col-12">
-                            <img class="position-relative top-50 start-50 translate-middle" :src="qrCode">
+                            <div id="qrcode"></div>
+                            <!-- <img class="position-relative top-50 start-50 translate-middle" :src="qrCode"> -->
                         </div>
                     </div>
                 </div>
@@ -154,8 +155,9 @@
             
             methods: {
 
-                setQRCode(qrCode){
-                    this.qrCode = qrCode
+                setQRCode(token){
+                    $("#qrcode").empty()
+                    new QRCode(document.getElementById("qrcode"), `${location.host}`)
                 }
 
             },
