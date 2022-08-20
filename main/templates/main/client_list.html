@@ -148,7 +148,7 @@
                 return {
                     delay: 1000, 
                     clients: clients,
-                    qrCode: "",
+                    // qrCode: "",
 
                 }
             },
@@ -156,8 +156,8 @@
             methods: {
 
                 setQRCode(token){
-                    $("#qrcode").empty()
-                    new QRCode(document.getElementById("qrcode"), `${location.host}`)
+                    new QRCode(document.getElementById("qrcode"), `${location.href}existing_check_in/${token}/`)
+                
                 }
 
             },

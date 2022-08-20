@@ -292,6 +292,11 @@ def remedial_check_in_form(request):
 
 
 def existing_remedial_check_in_form(request, token):
+    
+    data = jwt.decode(token, settings.SECRET_KEY, "HS256")
+    id = data["id"]
+    
+
     if request.method =="POST":
 
         
@@ -313,15 +318,11 @@ def existing_remedial_check_in_form(request, token):
         if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
             if remedial_history_form.is_valid():
 
-                client = client_form.save()
-                remedial_client_info = remedial_form.save(commit=False)
                 remedial_client_history = remedial_history_form.save(commit=False)
                 
-                remedial_client_info.client = client
-                remedial_client_info.save()
 
                 
-                remedial_client_history.remedial_client_info = remedial_client_info
+                remedial_client_history.remedial_client_info = m.RemedialClientInfo.objects.get(id=id)
                 
                 if front_image.memory_file:
 
@@ -358,16 +359,12 @@ def existing_remedial_check_in_form(request, token):
             )
 
     else:
-        client_form = f.CustomerCheckInForm() 
+       
         remedial_history_form = f.RemedialHistoryForm()
-        remedial_form = f.RemedialCustomerCheckInForm()
     
-    # print(request.POST)
-    
+
     context = {
-        "client_form": client_form,
-        "remedial_history_form":remedial_history_form,
-        "remedial_form": remedial_form
+        "remedial_history_form":remedial_history_form
     }
     return render(request, 'form/remedial_check_in_form.html', context)
 
@@ -450,7 +447,7 @@ class ClientListView(ListView):
                 settings.SECRET_KEY, 
                 algorithm="HS256"
             )
-
+            print(jwt_token)
             client_json.append({
                 "id": remedial_client.client.id,
                 "first_name": remedial_client.client.first_name,

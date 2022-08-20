@@ -539,7 +539,7 @@
              typeNumber : 4,
              colorDark : "#000000",
              colorLight : "#ffffff",
-             correctLevel : QRErrorCorrectLevel.H
+             correctLevel : QRErrorCorrectLevel.L
          };
          
          if (typeof vOption === 'string') {
