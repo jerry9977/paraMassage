@@ -181,16 +181,6 @@ def customer_view(request, id):
 
 @login_required(login_url='/login/')
 def check_in(request):
-    # token = request.COOKIES.get(settings.SIMPLE_JWT['AUTH_COOKIE'])
-    # jwt.decode(
-    #     token,
-    #     settings.SIMPLE_JWT['SIGNING_KEY'],
-    #     algorithms=[settings.SIMPLE_JWT['ALGORITHM']],
-    # )
-
-    # template = loader.get_template('main/check_in.html')
-    # context = {}
-    # return HttpResponse(template.render(context,request))
 
     context = {}
     return render(request, 'main/check_in.html', context)
@@ -382,39 +372,18 @@ def upload_receipt(request):
             img = request.FILES["image"]
             
             try:
-                print("==============")
-                print("==============")
-                print("==============")
-                print("==============")
-                
-                # img_file = open(os.path.join(settings.MEDIA_ROOT, "123"),'wb')
-                
-                print("1")
-                # img_file.write(img.read())
+
                 
                 remedial_history = m.RemedialMedicalHistory.objects.get(pk=remedial_history_id)
-                
-                print("2")
+
                 remedial_history.receipt_image.save(
                     "remedial_receipt.jpg",
                     img,
                     save=False
                 )
 
-                print("3")
                 remedial_history.save()
-                # print(settings.BASE_DIR)
-                # print(os)
-                # print(os.path)
-                # print(os.path.join(settings.MEDIA_ROOT))
-                # print()
-
-                print(remedial_history.receipt_image.name)
-                print(remedial_history.receipt_image.path)
-                # print(remedial_history.recept_image.path)
-                print("==============")
-                print("==============")
-
+                
                 response = HttpResponse()
                 response['Content-Type'] = 'application/json'
                 return response
@@ -447,7 +416,7 @@ class ClientListView(ListView):
                 settings.SECRET_KEY, 
                 algorithm="HS256"
             )
-            print(jwt_token)
+
             client_json.append({
                 "id": remedial_client.client.id,
                 "first_name": remedial_client.client.first_name,

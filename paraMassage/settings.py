@@ -228,16 +228,16 @@ SESSION_COOKIE_AGE = 43200
 
 
 # heroku need this, local doesnt
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASE_URL = os.environ['DATABASE_URL']
+# conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 
 ASGI_APPLICATION = "paraMassage.asgi.application"
 
 
-MEDIA_ROOT = BASE_DIR / "mediafiles/"
+MEDIA_ROOT = "mediafiles/"
 
 RECAPTCHA_PUBLIC_KEY = '6Le513EhAAAAALJYECpzIXylAj14mhvx_F6WcXVJ'
 RECAPTCHA_PRIVATE_KEY = '6Le513EhAAAAADZCm2mDWF2p7-5Ymf0sicMidISt'
