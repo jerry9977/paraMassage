@@ -30,13 +30,7 @@ SECRET_KEY = 'django-insecure--qsy6lzawpve(7skc1s(x@d9=qvthr@vaa-n9r56yhdbjx5owv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '0.0.0.0', 
-    'localhost', 
-    '127.0.0.1',
-    '192.168.1.19',
-    'paramassage.herokuapp.com'
-]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -105,7 +99,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': 'Qazwsx123@',
         'HOST': '',
-        'PORT': '5433',
+        'PORT': '5432',
     }
 }
 
