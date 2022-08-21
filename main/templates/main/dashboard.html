@@ -195,7 +195,7 @@
                     );
 
                     dashboardSocket.onopen = function(e){
-                        delay = 1000
+                        this.delay = 1000
                         console.log('dashboard websocket connected successfully')
                     }
 
@@ -210,11 +210,11 @@
                         
                         
                         console.error('update socket closed unexpectedly');
-                        console.log(`Socket is closed. Reconnect will be attempted in ${delay/1000} second.`, e.reason);
+                        console.log(`Socket is closed. Reconnect will be attempted in ${this.delay/1000} second.`, e.reason);
                         setTimeout(function() {
-                            delay = delay * 2
+                            this.delay = this.delay * 2
                             _this.dashboardConnectSocket();
-                        }, delay);
+                        }, this.delay);
                     };
                 },  
 
