@@ -8,9 +8,10 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 """
 
 import os
-
+import django
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'paraMassage.settings')
+django.setup()
 
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
