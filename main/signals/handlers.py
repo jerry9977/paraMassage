@@ -1,4 +1,5 @@
 import datetime
+from gettext import install
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import main.models as m
@@ -46,8 +47,9 @@ def client_post_save(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=m.RemedialMedicalHistory)
-def history_post_save(sender, instance, created, **kwargs):
-
+def history_post_save(sender,**kwargs):
+    instance = kwargs.get("instance")
+    
     remedial_client_info = instance.remedial_client_info
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
 
