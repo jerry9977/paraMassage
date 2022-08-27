@@ -201,6 +201,7 @@
 
 
                     dashboardSocket.onmessage = function(e) {
+                        console.log(e)
                         const data = JSON.parse(e.data);
 
                         _this.dashboardWebsocketHandler(data)

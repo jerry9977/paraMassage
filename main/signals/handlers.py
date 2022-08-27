@@ -13,25 +13,33 @@ from channels.layers import get_channel_layer
 def historyPostSave(sender, instance, created, **kwargs):
 
     if created:
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-        'dashboard_consumer',
-        {
-            'type': 'send_data',
-            'action_type': "add_remedial_client",
-            'payload':{
-                'id': instance.id,
-                'client_id': instance.client.id,
-                'first_name':instance.client.first_name,
-                'last_name':instance.client.last_name,
-                'health_insurance_number': str(instance.health_insurance_number),
-                'suffix': str(instance.suffix),
-                'date_created': datetime.datetime.strftime(instance.date_created, "%d %b %Y %H:%M"),
-                
-            }
-            
-        }
-    )
+        print("============")
+        print("============")
+        print("============")
+        try:
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                'dashboard_consumer',
+                {
+                    'type': 'send_data',
+                    'action_type': "add_remedial_client",
+                    'payload':{
+                        'id': instance.id,
+                        'client_id': instance.client.id,
+                        'first_name':instance.client.first_name,
+                        'last_name':instance.client.last_name,
+                        'health_insurance_number': str(instance.health_insurance_number),
+                        'suffix': str(instance.suffix),
+                        'date_created': datetime.datetime.strftime(instance.date_created, "%d %b %Y %H:%M"),
+                        
+                    }
+                    
+                }
+            )
+            print("success send")
+        except Exception as e:
+            print(e)
+    
 
 
     
