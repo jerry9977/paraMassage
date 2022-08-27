@@ -46,7 +46,7 @@ def client_post_save(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=m.RemedialMedicalHistory)
-def history_post_save(sender, instance, **kwargs):
+def history_post_save(sender, instance, created, **kwargs):
 
     remedial_client_info = instance.remedial_client_info
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
