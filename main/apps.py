@@ -7,4 +7,6 @@ class MainConfig(AppConfig):
     name = 'main'
 
     def ready(self):
-        import main.signals.handlers
+        from main.signals import handlers
+        request_finished.connect(handlers.history_post_save)
+        request_finished.connect(handlers.client_post_save)
