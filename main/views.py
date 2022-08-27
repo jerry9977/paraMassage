@@ -306,8 +306,9 @@ def existing_remedial_check_in_form(request, token):
 
 
         if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
+            print("image ok")
             if remedial_history_form.is_valid():
-
+                print("rm ok")
                 remedial_client_history = remedial_history_form.save(commit=False)
                 
 
