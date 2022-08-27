@@ -8,10 +8,10 @@
         /* #search-card{
             height: 100px;
         } */
-
+/* 
         #customer-list-card{
             height: 400px;
-        }
+        } */
 
         .cards{
             border-radius: 5px;
@@ -156,7 +156,7 @@
 
                 setQRCode(token){
                     $("#qrcode").empty()
-                    new QRCode(document.getElementById("qrcode"), `${location.href}existing_check_in/${token}/`)
+                    new QRCode(document.getElementById("qrcode"), `${location.host}existing_check_in/${token}/`)
                 
                 }
 
