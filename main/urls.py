@@ -11,7 +11,7 @@ urlpatterns=[
     path('customers/', views.ClientListView.as_view()),
     path('checkin/', views.check_in),
     path('customers/<int:id>/', views.customer_view),
-    path('customers/existing_check_in/<str:token>/', views.existing_remedial_check_in_form),
+    path('existing_check_in/<str:token>/', views.existing_remedial_check_in_form),
     # path('customers/list/', views.customer_list),
     # path('customer_check_in_form/', views.customer_check_in_form),
     path('remedial_check_in_form/', views.remedial_check_in_form),
