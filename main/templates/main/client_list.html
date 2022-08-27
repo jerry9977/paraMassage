@@ -156,7 +156,7 @@
 
                 setQRCode(token){
                     $("#qrcode").empty()
-                    new QRCode(document.getElementById("qrcode"), `${location.host}existing_check_in/${token}/`)
+                    new QRCode(document.getElementById("qrcode"), `${location.origin}/existing_check_in/${token}/`)
                 
                 }
 
