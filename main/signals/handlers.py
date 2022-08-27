@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 
 @receiver(post_save, sender=m.RemedialClientInfo)
 def historyPostSave(sender, instance, created, **kwargs):
-
+    print("this is called never", flush=True)
     if created:
         print("============",flush=True)
         print("============",flush=True)
