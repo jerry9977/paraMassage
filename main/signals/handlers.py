@@ -13,9 +13,9 @@ from channels.layers import get_channel_layer
 def historyPostSave(sender, instance, created, **kwargs):
 
     if created:
-        print("============")
-        print("============")
-        print("============")
+        print("============",flush=True)
+        print("============",flush=True)
+        print("============",flush=True)
         try:
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
@@ -36,9 +36,9 @@ def historyPostSave(sender, instance, created, **kwargs):
                     
                 }
             )
-            print("success send")
+            print("success send",flush=True)
         except Exception as e:
-            print(e)
+            print(e,flush=True)
     
 
 

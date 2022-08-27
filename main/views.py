@@ -371,10 +371,10 @@ def upload_receipt(request):
             remedial_history_id = request.POST.get("id")
             img = request.FILES["image"]
             print("it is uploading the image",flush=True)
-            print("it is uploading the image")
-            print("it is uploading the image")
-            print("it is uploading the image")
-            print("it is uploading the image")
+            print("it is uploading the image",flush=True)
+            print("it is uploading the image",flush=True)
+            print("it is uploading the image",flush=True)
+            print("it is uploading the image",flush=True)
             try:
 
                 
