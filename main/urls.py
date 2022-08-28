@@ -16,6 +16,7 @@ urlpatterns=[
     # path('customer_check_in_form/', views.customer_check_in_form),
     path('remedial_check_in_form/', views.remedial_check_in_form),
     path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),
+    path('error/<str:title>', views.error_page, name="error_page"),
     path('upload_receipt/', views.upload_receipt)
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

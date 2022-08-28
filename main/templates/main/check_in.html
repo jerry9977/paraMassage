@@ -189,7 +189,9 @@
                         </div>
         
                         <div style="height:60%">
-                            <img class="position-relative top-50 start-50 translate-middle h-100" style="height:100%;" src="{% qr_url_from_text "Hello World!" dark_color="white" border="0" %}" alt="Hello World!">
+                            <div class="position-relative top-50 start-50 translate-middle h-100" style="height:100%;" >
+                                <div class="position-absolute top-50 start-50 translate-middle h-100" id="remedial-check-in-qr" ></div>
+                            </div>
                         </div>
         
                         <div style="height:20%">
@@ -214,6 +216,16 @@
                 }
                 
             })
+
+            new QRCode(document.getElementById('remedial-check-in-qr'), {
+                text:`${location.origin}/remedial_check_in_form/`,
+                height: $("#remedial-check-in-qr").height(),
+                width: $("#remedial-check-in-qr").height(),
+                colorLight: "#87C887",
+                colorDark: "#ffffff"
+            })
+
+
         })
     </script>
 {%endblock%}

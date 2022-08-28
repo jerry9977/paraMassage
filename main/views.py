@@ -282,9 +282,16 @@ def remedial_check_in_form(request):
 
 
 def existing_remedial_check_in_form(request, token):
-    
-    data = jwt.decode(token, settings.SECRET_KEY, "HS256")
-    id = data["id"]
+    try:
+        data = jwt.decode(token, settings.SECRET_KEY, "HS256")
+        id = data["id"]
+        print("===========")
+        print(data["exp"])
+        print(datetime.datetime.now())
+    except jwt.ExpiredSignatureError as e:
+        print("==============")
+        print(e)
+        return redirect("error_page", title="Paradise Massage")
     
 
     if request.method =="POST":
@@ -306,9 +313,7 @@ def existing_remedial_check_in_form(request, token):
 
 
         if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
-            print("image ok")
             if remedial_history_form.is_valid():
-                print("rm ok")
                 remedial_client_history = remedial_history_form.save(commit=False)
                 
 
@@ -363,6 +368,10 @@ def form_submitted(request, title):
     context = {"title":title}
     return render(request, 'form/form_submitted.html', context)
 
+def error_page(request, title):
+    context = {"title":title}
+    return render(request, 'form/error_page.html', context)
+
 
 def upload_receipt(request):
 
@@ -416,9 +425,10 @@ class ClientListView(ListView):
             jwt_token = jwt.encode(
                 {
                     "id": remedial_client.id, 
-                    "time": datetime.datetime.now().strftime("%H:%M:S")
+                    "time": datetime.datetime.now().strftime("%H:%M:S"),
+                    "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=30)
                 }, 
-                settings.SECRET_KEY, 
+                settings.SECRET_KEY,
                 algorithm="HS256"
             )
 

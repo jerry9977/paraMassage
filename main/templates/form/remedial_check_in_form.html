@@ -69,7 +69,10 @@
 <div id="form-card">
     <div class="cutsomer-form-wrapper">
         <div style="margin-bottom: 30px;">
-            <div style="color:#2c2c2c; font-size: 16px; margin-bottom: 20px;">Please provide at least one of the following <b>email</b>, <b>mobile</b> or <b>home phone</b>.</div>
+            {% if remedial_form %}
+                <div style="color:#2c2c2c; font-size: 16px; margin-bottom: 20px;">Please provide at least one of the following <b>email</b>, <b>mobile</b> or <b>home phone</b>.</div>
+            {% endif %}
+            
             <div style="color:#959595; font-size: 12px; "><span style="color:red">*</span> Required information</div>
 
             {% for error in client_form.non_field_errors %}
@@ -260,14 +263,10 @@
 
                             
 
-                            <div class="text-md-start g-col-3" style="margin-top:-20px">
+                            <div class="text-md-start g-col-3">
                                 <label  for="{{ field.id_for_label }}" 
                                         class="form-label fw-semibold">
-                                        {{field.label}}
-
-                                        {% if field.field.required %}
-                                            <span style="color:red;">*</span>
-                                        {% endif %}
+                                        {{field.label}} <span style="color:red;">*</span>
 
                                 </label>
                                 
