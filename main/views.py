@@ -417,7 +417,7 @@ def upload_receipt(request):
 class ClientListView(ListView):
     model = m.RemedialClientInfo
     template_name = 'main/client_list.html'
-    paginate_by = 20
+    paginate_by = 10
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_json = []
