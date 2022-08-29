@@ -380,11 +380,6 @@ def upload_receipt(request):
         if request.FILES.get("image", None) is not None:
             remedial_history_id = request.POST.get("id")
             img = request.FILES["image"]
-            print("it is uploading the image",flush=True)
-            print("it is uploading the image",flush=True)
-            print("it is uploading the image",flush=True)
-            print("it is uploading the image",flush=True)
-            print("it is uploading the image",flush=True)
             try:
 
                 
