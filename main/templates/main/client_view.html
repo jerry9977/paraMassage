@@ -155,7 +155,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Area of soreness (Front)</div>
-                                            <img :src="history.area_of_soreness_front" v-if="history.area_of_soreness_front.length">
+                                            <img class="g-col-6"style="width: 100%;" :src="history.area_of_soreness_front" v-if="history.area_of_soreness_front.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                             
                                         </div>
@@ -164,7 +164,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Area of soreness (Back)</div>
-                                            <img :src="history.area_of_soreness_back" v-if="history.area_of_soreness_back.length">
+                                            <img class="g-col-6" style="width: 100%;" :src="history.area_of_soreness_back" v-if="history.area_of_soreness_back.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                             
                                         </div>
@@ -216,7 +216,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Receipt</div>
-                                            <img class="g-col-6" :src="history.receipt_image" v-if="history.receipt_image.length">
+                                            <img class="g-col-6" style="width: 100%;" :src="history.receipt_image" v-if="history.receipt_image.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -224,7 +224,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Signature</div>
-                                            <img class="g-col-6" :src="history.signature" v-if="history.signature.length">
+                                            <img class="g-col-6"  :src="history.signature" v-if="history.signature.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>

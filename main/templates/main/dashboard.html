@@ -168,8 +168,11 @@
                     let image = event.target.files[0]
                     let url = "../upload_receipt/"
                     let data = new FormData()
+                    
                     data.append("image", image)
                     data.append("id", id)
+                    openInfoToast({message: data})
+                    openInfoToast({message: image})
                     let config = {
                         headers: {
                             "X-CSRFToken": csrftoken,
