@@ -171,8 +171,6 @@
                     
                     data.append("image", image)
                     data.append("id", id)
-                    openInfoToast({message: JSON.stringify(data)})
-                    openInfoToast({message: JSON.stringify(event.target.files)})
                     
                     let config = {
                         headers: {
@@ -181,12 +179,16 @@
                         }
                     }
 
+                    removeToast($("#loading-toast"))
+                    openLoadingToast({message:"Uploading image...", id:"loading-toast"})
                     axios
                         .post(url, data, config)
                         .then(response=>{
-                            openInfoToast({message: "sending message"})
+                            removeToast($("#loading-toast"))
+                            openSuccessToast({message:"Receipt uploaded."})
                         })
                         .catch(error =>{
+                            removeToast($("#loading-toast"))
                             openErrorToast({message:JSON.stringify(error.message)})
                         })
 

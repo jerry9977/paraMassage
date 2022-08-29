@@ -30,6 +30,9 @@ import json
 from main.image_verifier.image_verifier import ImageVerifier
 from django.db.models import Q
 
+from io import BytesIO
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -234,24 +237,32 @@ def remedial_check_in_form(request):
                 
                 if front_image.memory_file:
 
-                    remedial_client_history.area_of_soreness_front.save(
-                        "remedial_front.jpg",
-                        front_image.memory_file,
-                        save=False
-                    )
+                    # remedial_client_history.area_of_soreness_front.save(
+                    #     "remedial_front.jpg",
+                    #     front_image.memory_file,
+                    #     save=False
+                    # )
+
+                    remedial_client_history.area_of_soreness_front = front_image.memory_file
+
+
                 if back_image.memory_file:
 
-                    remedial_client_history.area_of_soreness_back.save(
-                        "remedial_back.jpg",
-                        back_image.memory_file,
-                        save=False
-                    )
+                    # remedial_client_history.area_of_soreness_back.save(
+                    #     "remedial_back.jpg",
+                    #     back_image.memory_file,
+                    #     save=False
+                    # )
+                    remedial_client_history.area_of_soreness_back = back_image.memory_file
 
-                remedial_client_history.signature.save(
-                    "remedial_signature.jpg",
-                    signature_image.memory_file,
-                    save=False
-                )
+                # remedial_client_history.signature.save(
+                #     "remedial_signature.jpg",
+                #     signature_image.memory_file,
+                #     save=False
+                # )
+
+                remedial_client_history.signature = signature_image.memory_file
+                
                 remedial_client_history.save()
 
                 return redirect("form_submitted", title="Client Intake Form")
@@ -322,24 +333,30 @@ def existing_remedial_check_in_form(request, token):
                 
                 if front_image.memory_file:
 
-                    remedial_client_history.area_of_soreness_front.save(
-                        "remedial_front.jpg",
-                        front_image.memory_file,
-                        save=False
-                    )
+                    # remedial_client_history.area_of_soreness_front.save(
+                    #     "remedial_front.jpg",
+                    #     front_image.memory_file,
+                    #     save=False
+                    # )
+
+                    remedial_client_history.area_of_soreness_front = front_image.memory_file
+
                 if back_image.memory_file:
 
-                    remedial_client_history.area_of_soreness_back.save(
-                        "remedial_back.jpg",
-                        back_image.memory_file,
-                        save=False
-                    )
+                    # remedial_client_history.area_of_soreness_back.save(
+                    #     "remedial_back.jpg",
+                    #     back_image.memory_file,
+                    #     save=False
+                    # )
 
-                remedial_client_history.signature.save(
-                    "remedial_signature.jpg",
-                    signature_image.memory_file,
-                    save=False
-                )
+                    remedial_client_history.area_of_soreness_back = back_image.memory_file
+
+                # remedial_client_history.signature.save(
+                #     "remedial_signature.jpg",
+                #     signature_image.memory_file,
+                #     save=False
+                # )
+                remedial_client_history.signature = signature_image.memory_file
                 remedial_client_history.save()
 
                 return redirect("form_submitted", title="Client Intake Form")
@@ -381,16 +398,17 @@ def upload_receipt(request):
             remedial_history_id = request.POST.get("id")
             img = request.FILES["image"]
             try:
-
+                i = Image.open(img)
+                thumb_io = BytesIO()
+                i.save(thumb_io, format='JPEG', quality=80)
+                in_memory_uploaded_file = InMemoryUploadedFile(thumb_io, None, 'remedial_receipt_{id}.jpg'.format(id=remedial_history_id), 'image/jpeg', thumb_io.tell(), None)
                 
                 remedial_history = m.RemedialMedicalHistory.objects.get(pk=remedial_history_id)
 
-                remedial_history.receipt_image.save(
-                    "remedial_receipt.jpg",
-                    img,
-                    save=False
-                )
-
+                if remedial_history.receipt_image:
+                    remedial_history.receipt_image.delete()
+                    
+                remedial_history.receipt_image = in_memory_uploaded_file
                 remedial_history.save()
                 
                 response = HttpResponse()
@@ -399,7 +417,9 @@ def upload_receipt(request):
 
             except Exception as e:
                 print(e)
-                pass
+                response = HttpResponse(status=400)
+                response['Content-Type'] = 'application/json'
+                return response
 
             
     response = HttpResponse()
