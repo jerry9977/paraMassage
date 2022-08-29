@@ -171,8 +171,9 @@
                     
                     data.append("image", image)
                     data.append("id", id)
-                    openInfoToast({message: data})
-                    openInfoToast({message: image})
+                    openInfoToast({message: JSON.stringify(data)})
+                    openInfoToast({message: JSON.stringify(image)})
+                    
                     let config = {
                         headers: {
                             "X-CSRFToken": csrftoken,
@@ -183,7 +184,10 @@
                     axios
                         .post(url, data, config)
                         .then(response=>{
-
+                            openInfoToast({message: "sending message"})
+                        })
+                        .catch(error =>{
+                            openErrorToast({message:JSON.stringify(error.data)})
                         })
 
 
