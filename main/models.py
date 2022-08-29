@@ -16,23 +16,21 @@ class Client(models.Model):
     email = models.EmailField(null=True, blank=True, unique=True)
     DOB = models.DateField(null=True, blank=True)
     
-    mobile = models.DecimalField(   
+    mobile = models.TextField(   
         null=True, 
         blank=True, 
         unique=True, 
-        max_digits=20, 
-        decimal_places=0, 
+        max_length=20, 
         error_messages={
             "invalid":"Please enter only digits"
         }
     )
 
-    home_phone = models.DecimalField(   
+    home_phone = models.TextField(   
         null=True, 
         blank=True, 
         unique=True, 
-        max_digits=20, 
-        decimal_places=0,
+        max_length=20, 
         error_messages={
             "invalid":"Please enter only digits"
         }
@@ -58,12 +56,11 @@ class RemedialClientInfo(models.Model):
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     
-    health_insurance_number = models.DecimalField(
+    health_insurance_number = models.TextField(
         null=False, 
         blank=False, 
         unique=True, 
-        max_digits=25, 
-        decimal_places=0, 
+        max_length=25, 
         error_messages={
             "invalid":"Please enter only digits"
         }
