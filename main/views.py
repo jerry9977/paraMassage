@@ -437,7 +437,7 @@ class ClientListView(ListView):
                 {
                     "id": remedial_client.id, 
                     "time": datetime.datetime.now().strftime("%H:%M:S"),
-                    "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(seconds=30)
+                    "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=30)
                 }, 
                 settings.SECRET_KEY,
                 algorithm="HS256"
