@@ -125,7 +125,6 @@
                                     <td class="align-middle text-center">
                                         <span v-if="history.receipt_image" class="badge bg-success">Uploaded</span>
                                         <span v-else class="badge bg-danger">Require</span>
-                                        <div id="test"></div>
                                     </td>
                                     <td class="align-middle">
                                         <div style="width:200px">
@@ -171,7 +170,6 @@
                     let data = new FormData()
                     data.append("image", image)
                     data.append("id", id)
-                    $("#test").html("uploaded")
                     let config = {
                         headers: {
                             "X-CSRFToken": csrftoken,
