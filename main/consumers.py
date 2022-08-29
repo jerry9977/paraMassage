@@ -104,7 +104,6 @@ class DashboardConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
 
-        print(text_data)
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
@@ -112,9 +111,5 @@ class DashboardConsumer(WebsocketConsumer):
             'message': message
         }))
     def send_data(self, data, type="send_data"):
-        
-        print("===================1231231@")
-        print(data)
+
         self.send(text_data=json.dumps(data))
-    # def send(self, data):
-    #     self.send(text_date=json.dumps(data))

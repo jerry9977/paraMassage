@@ -11,11 +11,7 @@ from channels.layers import get_channel_layer
 
 @receiver(post_save, sender=m.RemedialClientInfo)
 def client_post_save(sender, instance, created, **kwargs):
-    print("this is called never", flush=True)
     if created:
-        print("============",flush=True)
-        print("============",flush=True)
-        print("============",flush=True)
         try:
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
@@ -36,7 +32,6 @@ def client_post_save(sender, instance, created, **kwargs):
                     
                 }
             )
-            print("success send",flush=True)
         except Exception as e:
             print(e,flush=True)
     
@@ -73,27 +68,3 @@ def history_post_save(sender, instance=None, **kwargs):
                 
             }
         )
-
-
-
-# @receiver(post_save, sender=m.RemedialMedicalHistory)
-# def historyPostSave(sender, instance, **kwargs):
-
-#     remedial_client_info = instance.remedial_client_info
-
-#     channel_layer = get_channel_layer()
-#     async_to_sync(channel_layer.group_send)(
-#         'dashboard_consumer',
-#         {
-#             'type': 'send_data',
-#             'action_type': 'add_remedial_client',
-#             'payload':{
-#                 'id': remedial_client_info.id,
-#                 'first_name':remedial_client_info.client.first_name,
-#                 'last_name':remedial_client_info.client.last_name,
-#                 'health_insurance_number':str(remedial_client_info.health_insurance_number),
-#                 'suffix': str(remedial_client_info.suffix)
-#             }
-            
-#         }
-#     )

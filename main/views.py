@@ -262,7 +262,7 @@ def remedial_check_in_form(request):
                 # )
 
                 remedial_client_history.signature = signature_image.memory_file
-                
+
                 remedial_client_history.save()
 
                 return redirect("form_submitted", title="Client Intake Form")
@@ -296,11 +296,7 @@ def existing_remedial_check_in_form(request, token):
     try:
         data = jwt.decode(token, settings.SECRET_KEY, "HS256")
         id = data["id"]
-        print("===========")
-        print(data["exp"])
-        print(datetime.datetime.now())
     except jwt.ExpiredSignatureError as e:
-        print("==============")
         print(e)
         return redirect("error_page", title="Paradise Massage")
     

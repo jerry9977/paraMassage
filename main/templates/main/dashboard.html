@@ -217,7 +217,6 @@
 
                     dashboardSocket.onclose = function(e) {
                         
-                        console.log(_this.delay)
                         console.error('update socket closed unexpectedly');
                         console.log(`Socket is closed. Reconnect will be attempted in ${_this.delay/1000} second.`, e.reason);
                         setTimeout(function() {
@@ -232,7 +231,6 @@
                         console.err("Bad response message")
                         return
                     }
-                    console.log(data.action_type)
                     switch (data.action_type){
                         case "init_remedial_client":
                             this.initRemedialClientHandler(data.payload)
@@ -281,14 +279,12 @@
                 },
 
                 initMissingRemedialReceiptHandler(data){
-                    console.log(data)
                     data.forEach(history=>{
                         this.missingRemedialReceipt.set(history.id, history)
                     })
                 },
                 
                 setMissingRemedialReceiptHandler(history){
-                    console.log(history)
                     this.missingRemedialReceipt.set(history.id, history)
                 }
 
