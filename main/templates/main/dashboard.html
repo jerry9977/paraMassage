@@ -172,7 +172,7 @@
                     data.append("image", image)
                     data.append("id", id)
                     openInfoToast({message: JSON.stringify(data)})
-                    openInfoToast({message: JSON.stringify(image)})
+                    openInfoToast({message: JSON.stringify(event.target.files)})
                     
                     let config = {
                         headers: {
@@ -187,7 +187,7 @@
                             openInfoToast({message: "sending message"})
                         })
                         .catch(error =>{
-                            openErrorToast({message:JSON.stringify(error.data)})
+                            openErrorToast({message:JSON.stringify(error.message)})
                         })
 
 
