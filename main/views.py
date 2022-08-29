@@ -473,6 +473,9 @@ class ClientListView(ListView):
         new_context = m.RemedialClientInfo.objects.filter(
             Q(client__first_name__icontains=filter_val) | 
             Q(client__last_name__icontains=filter_val) | 
+            Q(client__mobile__icontains=filter_val) | 
+            Q(client__home_phone__icontains=filter_val) | 
+            Q(client__email__icontains=filter_val) | 
             Q(health_insurance_number__icontains=filter_val))
         
         return new_context
