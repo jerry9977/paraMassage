@@ -184,8 +184,15 @@ def customer_view(request, id):
 
 @login_required(login_url='/login/')
 def check_in(request):
-
-    context = {}
+    jwt_token = jwt.encode(
+        {
+            "time": datetime.datetime.now().strftime("%H:%M:S"),
+            "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=30)
+        }, 
+        settings.SECRET_KEY,
+        algorithm="HS256"
+    )
+    context = {"token":jwt_token}
     return render(request, 'main/check_in.html', context)
 
 
@@ -203,7 +210,12 @@ def customer_check_in_form(request):
     }
     return render(request, 'form/customer_check_in_form.html', context)
 
-def remedial_check_in_form(request):
+def remedial_check_in_form(request,token):
+    try:
+        jwt.decode(token, settings.SECRET_KEY, "HS256")
+    except jwt.ExpiredSignatureError as e:
+        print(e)
+        return redirect("error_page", title="Paradise Massage")
 
     if request.method =="POST":
 
