@@ -25,8 +25,8 @@
 
     @media only screen and (max-width: 1600px){
         .qr-code-wrapper{
-            height: 400px;
-            width: 400px;
+            height: 350px;
+            width: 350px;
         }
     }
     
@@ -107,7 +107,7 @@
 {%block content%}
 {% load qr_code %}
     <div class="position-relative w-100 h-100">
-        <div id="qr-wrapper" class="grid position-absolute top-50 start-50 translate-middle w-100" style="--bs-columns:19;">
+        <div id="qr-wrapper" class="grid position-relative top-50 start-50 translate-middle w-100" style="--bs-columns:19;">
             <div class="flip-box qr-code-wrapper cards g-start-3 g-start-sm-5 g-col-lg-8 g-start-lg-2 g-col-xl-6 g-start-xl-4">
                 <div class="flip-box-inner w-100 h-100">
                     <div class="remedial-check-in flip-box-front w-100 h-100">
@@ -187,9 +187,9 @@
 
                     <div class="customer-check-in flip-box-back w-100 h-100">
                         <div style="height:20%">
-                            <!-- <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
+                            <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
                                 SCAN ME
-                            </div> -->
+                            </div>
                         </div>
         
                         <div style="height:60%">
