@@ -2,6 +2,9 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% load static %}
+
+
 {%block head_extra%}
     <style>
         #new-member-card{
@@ -25,6 +28,7 @@
         [v-cloak] {display: none}
 
     </style>
+    <script type="text/javascript" src="{%static 'js/echarts.js'%}"></script>
 {%endblock%}
 
 {%block content%}
@@ -38,8 +42,9 @@
             </div>
 
             <div id="status-card" class="cards g-col-12 g-col-lg-8 py-3 px-4">
-                <div class="grid">
+                <div class="grid"  style="grid-template-rows: 48px 1fr;height: 100%;">
                     <div class="g-col-12 fs-2 fw-semibold ">NEW CUSTOMER STATS</div>
+                    <div id="new-customer-stats-bar" class="g-col-12 w-100 h-100" ></div>
                 </div>
             </div>
 
@@ -150,6 +155,7 @@
     </script>
 
     <script>
+        let sevenDayStats = JSON.parse('{{seven_day_stats|escapejs}}')
         const app = Vue.createApp({
 
             data() {
@@ -158,7 +164,8 @@
                     delay: 1000,
                     newRemedialClient: new Map(),
                     newRemedialHistory: new Map(),
-                    missingRemedialReceipt: new Map()
+                    missingRemedialReceipt: new Map(),
+                    sevenDayStats:sevenDayStats
 
                 }
             },
@@ -286,11 +293,52 @@
                 
                 setMissingRemedialReceiptHandler(history){
                     this.missingRemedialReceipt.set(history.id, history)
+                },
+
+                initChart(){
+                    // Initialize the echarts instance based on the prepared dom
+                    var myChart = echarts.init(document.getElementById('new-customer-stats-bar'));
+                    
+                    // Specify the configuration items and data for the chart
+                    var option = {
+                        tooltip: {},
+                        xAxis: {
+                            type: 'category',
+                            data: sevenDayStats.map(result=>result.date_created),
+                        },
+                        yAxis: {
+                            type: 'value'
+                        },
+                        series: [
+                            {
+                            data: sevenDayStats.map(result=>result.total),
+                            type: 'bar'
+                            }
+                        ],
+                        grid: {
+                        left: 40,
+                        top: 20,
+                        right: 20,
+                        bottom: 20
+                        }
+                    };
+
+                    // Display the chart using the configuration items and data just specified.
+                    myChart.setOption(option);
+                    window.onload = function(){
+                        myChart.resize()
+                    }
+                    window.onresize= function(){
+                        myChart.resize()
+                    }
                 }
 
             },
             mounted() {
                 this.dashboardConnectSocket()
+                this.initChart()
+
+                
             },
         })
 

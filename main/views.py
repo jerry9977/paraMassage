@@ -1,5 +1,7 @@
 import base64
 from inspect import signature
+from itertools import count
+from optparse import Values
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from paraMassage.settings import BASE_DIR
@@ -115,8 +117,40 @@ def standard_login(request):
 
 @login_required(login_url='/login/')
 def dashboard(request):
+    from django.db.models import Count
+    from django.db.models.functions import TruncDate
 
-    context = {}
+    today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
+    seven_days_ago = today - datetime.timedelta(days=7)
+    # recently added remedial client  
+    total_count_last_seven_days = m.RemedialClientInfo.objects\
+        .select_related("client")\
+        .filter(date_created__lt=today, date_created__gte=seven_days_ago)\
+        .annotate(registered_date=TruncDate('date_created'))\
+        .order_by('registered_date')\
+        .values("registered_date")\
+        .annotate(**{'total': Count('registered_date')})
+
+    seven_day_stats = []
+    for day in range(0, 7):
+        current_day = datetime.date.today() - datetime.timedelta(days=7) + datetime.timedelta(days=day)
+        not_found = True
+        for result in total_count_last_seven_days:
+            if result["registered_date"] == current_day:
+                seven_day_stats.append({
+                    "date_created": current_day.strftime("%d.%m.%Y"),
+                    "total": result["total"]
+                })
+                not_found = False
+                break
+        
+        if not_found:
+            seven_day_stats.append({
+                "date_created": current_day.strftime("%d.%m.%Y"),
+                "total": 0
+            })
+            
+    context = {"seven_day_stats":json.dumps(seven_day_stats)}
     return render(request, 'main/dashboard.html', context)
 
 
