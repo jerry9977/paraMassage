@@ -42,7 +42,7 @@ class DashboardConsumer(WebsocketConsumer):
         require_receipts = m.RemedialMedicalHistory.objects\
             .select_related("remedial_client_info","remedial_client_info__client")\
             .filter(date_created__gte=today)\
-            .order_by("-remedial_client_info__date_created")\
+            .order_by("-date_created")\
             .values(
                 "id",
                 "remedial_client_info__client__id",
@@ -73,7 +73,7 @@ class DashboardConsumer(WebsocketConsumer):
         missing_receipts = m.RemedialMedicalHistory.objects\
             .select_related("remedial_client_info","remedial_client_info__client")\
             .filter(receipt_image="",date_created__lte=today)\
-            .order_by("-remedial_client_info__date_created")\
+            .order_by("-date_created")\
             .values(
                 "id",
                 "remedial_client_info__client__id",
