@@ -10,7 +10,9 @@ from channels.layers import get_channel_layer
 
 
 @receiver(post_save, sender=m.RemedialClientInfo)
-def client_post_save(sender, instance, created, **kwargs):
+def client_post_save(sender, **kwargs):
+    instance = kwargs.get("instance", None)
+    created = kwargs.get("created", None)
     if created:
         try:
             channel_layer = get_channel_layer()
@@ -41,7 +43,8 @@ def client_post_save(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=m.RemedialMedicalHistory)
-def history_post_save(sender, instance=None, **kwargs):
+def history_post_save(sender, **kwargs):
+    instance = kwargs.get("instance", None)
     if instance:
         remedial_client_info = instance.remedial_client_info
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())

@@ -8,5 +8,5 @@ class MainConfig(AppConfig):
 
     def ready(self):
         from main.signals import handlers
-        request_finished.connect(handlers.history_post_save)
-        request_finished.connect(handlers.client_post_save)
+        request_finished.connect(handlers.history_post_save, dispatch_uid="history_post_save")
+        request_finished.connect(handlers.client_post_save, dispatch_uid="client_post_save")
