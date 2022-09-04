@@ -242,7 +242,7 @@
 
 
     <script>
-        const histories = JSON.parse('{{client_remedial_history|safe}}')
+        const histories = JSON.parse('{{client_remedial_history|escapejs}}')
         const app = Vue.createApp({
 
             data() {
