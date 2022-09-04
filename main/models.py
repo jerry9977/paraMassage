@@ -84,7 +84,7 @@ class RemedialClientInfo(models.Model):
     occupation = models.TextField(null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     job = models.TextField(null=True, blank=True)
-    emergency_contact_number = models.IntegerField(null=True, blank=True)
+    emergency_contact_number = models.TextField(null=True, blank=True, max_length=20)
     emergency_contact_name = models.TextField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
