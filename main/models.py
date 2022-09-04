@@ -58,8 +58,7 @@ class RemedialClientInfo(models.Model):
     
     health_insurance_number = models.TextField(
         null=False, 
-        blank=False, 
-        unique=True, 
+        blank=False,
         max_length=25, 
         error_messages={
             "invalid":"Please enter only digits"
@@ -165,21 +164,3 @@ class RemedialMedicalHistory(models.Model):
 
     def __str__(self):
         return str(self.id)
-
-    # def clean_area_of_soreness(self):
-    #     print("=========================")
-    #     print("=========================")
-    #     print("===========model123==============")
-    #     print(self)
-    #     # data = self
-    #     pass
-
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     print("=========================")
-    #     print("=========================")
-    #     print("==============model===========")
-    #     print(type(self.area_of_soreness_front))
-    #     pass
-
-
