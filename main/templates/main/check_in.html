@@ -66,10 +66,13 @@
 
     .qr-description{
         font-size:14px;
-        
+        text-decoration: none;
         color: white;
     }
 
+    .qr-description:hover{
+        color: white;
+    }
 
 
     /* flip box */
@@ -150,7 +153,7 @@
         
                         <div style="height:20%">
                             <div class="position-relative top-50 start-50 translate-middle qr-description" style="display:inline-block">
-                                CLICK HERE TO REDIRECT
+                                <a class="qr-description" href="/remedial_check_in_form/{{token}}/">CLICK HERE TO REDIRECT</a>
                             </div>
                         </div>
                     </div>
