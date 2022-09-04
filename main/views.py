@@ -1,4 +1,5 @@
 import base64
+from http import client
 from inspect import signature
 from itertools import count
 from optparse import Values
@@ -172,6 +173,7 @@ def customer_view(request, id):
 
     # print(client["id"])
     client_info = {
+        "id": client["id"],
         "first_name": client["first_name"],
         "last_name": client["last_name"],
         "email": client["email"],
@@ -214,6 +216,37 @@ def customer_view(request, id):
         "client_remedial_history": json.dumps(history_container)
     }
     return render(request, 'main/client_view.html', context)
+
+
+@login_required(login_url='/login/')
+def customer_edit(request, id):
+    client = m.Client.objects.get(pk=id)
+    client_remedial_detail = m.RemedialClientInfo.objects.get(client=client)
+    if request.method =="POST":
+        client_form = f.CustomerCheckInForm(request.POST, instance=client)
+        remedial_form = f.RemedialCustomerCheckInForm(request.POST, instance=client_remedial_detail)
+
+        if client_form.is_valid() and remedial_form.is_valid():
+
+            client_form.save()
+            remedial_form.save()
+
+
+            return redirect("client_view", id=id)
+
+
+    else:
+        client_form = f.CustomerCheckInForm(instance=client) 
+        remedial_form = f.RemedialCustomerCheckInForm(instance=client_remedial_detail)
+    
+
+    
+    context = {
+        "client_form": client_form,
+        "remedial_form": remedial_form,
+        "id": id
+    }
+    return render(request, 'main/client_edit.html', context)
 
 
 @login_required(login_url='/login/')
@@ -505,7 +538,7 @@ class ClientListView(ListView):
         start_page, end_page = self._get_start_end_page(paginator.paginator.num_pages, paginator.number)
         context["paginator_range"] = range(start_page, end_page + 1)
         context["filter"] = self.request.GET.get('filter', '')
-        print(context)
+        
         return context
 
     @method_decorator(login_required(login_url='/login/'))
@@ -522,7 +555,8 @@ class ClientListView(ListView):
             Q(client__mobile__icontains=filter_val) | 
             Q(client__home_phone__icontains=filter_val) | 
             Q(client__email__icontains=filter_val) | 
-            Q(health_insurance_number__icontains=filter_val))
+            Q(health_insurance_number__icontains=filter_val))\
+            .order_by("-client__date_created")
         
         return new_context
 

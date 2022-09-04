@@ -1,0 +1,145 @@
+{% extends "main/layout.html"%}
+
+{% load filter_tag %}
+
+{% block title %}Customer{% endblock %}
+
+{%block head_extra%}
+<style>
+    .cards {
+        border-radius: 5px;
+        background: #FFFFFF;
+        box-shadow: 0px 1px 4px rgb(0 0 0 / 25%);
+    }
+</style>
+{%endblock%}
+
+{%block content%}
+    <div id="app" v-cloak>
+        <div class="grid">
+            <div class="cards g-col-12 py-3 px-4">
+                <div class="fs-2 fw-semibold " style="margin-bottom: 30px;">EDIT CUSTOMER DETAIL</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="grid">
+
+                        {% for field in client_form %}
+                        
+                            <div class="g-col-12">
+    
+                                <div class="grid">
+                                    <div class="g-col-4 fw-semibold">
+                                        {{field.label}}
+                                        {% if field.field.required %}
+                                            <span style="color:red;">*</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="g-col-8">
+                                        <input  type="{{ field.field.widget.input_type }}" 
+                                            class="form-control {%if field.errors%}is-invalid{%endif%}" 
+                                            id="{{ field.id_for_label }}" 
+                                            name="{{field.html_name}}" 
+                                            value="{{field.value|default_if_none:''}}"
+                                            maxlength="{{field.field.max_length}}">
+                                
+                                        {% if field.errors %} 
+                                            <div class="invalid-feedback">
+                                                {% for error in field.errors %}
+                                                    {{ error|escape }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                        {% endfor %}
+    
+                        {% for field in remedial_form %}
+                            
+                            <div class="g-col-12">
+                                <div class="grid">
+                                    <div class="g-col-4 fw-semibold">
+                                        {{field.label}}
+                                        {% if field.field.required %}
+                                            <span style="color:red;">*</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="g-col-8">
+                                        {%if field|fieldtype == "Select" %}
+                                            <select type="{{ field.field.widget.input_type }}" 
+                                                    class="form-select" 
+                                                    id="{{ field.id_for_label }}" 
+                                                    name="{{field.html_name}}" 
+                                                    value="{{field.value|default_if_none:''}}"
+                                                    maxlength="{{field.field.max_length}}">
+                                                {% for value, label in field.field.widget.choices %}
+                                                <option value="{{value}}">{{label}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% else %}
+                                            <input  type="{{ field.field.widget.input_type }}" 
+                                                class="form-control {%if field.errors%}is-invalid{%endif%}" 
+                                                id="{{ field.id_for_label }}" 
+                                                name="{{field.html_name}}" 
+                                                value="{{field.value|default_if_none:''}}"
+                                                maxlength="{{field.field.max_length}}">
+                                        {%endif%}
+                                        
+                                        {% if field.errors %} 
+                                            <div class="invalid-feedback">
+                                                {% for error in field.errors %}
+                                                    {{ error|escape }}
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}    
+    
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                                
+                            </div>
+                            
+                        {% endfor %}
+    
+                  
+                        <div class="g-col-12">
+                            <button class="btn btn-primary" type="submit" style="margin-right: 10px">Save</button>
+                            <a class="btn btn-outline-primary" href="/customers/{{id}}/">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+                
+                
+            </div>            
+        </div>
+    </div>
+
+
+    <script>
+       
+        const app = Vue.createApp({
+
+            data() {
+                
+                return {
+                    
+                }
+            },
+            
+            methods: {
+
+
+            },
+            mounted() {
+            },
+        })
+
+        app.config.compilerOptions.delimiters = ['[[', ']]'];
+        app.config.devtools = true
+        app.mount("#app")
+    </script>
+{%endblock%}
