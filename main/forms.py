@@ -29,7 +29,7 @@ class CustomerCheckInForm(forms.ModelForm):
     home_phone = forms.CharField(max_length=20, required=False, empty_value=None)
     class Meta:
         model = m.Client
-        fields = ["first_name", "last_name", "DOB", "email", "mobile", "home_phone"]
+        fields = ["email", "mobile", "home_phone", "first_name", "last_name", "DOB"]
 
         widgets = {
             'DOB': DatePickerInput(),

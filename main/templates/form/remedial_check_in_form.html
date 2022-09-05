@@ -61,6 +61,10 @@
     input[type="date"]{ 
         -webkit-appearance: none;
     }
+
+    .form-control, .form-label{
+        font-size: 1.5rem;
+    }
 </style>
 <!-- {{ form.media }} -->
 {%endblock%}
@@ -69,20 +73,21 @@
 <div id="form-card">
     <div class="cutsomer-form-wrapper">
         <div style="margin-bottom: 30px;">
-            {% if remedial_form %}
-                <div style="color:#2c2c2c; font-size: 16px; margin-bottom: 20px;">Please provide at least one of the following <b>email</b>, <b>mobile</b> or <b>home phone</b>.</div>
-            {% endif %}
             
-            <div style="color:#959595; font-size: 12px; "><span style="color:red">*</span> Required information</div>
-
+            {% if remedial_form %}
+            <div style="color:#2c2c2c; font-size: 16px; margin-bottom: 20px;font-size: 1.5rem;">Please provide at least one of the following <b>email</b>, <b>mobile</b> or <b>home phone</b>.</div>
+            {% endif %}
+            {% if not client_form %}
+                <div style="color:#959595;font-size: 1.5rem; "><span style="color:red;font-size: 1.5rem;">*</span> Required information</div>
+            {% endif %}
             {% for error in client_form.non_field_errors %}
-                    <span style="color:red">{{ error|escape }}</span>
+                    <span style="color:red;font-size: 1.5rem;">{{ error|escape }}</span>
             {% endfor %}
             {% for error in remedial_form.non_field_errors %}
-                    <span style="color:red">{{ error|escape }}</span>
+                    <span style="color:red;font-size: 1.5rem;">{{ error|escape }}</span>
             {% endfor %}
             {% for error in remedial_history_form.non_field_errors %}
-                    <span style="color:red">{{ error|escape }}</span>
+                    <span style="color:red;font-size: 1.5rem;">{{ error|escape }}</span>
             {% endfor %}
         </div>
         
@@ -97,7 +102,7 @@
                 
                 {% for field in client_form %}
                     
-                    <div class="g-col-12 g-col-md-6">
+                    <div class="g-col-12 ">
                         <label  for="{{ field.id_for_label }}" 
                                 class="form-label fw-semibold">
                                 {{field.label}}
@@ -123,13 +128,21 @@
                                 {% endfor %}
                             </div>
                         {% endif %}    
-                    </div>
+                        
+                        {% if field.label == "Home phone"%}
+                            <hr style="margin-top:50px">
+                            
+                            <div style="color:#959595;font-size: 1.5rem; margin-top: 60px;"><span style="color:red;font-size: 1.5rem;">*</span> Required information</div>
 
+
+                        {% endif %}
+                    </div>
+                
                 {% endfor %}
 
                 {% for field in remedial_form %}
                     
-                    <div class="g-col-12 g-col-md-6">
+                    <div class="g-col-12 ">
                         <label  for="{{ field.id_for_label }}" 
                                 class="form-label fw-semibold">
                                 {{field.label}}
@@ -239,15 +252,6 @@
                                 rows="{{ field.field.widget.attrs.rows }}"
                                 type="hidden">
 
-                                <!-- {{field.value|default_if_none:''}} -->
-                            <!-- <input
-                                class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
-                                id="{{ field.id_for_label }}" 
-                                name="{{field.html_name}}" 
-                                value="{{field.value|default_if_none:''}}"
-                                rows="{{ field.field.widget.attrs.rows }}"
-                                maxlength="{{field.field.max_length}}"
-                                type="file"> -->
 
                             <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px; margin-bottom: 20px;">
                                 <canvas class="js-paint back" width="300" height="600"></canvas>
@@ -255,8 +259,6 @@
 
                             </div>
                                 
-                                
-                            <!-- </div> -->
                             
                                 
                         {% elif field.field.widget.attrs.signature  %}
@@ -324,7 +326,7 @@
                         </div>
 
                     {% else %}
-                        <div class="g-col-12 g-col-md-6">
+                        <div class="g-col-12 ">
                             <label  for="{{ field.id_for_label }}" 
                                     class="form-label fw-semibold">
                                     {{field.label}}
@@ -358,7 +360,9 @@
             </div>
 
             <div style="margin-top: 40px;">
-                <button class="btn btn-primary" type="submit" >Submit</button>
+                <button id="submit-btn" class="btn btn-primary" type="submit">
+                    Submit
+                </button>
             </div>
 
 
@@ -370,6 +374,16 @@
 
 <script>
     
+    $("form").on('submit', function(){
+        // disable button
+        $("#submit-btn").prop("disabled", true);
+        // add spinner to button
+        $("#submit-btn").html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`
+        );
+    })
+    
+
     let frontBackCanvas= {
         frontDataUrl:"",
         backDataUrl: "",
