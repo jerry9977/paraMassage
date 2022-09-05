@@ -219,7 +219,10 @@
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Receipt</div>
                                             <img class="g-col-6" style="width: 100%;" :src="history.receipt_image" v-if="history.receipt_image.length">
-                                            <div class="g-col-8" v-else>N/A</div>
+                                            <div class="g-col-6" v-else>N/A</div>
+                                            
+                                            
+
                                         </div>
                                     </div>
 
@@ -229,6 +232,14 @@
                                             <img class="g-col-6" style="width: 100%;"  :src="history.signature" v-if="history.signature.length">
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Upload Receipt</div>
+                                            <div class="g-col-6"><input class="form-control form-control-sm" id="formFileSm" type="file" @change="uploadReceipt([[history.id]])"></div>
+                                        </div>
+                                        
                                     </div>
 
                                 </div>
@@ -241,7 +252,10 @@
             
         </div>
     </div>
-
+    {% csrf_token %}
+    <script>
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
 
     <script>
         const histories = JSON.parse('{{client_remedial_history|escapejs}}')
@@ -255,8 +269,34 @@
             },
             
             methods: {
+                uploadReceipt(id){
+                    let image = event.target.files[0]
+                    let url = "/upload_receipt/"
+                    let data = new FormData()
+                    
+                    data.append("image", image)
+                    data.append("id", id)
+                    
+                    let config = {
+                        headers: {
+                            "X-CSRFToken": csrftoken,
+                            "content-type": "multipart/form-data"
+                        }
+                    }
 
-
+                    removeToast($("#loading-toast"))
+                    openLoadingToast({message:"Uploading image...", id:"loading-toast"})
+                    axios
+                        .post(url, data, config)
+                        .then(response=>{
+                            removeToast($("#loading-toast"))
+                            openSuccessToast({message:"Receipt uploaded. Refresh page to see changes."})
+                        })
+                        .catch(error =>{
+                            removeToast($("#loading-toast"))
+                            openErrorToast({message:JSON.stringify(error.message)})
+                        })
+                    }
             },
             mounted() {
             },

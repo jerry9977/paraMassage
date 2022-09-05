@@ -165,7 +165,7 @@ def dashboard(request):
 def customer_view(request, id):
     client = m.Client.objects.filter(pk=id)
     client_remedial_detail = m.RemedialClientInfo.objects.filter(client=client.first())
-    client_remedial_history = m.RemedialMedicalHistory.objects.filter(remedial_client_info=client_remedial_detail.first())
+    client_remedial_history = m.RemedialMedicalHistory.objects.filter(remedial_client_info=client_remedial_detail.first()).order_by("-date_created")
     
     client = client.values().first()
     client_remedial_detail = client_remedial_detail.values().first()
