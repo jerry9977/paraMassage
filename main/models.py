@@ -66,8 +66,8 @@ class RemedialClientInfo(models.Model):
     )
 
     suffix = models.DecimalField(
-        null=False, 
-        blank=False,
+        null=True, 
+        blank=True,
         max_digits=4, 
         decimal_places=0, 
         error_messages={
