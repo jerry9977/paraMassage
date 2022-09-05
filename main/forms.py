@@ -56,7 +56,7 @@ class CustomerCheckInForm(forms.ModelForm):
 
 class RemedialCustomerCheckInForm(forms.ModelForm):
     health_insurance_number = forms.CharField(max_length=20)
-    suffix = forms.CharField(max_length=4)
+    # suffix = forms.CharField(max_length=4)
     # gender = forms.Select(choices=GENDER_CHOICES)
     # martial_status = forms.Select(choices=MARTIAL_STATUS_CHOICES)
     class Meta:

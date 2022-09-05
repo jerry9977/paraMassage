@@ -65,11 +65,10 @@ class RemedialClientInfo(models.Model):
         }
     )
 
-    suffix = models.DecimalField(
+    suffix = models.TextField(
         null=True, 
         blank=True,
-        max_digits=4, 
-        decimal_places=0, 
+        max_length=4,
         error_messages={
             "invalid":"Please enter only digits"
         }
