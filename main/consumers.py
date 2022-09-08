@@ -11,7 +11,7 @@ class DashboardConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)('dashboard_consumer', self.channel_name)
         
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
-
+        three_days_before = today + datetime.timedelta(days=3)
         # recently added remedial client  
         recently_added_client = m.RemedialClientInfo.objects\
             .select_related("client")\
@@ -72,7 +72,7 @@ class DashboardConsumer(WebsocketConsumer):
         # missing receipt 
         missing_receipts = m.RemedialMedicalHistory.objects\
             .select_related("remedial_client_info","remedial_client_info__client")\
-            .filter(receipt_image="",date_created__lte=today)\
+            .filter(receipt_image="",date_created__lte=today, date_created__gte=three_days_before)\
             .order_by("-date_created")\
             .values(
                 "id",
