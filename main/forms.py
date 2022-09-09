@@ -73,7 +73,7 @@ class RemedialHistoryForm(forms.ModelForm):
     captcha = ReCaptchaField(
         widget=ReCaptchaV3(
         attrs={
-            'required_score':0.85,
+            'required_score':0.5,
             'recaptcha': True,
             'input_type': "hidden"
         }
