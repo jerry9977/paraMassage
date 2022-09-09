@@ -582,3 +582,8 @@ class ClientListView(ListView):
                 end_page = current_page + max_page_after_current
         
         return start_page, end_page
+
+
+def csrf_failure(request, reason=""):
+    context = {'message': 'Your session has expired.'}
+    return render(request, 'main/csrf_failure.html', context)
