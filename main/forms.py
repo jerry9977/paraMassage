@@ -70,14 +70,14 @@ class RemedialCustomerCheckInForm(forms.ModelForm):
 
 
 class RemedialHistoryForm(forms.ModelForm):
-    captcha = ReCaptchaField(
-        widget=ReCaptchaV3(
-        attrs={
-            'required_score':0,
-            'recaptcha': True,
-            'input_type': "hidden"
-        }
-    ))
+    # captcha = ReCaptchaField(
+    #     widget=ReCaptchaV3(
+    #     attrs={
+    #         'required_score':0,
+    #         'recaptcha': True,
+    #         'input_type': "hidden"
+    #     }
+    # ))
 
     class Meta:
         model = m.RemedialMedicalHistory
