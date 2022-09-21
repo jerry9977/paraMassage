@@ -1,11 +1,5 @@
-import base64
-from http import client
-from inspect import signature
-from itertools import count
-from optparse import Values
 from django.views.generic import ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from paraMassage.settings import BASE_DIR
 
 from rest_framework import status
 from rest_framework.response import Response
@@ -207,6 +201,7 @@ def customer_view(request, id):
             "health_care": history.health_care,
             "additional_comments": history.additional_comments,
             "receipt_image": history.receipt_image.url if history.receipt_image else "",
+            "remedial_treatment_plan": history.remedial_treatment_plan if history.remedial_treatment_plan else "",
             "signature": history.signature.url if history.signature else "",
             "date_created": datetime.datetime.strftime(history.date_created, "%d %b %Y %H:%M")
         })
@@ -502,7 +497,60 @@ def upload_receipt(request):
     return response
 
 
+def get_treatment_plan_note(request):
 
+    if request.method == "GET":
+        try:
+            id = request.GET.get("id")
+            treatment_plan_note = m.RemedialMedicalHistory.objects.get(id=id).remedial_treatment_plan
+            
+            context = {
+                "note": treatment_plan_note
+            }
+            response = HttpResponse(json.dumps(context))
+            response['Content-Type'] = 'application/json'
+            return response
+
+        except Exception as e:
+            print(e)
+            context = {
+                "note": ""
+            }
+            response = HttpResponse(json.dumps(context), status=200)
+            response['Content-Type'] = 'application/json'
+            return response   
+      
+  
+    response = HttpResponse(status=400)
+    response['Content-Type'] = 'application/json'
+    return response   
+
+def set_treatment_plan_note(request):
+
+    if request.method == "POST":
+        try:
+            id = request.POST.get("id")
+            note = request.POST.get("note")
+            print(id)
+            print(request.POST)
+            print(request)
+            remedial_history = m.RemedialMedicalHistory.objects.get(id=id)
+            remedial_history.remedial_treatment_plan = note
+            remedial_history.save()
+            response = HttpResponse()
+            response['Content-Type'] = 'application/json'
+            return response
+
+        except Exception as e:
+            print(e)
+            response = HttpResponse(status=400)
+            response['Content-Type'] = 'application/json'
+            return response   
+      
+  
+    response = HttpResponse(status=400)
+    response['Content-Type'] = 'application/json'
+    return response  
 
 class ClientListView(ListView):
     model = m.RemedialClientInfo

@@ -18,6 +18,8 @@ urlpatterns=[
     path('remedial_check_in_form/<str:token>/', views.remedial_check_in_form),
     path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),
     path('error/<str:title>', views.error_page, name="error_page"),
-    path('upload_receipt/', views.upload_receipt)
+    path('upload_receipt/', views.upload_receipt),
+    path('get_treatment_plan_note/', views.get_treatment_plan_note),
+    path('set_treatment_plan_note/', views.set_treatment_plan_note)
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -82,7 +82,7 @@ class RemedialHistoryForm(forms.ModelForm):
     class Meta:
         model = m.RemedialMedicalHistory
         fields = '__all__'
-        exclude = ['remedial_client_info', 'receipt_image']
+        exclude = ['remedial_client_info', 'receipt_image', 'remedial_treatment_plan']
 
         widgets = {
             'area_of_soreness_front': forms.TextInput(attrs={"sore_area_front":True,"input_type":"hidden"}),

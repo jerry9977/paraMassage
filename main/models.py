@@ -155,6 +155,13 @@ class RemedialMedicalHistory(models.Model):
         blank=True,
         max_length=500,
     )
+
+    remedial_treatment_plan = models.TextField(
+        null=True,
+        blank=True
+    )
+
+
     signature = models.ImageField(upload_to='signature/%Y/%m/%d/', null=False, blank=True)
 
     date_created = models.DateTimeField(auto_now_add=True)

@@ -97,9 +97,15 @@
                                         <span v-else class="badge bg-danger">Require</span>
                                     </td>
                                     <td class="align-middle">
-                                        <div style="width:200px">
-                                            <input class="form-control form-control-sm" id="formFileSm" type="file" @change="uploadReceipt([[history.id]])">
+                                        <div class="input-group">
+                                            <input class="form-control" id="formFileSm" type="file" @change="uploadReceipt([[history.id]])">
+                                            <button style="" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="getTreatmentPlanNote(history.id)">
+                                                Add Treatment Plan
+                                            </button>
                                         </div>
+                                        
+                                        
+                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -144,6 +150,31 @@
             </div>
             
         </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered ">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <!-- <h5 class="modal-title" id="exampleModalLabel">Treatment Plan</h5> -->
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid">
+                        <div class="g-col-12">
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 300px" v-model="treatmentPlanNote"></textarea>
+                                <label for="floatingTextarea2">Treatment Plan</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="setTreatmentPlanNote">Submit</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
     </div>
     
 
@@ -163,7 +194,9 @@
                     newRemedialClient: new Map(),
                     newRemedialHistory: new Map(),
                     missingRemedialReceipt: new Map(),
-                    sevenDayStats:sevenDayStats
+                    sevenDayStats:sevenDayStats,
+                    treatmentPlanNote: "",
+                    treatmentPlanNoteId: null
 
                 }
             },
@@ -329,6 +362,67 @@
                     window.onresize= function(){
                         myChart.resize()
                     }
+                },
+
+                getTreatmentPlanNote(id){
+                    this.treatmentPlanNoteId = id
+                    let url = "/get_treatment_plan_note/"
+
+                    let data = {
+                        params: {
+                            id: id
+                        }
+                    }
+
+                    let config = {
+                        headers: {
+                            "X-CSRFToken": csrftoken
+                        }
+                    }
+
+                    axios
+                        .get(url, data, config)
+                        .then(response=>{
+                            this.treatmentPlanNote = response.data.note
+                        })
+                        .catch(error=>{
+                            console.log(error)
+                        })
+                },
+                setTreatmentPlanNote(){
+                    let url = "/set_treatment_plan_note/"
+                    let data = new FormData()
+                    
+                    data.append("note", this.treatmentPlanNote)
+                    data.append("id", this.treatmentPlanNoteId)
+                    
+
+                    let config = {
+                        headers: {
+                            "X-CSRFToken": csrftoken
+                        }
+                    }
+                    
+                    removeToast($("#treatment-plan-loading"))
+                    openLoadingToast({message: "Submitting...", id:"treatment-plan-loading"})
+                    
+                    axios
+                        .post(url, data, config)
+                        .then(response=>{
+                            this.resetTreatmentNoteAndId()
+                            removeToast($("#treatment-plan-loading"))
+                            openSuccessToast({message:"Treatment plan note uploaded."})
+
+                        })
+                        .catch(error=>{
+                            this.resetTreatmentNoteAndId()
+                            removeToast($("#treatment-plan-loading"))
+                            openErrorToast({message:"Failed to contact to server."})
+                        })
+                },
+                resetTreatmentNoteAndId(){
+                    this.treatmentPlanNoteId = null
+                    this.treatmentPlanNote = ""
                 }
 
             },
