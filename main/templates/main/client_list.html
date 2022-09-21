@@ -131,6 +131,11 @@
                         <div class="g-col-12">
                             <div class="position-relative top-50 start-50 translate-middle" style="width: fit-content;" id="qrcode"></div>
                         </div>
+                        <div class="g-col-12">
+                            <div class="position-relative top-50 start-50 translate-middle" style="width: fit-content;" id="qrcode">
+                                <a :href="redirect" style="color:#222222" target="_blank">Click here to redirect</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -151,6 +156,7 @@
                 return {
                     delay: 1000, 
                     clients: clients,
+                    redirect: ""
                     // qrCode: "",
 
                 }
@@ -159,9 +165,9 @@
             methods: {
 
                 setQRCode(token){
-                    $("#qrcode").empty()
-                    new QRCode(document.getElementById("qrcode"), `${location.origin}/existing_check_in/${token}/`)
-                
+                    $("#qrcode").empty();
+                    new QRCode(document.getElementById("qrcode"), `${location.origin}/existing_check_in/${token}/`);
+                    this.redirect = `${location.origin}/existing_check_in/${token}/`;
                 }
 
             },
