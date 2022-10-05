@@ -204,9 +204,6 @@
             methods: {
                 uploadReceipt(id){
                     let image = event.target.files[0]
-                    console.log(event.target.files)
-                    console.log(event.target)
-                    console.log(image)
                     let url = "../upload_receipt/"
                     let data = new FormData()
                     
@@ -219,21 +216,15 @@
                             "content-type": "multipart/form-data"
                         }
                     }
-                    console.log(data)
-
                     removeToast($("#loading-toast"))
                     openLoadingToast({message:"Uploading image...", id:"loading-toast"})
                     axios
                         .post(url, data, config)
                         .then(response=>{
                             removeToast($("#loading-toast"))
-                            console.log("==========??")
-                            console.log(response)
                             openSuccessToast({message:"Receipt uploaded."})
                         })
                         .catch(error =>{
-                            console.log("========error")
-                            console.log(error)
                             removeToast($("#loading-toast"))
                             openErrorToast({message:JSON.stringify(error.message)})
                         })

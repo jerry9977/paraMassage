@@ -461,27 +461,8 @@ def error_page(request, title):
 
 
 def upload_receipt(request):
-    print("===========", flush=True)
-    print("===========", flush=True)
-    print("===========", flush=True)
-    print("===========", flush=True)
-    print("most outside", flush=True)
     if request.method == "POST":
-        print("===========", flush=True)
-        print("===========", flush=True)
-        print("===========", flush=True)
-        print("===========", flush=True)
-        print("outside", flush=True)
-        print(request.POST.get("id"), flush=True)
-        print(request.FILES.get("image"), flush=True)
-        print(request.FILES, flush=True)
-        print("============", flush=True)
         if request.FILES.get("image", None) is not None:
-            print("===========", flush=True)
-            print("===========", flush=True)
-            print("===========", flush=True)
-            print("===========", flush=True)
-            print("here", flush=True)
             remedial_history_id = request.POST.get("id")
             img = request.FILES["image"]
             try:
@@ -498,20 +479,17 @@ def upload_receipt(request):
                 remedial_history.receipt_image = in_memory_uploaded_file
                 remedial_history.save()
 
-                context = {
-                    "message": "ok"
-                }
-                response = HttpResponse(json.dumps(context),status=400)
+              
+                response = HttpResponse()
                 response['Content-Type'] = 'application/json'
                 return response
 
             except Exception as e:
                 print(e, flush=True)
                 context = {
-                    "message": "not ok",
                     "error": e
                 }
-                response = HttpResponse(json.dumps(context),status=400)
+                response = HttpResponse(json.dumps(context), status=400)
                 response['Content-Type'] = 'application/json'
                 return response
 
