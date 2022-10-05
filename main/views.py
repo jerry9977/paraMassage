@@ -461,9 +461,17 @@ def error_page(request, title):
 
 
 def upload_receipt(request):
-
+    print("===========", flush=True)
+    print("===========", flush=True)
+    print("===========", flush=True)
+    print("===========", flush=True)
+    print("most outside", flush=True)
     if request.method == "POST":
-
+        print("===========", flush=True)
+        print("===========", flush=True)
+        print("===========", flush=True)
+        print("===========", flush=True)
+        print("outside", flush=True)
         if request.FILES.get("image", None) is not None:
             print("===========", flush=True)
             print("===========", flush=True)
@@ -504,7 +512,7 @@ def upload_receipt(request):
                 return response
 
             
-    response = HttpResponse()
+    response = HttpResponse(status=400)
     response['Content-Type'] = 'application/json'
     return response
 
