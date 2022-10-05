@@ -472,7 +472,9 @@ def upload_receipt(request):
         print("===========", flush=True)
         print("===========", flush=True)
         print("outside", flush=True)
-        print(request.FILE.get("image"))
+        print(request.FILE.get("image"), flush=True)
+        print(request.FILE, flush=True)
+        print("============")
         if request.FILES.get("image", None) is not None:
             print("===========", flush=True)
             print("===========", flush=True)
