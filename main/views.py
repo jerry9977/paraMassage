@@ -486,7 +486,7 @@ def upload_receipt(request):
                 return response
 
             except Exception as e:
-                print(e)
+                print(e, flush=True)
                 response = HttpResponse(status=400)
                 response['Content-Type'] = 'application/json'
                 return response
