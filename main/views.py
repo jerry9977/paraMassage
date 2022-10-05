@@ -472,6 +472,7 @@ def upload_receipt(request):
         print("===========", flush=True)
         print("===========", flush=True)
         print("outside", flush=True)
+        print(request.POST, flush=True)
         print(request.FILES.get("image"), flush=True)
         print(request.FILES, flush=True)
         print("============", flush=True)
