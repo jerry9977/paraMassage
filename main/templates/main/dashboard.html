@@ -227,6 +227,7 @@
                             openSuccessToast({message:"Receipt uploaded."})
                         })
                         .catch(error =>{
+                            console.log(error)
                             removeToast($("#loading-toast"))
                             openErrorToast({message:JSON.stringify(error.message)})
                         })
