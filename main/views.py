@@ -465,6 +465,11 @@ def upload_receipt(request):
     if request.method == "POST":
 
         if request.FILES.get("image", None) is not None:
+            print("===========", flush=True)
+            print("===========", flush=True)
+            print("===========", flush=True)
+            print("===========", flush=True)
+            print("here", flush=True)
             remedial_history_id = request.POST.get("id")
             img = request.FILES["image"]
             try:
