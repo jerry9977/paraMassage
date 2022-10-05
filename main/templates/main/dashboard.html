@@ -223,6 +223,7 @@
                         .post(url, data, config)
                         .then(response=>{
                             removeToast($("#loading-toast"))
+                            console.log(response)
                             openSuccessToast({message:"Receipt uploaded."})
                         })
                         .catch(error =>{

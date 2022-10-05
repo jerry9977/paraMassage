@@ -485,14 +485,21 @@ def upload_receipt(request):
                     
                 remedial_history.receipt_image = in_memory_uploaded_file
                 remedial_history.save()
-                
-                response = HttpResponse()
+
+                context = {
+                    "message": "ok"
+                }
+                response = HttpResponse(json.dumps(context),status=400)
                 response['Content-Type'] = 'application/json'
                 return response
 
             except Exception as e:
                 print(e, flush=True)
-                response = HttpResponse(status=400)
+                context = {
+                    "message": "not ok",
+                    "error": e
+                }
+                response = HttpResponse(json.dumps(context),status=400)
                 response['Content-Type'] = 'application/json'
                 return response
 
