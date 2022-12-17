@@ -196,7 +196,7 @@ def customer_view(request, id):
             "area_of_soreness_front":history.area_of_soreness_front.url if history.area_of_soreness_front else "",
             "area_of_soreness_back":history.area_of_soreness_back.url if history.area_of_soreness_back else "",
             "reason_of_visit": history.reason_of_visit,
-            "symptoms": history.symptoms,
+            "symptoms": f"{history.symptoms}",
             "medication": history.medication,
             "health_care": history.health_care,
             "additional_comments": history.additional_comments,
