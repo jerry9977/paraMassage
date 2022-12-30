@@ -121,7 +121,12 @@ def standard_login(request):
             hist = m.LoginHistory()
             hist.user = user
             hist.login_time = datetime.datetime.now()
-            hist.remote_addr = request.META['REMOTE_ADDR']
+
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                hist.remote_addr = x_forwarded_for.split(',')[0]
+            else:
+                hist.remote_addr = request.META.get('REMOTE_ADDR')
             hist.session_key = request.session.session_key
             hist.save()
 
