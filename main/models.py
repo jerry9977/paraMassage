@@ -20,6 +20,20 @@ class LoginHistory(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
+    def has_logged_in(self):
+        twelve_hours_before = datetime.datetime.now() - datetime.timedelta(hours=12)
+
+        session_keys = LoginHistory.objects.filter(user=self.user, login_time__gte=twelve_hours_before).values_list("session_key", flat=True)
+
+        return Session.objects.filter(session_key__in=session_keys).exists()
+
+    def has_multiple_login_attempt(self):
+        twelve_hours_before = datetime.datetime.now() - datetime.timedelta(hours=12)
+
+        session_keys = LoginHistory.objects.filter(user=self.user, login_time__gte=twelve_hours_before)
+
+        return session_keys.count() > 4 and session_keys.distinct("remote_addr").count() > 1
+
     def handle_duplicate_logins(self):
 
         twelve_hours_before = datetime.datetime.now() - datetime.timedelta(hours=12)

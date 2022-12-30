@@ -82,6 +82,7 @@ def standard_login(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
+        force_login = request.POST.get("force-login", False)
         next = request.GET.get("next")
         try:
             user = User.objects.get(username=username)
@@ -93,8 +94,28 @@ def standard_login(request):
             return render(request, 'main/login.html', context)
         user = authenticate(request, username=username, password=password)
 
+        
+
         if user is not None:
-            user.userprofile.handle_duplicate_logins()
+
+            user_profile, _ = m.UserProfile.objects.get_or_create(user=user)
+        
+            if user_profile.has_logged_in() and not force_login:
+                context = {
+                    "already_logged_in": json.dumps(True),
+                    "password":password,
+                    "username":username
+                }
+                return render(request, 'main/login.html', context)
+
+            if user_profile.has_multiple_login_attempt():
+                context = {
+                    "error": json.dumps("Your account has temporarily locked due frequent login attempt.")
+                }
+                return render(request, 'main/login.html', context)
+                
+            user_profile.handle_duplicate_logins()
+
             login(request, user)
 
             hist = m.LoginHistory()

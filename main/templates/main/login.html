@@ -38,16 +38,16 @@
                 <div style="width: 50%; margin-left: auto; margin-right: auto; margin-top: 25%;">
             
                   
-                  <form method="POST">
+                  <form id="login-form" method="POST">
                     {% csrf_token %}
                     <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
                     <div class="form-floating mb-3 input-group-sm">
-                      <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Username" >
+                      <input name="username" type="text" class="form-control" id="floatingInput" placeholder="Username" value="{{username}}" >
                       <label for="floatingInput">username</label>
                     </div>
               
                     <div class="form-floating mb-3">
-                        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" >
+                        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password" value="{{password}}" >
                         <label for="floatingPassword">Password</label>
                     </div>
               
@@ -58,6 +58,31 @@
                     </div>
               
                     <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Forgot password? Contact..</a></p>
+
+                    <!-- Force Login attempt -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered ">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">This account is already logged in!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                              <div class="grid">
+                                  <div class="g-col-12">
+                                      <div class="position-relative top-50 start-50 translate-middle" style="width: fit-content;" id="qrcode">
+                                          <div style="color:#222222">For security reasons, repeated duplicated login attemps may result in account access being restricted.</div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button class="btn btn-danger" name="force-login" value="true" type="submit">Force Login</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </form>
 
                 </div>
@@ -72,76 +97,32 @@
             
             </div>
             
-            <script>
-                $(document).ready(function(){
-
-                    var error = {{error|safe}};
-                    if(error){
-                        
-                        openErrorToast({
-                            message:error
-                        })
-                    }
-                })
-              
-            </script>
-            <!-- <script>
             
-              const app = Vue.createApp({
-            
-                  data() {
-                      return {
-                          username: null,
-                          password: null,
-                      }
-                  },
-            
-                  methods: {
-                      loginRequest(){
-                        let url = "../api/login/"
-                        let data = {
-                          "username":this.username,
-                          "password":this.password
-                        }
-                        removeToast($("#loading-toast"))
-                        openLoadingToast({
-                          id:"loading-toast",
-                          message: "Waiting for response..."
-                        })
-                        
-                        axios
-                          .post(url, data)
-                          .then(response =>{
-                            removeToast($("#loading-toast"))
-                          })
-                          .then(response => {
-                            window.location.href = '../dashboard/';
-                          })
-                          .catch(function (error) {
-                            console.log(error)
-                            removeToast($("#loading-toast"))
-                            openErrorToast({
-                              message:"Failed to contact server."
-                            })
-                          });
-                          
-            
-                      }
-                  }
-            
-              })
-            
-              app.config.compilerOptions.delimiters = ['[[', ']]'];
-              app.config.devtools = true
-              app.mount("#app")
-            
-            </script> -->
           </div>
 
         <!-- toast wrapper -->
         <div id="_snf5-toast-message-global-wrapper" class="" ></div>
 
+        
         <div id="footer"></div>
+
+        <script>
+
+          $(window).load(function() {
+            var error = {{error|safe|default:"false"}};
+            var alreadyLoggedIn = {{already_logged_in|default:"false"|safe}};
+            if(alreadyLoggedIn){
+              $('#exampleModal').modal("show");
+            }else if(error){
+                openErrorToast({
+                    message:error
+                })
+            }
+          });
+        
+      </script>
+
+
     </body>
 
 </html>
