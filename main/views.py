@@ -9,7 +9,7 @@ from rest_framework_simplejwt.serializers import TokenVerifySerializer
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.middleware import csrf
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -94,7 +94,15 @@ def standard_login(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            user.userprofile.handle_duplicate_logins()
             login(request, user)
+
+            hist = m.LoginHistory()
+            hist.user = user
+            hist.login_time = datetime.datetime.now()
+            hist.remote_addr = request.META['REMOTE_ADDR']
+            hist.session_key = request.session.session_key
+            hist.save()
 
             if next:
                 return redirect(next)
@@ -109,6 +117,10 @@ def standard_login(request):
     # template = loader.get_template('main/login.html')
     context = {}
     return render(request, 'main/login.html', context)
+
+def standard_logout(request):
+    logout(request)
+    return render(request, 'main/login.html')
 
 @login_required(login_url='/login/')
 def dashboard(request):

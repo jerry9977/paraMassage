@@ -1,10 +1,33 @@
 
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 
 from multiselectfield import MultiSelectField
+
+import datetime
 # Create your models here.
 
+
+
+    
+class LoginHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    login_time = models.DateTimeField()
+    remote_addr = models.CharField(max_length=100)
+    session_key = models.CharField(max_length=100)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def handle_duplicate_logins(self):
+
+        twelve_hours_before = datetime.datetime.now() - datetime.timedelta(hours=12)
+
+        session_keys = LoginHistory.objects.filter(user=self.user, login_time__gte=twelve_hours_before).values_list("session_key", flat=True)
+
+        Session.objects.filter(session_key__in=session_keys).delete()
+    
 
 class Client(models.Model):
     class Meta:
