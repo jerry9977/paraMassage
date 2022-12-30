@@ -113,7 +113,7 @@ def standard_login(request):
                     "error": json.dumps("Your account has temporarily locked due frequent login attempt.")
                 }
                 return render(request, 'main/login.html', context)
-                
+
             user_profile.handle_duplicate_logins()
 
             login(request, user)
@@ -121,7 +121,7 @@ def standard_login(request):
             hist = m.LoginHistory()
             hist.user = user
             hist.login_time = datetime.datetime.now()
-            hist.remote_addr = request.META['REMOTE_ADDR']
+            hist.remote_addr = request.META['X_REAL_IP']
             hist.session_key = request.session.session_key
             hist.save()
 
