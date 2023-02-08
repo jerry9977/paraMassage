@@ -25,7 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--qsy6lzawpve(7skc1s(x@d9=qvthr@vaa-n9r56yhdbjx5owv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -106,7 +105,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'paraMassage',
         'USER': 'postgres',
-        'PASSWORD': 'Qazwsx123@',
         'HOST': '',
         'PORT': '5432',
     }
@@ -242,7 +240,5 @@ ASGI_APPLICATION = "paraMassage.asgi.application"
 
 MEDIA_ROOT = "mediafiles/"
 
-RECAPTCHA_PUBLIC_KEY = '6Le513EhAAAAALJYECpzIXylAj14mhvx_F6WcXVJ'
-RECAPTCHA_PRIVATE_KEY = '6Le513EhAAAAADZCm2mDWF2p7-5Ymf0sicMidISt'
 
 CSRF_FAILURE_VIEW = 'main.views.csrf_failure'
