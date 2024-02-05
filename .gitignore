@@ -1,2 +1,3 @@
 mediafiles/
 static_root/
+*.pyc

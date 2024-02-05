@@ -13,7 +13,7 @@ class DashboardConsumer(WebsocketConsumer):
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
         three_days_ago = today - datetime.timedelta(days=3)
         # recently added remedial client  
-        recently_added_client = m.RemedialClientInfo.objects\
+        recently_added_client = m.DetailClientInfo.objects\
             .select_related("client")\
             .filter(date_created__gte=today)\
             .order_by("-date_created")\
@@ -39,15 +39,15 @@ class DashboardConsumer(WebsocketConsumer):
 
 
         # require receipt 
-        require_receipts = m.RemedialMedicalHistory.objects\
-            .select_related("remedial_client_info","remedial_client_info__client")\
+        require_receipts = m.ClientMedicalHistory.objects\
+            .select_related("detail_client_info","detail_client_info__client")\
             .filter(date_created__gte=today)\
             .order_by("-date_created")\
             .values(
                 "id",
-                "remedial_client_info__client__id",
-                "remedial_client_info__client__first_name",
-                "remedial_client_info__client__last_name",
+                "detail_client_info__client__id",
+                "detail_client_info__client__first_name",
+                "detail_client_info__client__last_name",
                 "date_created",
                 "receipt_image"
             )
@@ -57,9 +57,9 @@ class DashboardConsumer(WebsocketConsumer):
         for require_receipt in require_receipts:
             require_receipt_container.append({
                 "id":require_receipt["id"],
-                "client_id": require_receipt["remedial_client_info__client__id"],
-                "first_name":require_receipt["remedial_client_info__client__first_name"],
-                "last_name":require_receipt["remedial_client_info__client__last_name"],
+                "client_id": require_receipt["detail_client_info__client__id"],
+                "first_name":require_receipt["detail_client_info__client__first_name"],
+                "last_name":require_receipt["detail_client_info__client__last_name"],
                 "date_created":datetime.datetime.strftime(require_receipt["date_created"], "%d %b %Y %H:%M"),
                 "receipt_image": require_receipt["receipt_image"]
             })
@@ -70,15 +70,15 @@ class DashboardConsumer(WebsocketConsumer):
         }))
 
         # missing receipt 
-        missing_receipts = m.RemedialMedicalHistory.objects\
-            .select_related("remedial_client_info","remedial_client_info__client")\
+        missing_receipts = m.ClientMedicalHistory.objects\
+            .select_related("detail_client_info","detail_client_info__client")\
             .filter(receipt_image="",date_created__lte=today, date_created__gte=three_days_ago)\
             .order_by("-date_created")\
             .values(
                 "id",
-                "remedial_client_info__client__id",
-                "remedial_client_info__client__first_name",
-                "remedial_client_info__client__last_name",
+                "detail_client_info__client__id",
+                "detail_client_info__client__first_name",
+                "detail_client_info__client__last_name",
                 "date_created",
                 "receipt_image"
             )
@@ -88,9 +88,9 @@ class DashboardConsumer(WebsocketConsumer):
         for missing_receipt in missing_receipts:
             missing_receipt_container.append({
                 "id":missing_receipt["id"],
-                "client_id": missing_receipt["remedial_client_info__client__id"],
-                "first_name":missing_receipt["remedial_client_info__client__first_name"],
-                "last_name":missing_receipt["remedial_client_info__client__last_name"],
+                "client_id": missing_receipt["detail_client_info__client__id"],
+                "first_name":missing_receipt["detail_client_info__client__first_name"],
+                "last_name":missing_receipt["detail_client_info__client__last_name"],
                 "date_created":datetime.datetime.strftime(missing_receipt["date_created"], "%d %b %Y %H:%M"),
                 "receipt_image": missing_receipt["receipt_image"]
             })

@@ -156,7 +156,7 @@ def dashboard(request):
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
     seven_days_ago = today - datetime.timedelta(days=7)
     # recently added remedial client  
-    total_count_last_seven_days = m.RemedialClientInfo.objects\
+    total_count_last_seven_days = m.DetailClientInfo.objects\
         .select_related("client")\
         .filter(date_created__lt=today, date_created__gte=seven_days_ago)\
         .annotate(registered_date=TruncDate('date_created'))\
@@ -196,8 +196,8 @@ def dashboard(request):
 @login_required(login_url='/login/')
 def customer_view(request, id):
     client = m.Client.objects.filter(pk=id)
-    client_remedial_detail = m.RemedialClientInfo.objects.filter(client=client.first())
-    client_remedial_history = m.RemedialMedicalHistory.objects.filter(remedial_client_info=client_remedial_detail.first()).order_by("-date_created")
+    client_remedial_detail = m.DetailClientInfo.objects.filter(client=client.first())
+    client_remedial_history = m.ClientMedicalHistory.objects.filter(detail_client_info=client_remedial_detail.first()).order_by("-date_created")
     
     client = client.values().first()
     client_remedial_detail = client_remedial_detail.values().first()
@@ -254,7 +254,7 @@ def customer_view(request, id):
 @login_required(login_url='/login/')
 def customer_edit(request, id):
     client = m.Client.objects.get(pk=id)
-    client_remedial_detail = m.RemedialClientInfo.objects.get(client=client)
+    client_remedial_detail = m.DetailClientInfo.objects.get(client=client)
     if request.method =="POST":
         client_form = f.CustomerCheckInForm(request.POST, instance=client)
         remedial_form = f.RemedialCustomerCheckInForm(request.POST, instance=client_remedial_detail)
@@ -338,14 +338,14 @@ def remedial_check_in_form(request,token):
             if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
 
                 client = client_form.save()
-                remedial_client_info = remedial_form.save(commit=False)
+                detail_client_info = remedial_form.save(commit=False)
                 remedial_client_history = remedial_history_form.save(commit=False)
                 
-                remedial_client_info.client = client
-                remedial_client_info.save()
+                detail_client_info.client = client
+                detail_client_info.save()
 
                 
-                remedial_client_history.remedial_client_info = remedial_client_info
+                remedial_client_history.detail_client_info = detail_client_info
                 
                 if front_image.memory_file:
 
@@ -437,7 +437,7 @@ def existing_remedial_check_in_form(request, token):
                 
 
                 
-                remedial_client_history.remedial_client_info = m.RemedialClientInfo.objects.get(id=id)
+                remedial_client_history.detail_client_info = m.DetailClientInfo.objects.get(id=id)
                 
                 if front_image.memory_file:
 
@@ -509,7 +509,7 @@ def upload_receipt(request):
                 i.save(thumb_io, format='JPEG', quality=80)
                 in_memory_uploaded_file = InMemoryUploadedFile(thumb_io, None, 'remedial_receipt_{id}.jpg'.format(id=remedial_history_id), 'image/jpeg', thumb_io.tell(), None)
                 
-                remedial_history = m.RemedialMedicalHistory.objects.get(pk=remedial_history_id)
+                remedial_history = m.ClientMedicalHistory.objects.get(pk=remedial_history_id)
 
                 if remedial_history.receipt_image:
                     remedial_history.receipt_image.delete()
@@ -542,7 +542,7 @@ def get_treatment_plan_note(request):
     if request.method == "GET":
         try:
             id = request.GET.get("id")
-            treatment_plan_note = m.RemedialMedicalHistory.objects.get(id=id).remedial_treatment_plan
+            treatment_plan_note = m.ClientMedicalHistory.objects.get(id=id).remedial_treatment_plan
             
             context = {
                 "note": treatment_plan_note
@@ -574,7 +574,7 @@ def set_treatment_plan_note(request):
             print(id)
             print(request.POST)
             print(request)
-            remedial_history = m.RemedialMedicalHistory.objects.get(id=id)
+            remedial_history = m.ClientMedicalHistory.objects.get(id=id)
             remedial_history.remedial_treatment_plan = note
             remedial_history.save()
             response = HttpResponse()
@@ -593,7 +593,7 @@ def set_treatment_plan_note(request):
     return response  
 
 class ClientListView(ListView):
-    model = m.RemedialClientInfo
+    model = m.DetailClientInfo
     template_name = 'main/client_list.html'
     paginate_by = 10
     def get_context_data(self, **kwargs):
@@ -637,7 +637,7 @@ class ClientListView(ListView):
     def get_queryset(self):
         filter_val = self.request.GET.get('filter', '')
 
-        new_context = m.RemedialClientInfo.objects.filter(
+        new_context = m.DetailClientInfo.objects.filter(
             Q(client__first_name__icontains=filter_val) | 
             Q(client__last_name__icontains=filter_val) | 
             Q(client__mobile__icontains=filter_val) | 

@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('client', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main.client')),
             ],
             options={
-                'db_table': 'core_remedial_client_info',
+                'db_table': 'core_detail_client_info',
             },
         ),
     ]

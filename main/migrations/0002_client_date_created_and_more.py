@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='remedialmedicalhistory',
-            name='remedial_client_info',
+            name='detail_client_info',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='main.remedialclientinfo'),
             preserve_default=False,
         ),

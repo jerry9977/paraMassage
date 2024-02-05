@@ -60,7 +60,7 @@ class RemedialCustomerCheckInForm(forms.ModelForm):
     # gender = forms.Select(choices=GENDER_CHOICES)
     # martial_status = forms.Select(choices=MARTIAL_STATUS_CHOICES)
     class Meta:
-        model = m.RemedialClientInfo
+        model = m.DetailClientInfo
         fields = '__all__'
         exclude = ['client']
         widgets = {
@@ -80,9 +80,9 @@ class RemedialHistoryForm(forms.ModelForm):
     # ))
 
     class Meta:
-        model = m.RemedialMedicalHistory
+        model = m.ClientMedicalHistory
         fields = '__all__'
-        exclude = ['remedial_client_info', 'receipt_image', 'remedial_treatment_plan']
+        exclude = ['detail_client_info', 'receipt_image', 'remedial_treatment_plan']
 
         widgets = {
             'area_of_soreness_front': forms.TextInput(attrs={"sore_area_front":True,"input_type":"hidden"}),

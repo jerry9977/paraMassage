@@ -47,13 +47,18 @@ class Client(models.Model):
     class Meta:
         db_table = 'core_client'
     
-
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=50, null=False, blank=False)
-    email = models.EmailField(null=True, blank=True, unique=True)
-    DOB = models.DateField(null=True, blank=True)
-    
-    mobile = models.TextField(   
+    phone_day = models.TextField(   
+        null=True, 
+        blank=True, 
+        unique=True, 
+        max_length=20, 
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+    phone_night = models.TextField(   
         null=True, 
         blank=True, 
         unique=True, 
@@ -63,15 +68,12 @@ class Client(models.Model):
         }
     )
 
-    home_phone = models.TextField(   
-        null=True, 
-        blank=True, 
-        unique=True, 
-        max_length=20, 
-        error_messages={
-            "invalid":"Please enter only digits"
-        }
-    )
+
+    email = models.EmailField(null=True, blank=True, unique=True)
+    DOB = models.DateField(null=True, blank=True)
+    # employer
+    # primary physician
+
     date_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
@@ -86,12 +88,30 @@ class Client(models.Model):
             })
         
         
-            
-class RemedialClientInfo(models.Model):
+class Suburb(models.Model):
     class Meta:
-        db_table = 'core_remedial_client_info'
+        db_table = 'core_suburb'
+    name = models.CharField(max_length=50, null=False, blank=False)
+
+class State(models.Model):
+    class Meta:
+        db_table = 'core_state'
+    name = models.CharField(max_length=20, null=False, blank=False)
+
+class PostCode(models.Model):
+    class Meta:
+        db_table = 'core_post_code'
+    number = models.CharField(max_length=10, null=False, blank=False)
+            
+class DetailClientInfo(models.Model):
+    class Meta:
+        db_table = 'core_detail_client_info'
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    address = models.CharField(max_length=50, null=False, blank=False)
+    suburb = models.ForeignKey(Suburb)
+    state = models.ForeignKey(State)
+    post_code = models.ForeignKey(PostCode)
     
     health_insurance_number = models.TextField(
         null=False, 
@@ -118,10 +138,10 @@ class RemedialClientInfo(models.Model):
     
     children = models.IntegerField(null=True, blank=True)
     occupation = models.TextField(null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
     job = models.TextField(null=True, blank=True)
-    emergency_contact_number = models.TextField(null=True, blank=True, max_length=20)
     emergency_contact_name = models.TextField(null=True, blank=True)
+    emergency_contact_relation = models.TextField(null=True, blank=True, max_length=50)
+    emergency_contact_number = models.TextField(null=True, blank=True, max_length=20)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -164,16 +184,73 @@ SYMPTOM_CHOICES = (
     (33, "OTHER")
 )
 
+CONDITION_CHOICES = (
+    (1, "Cancer"),
+    (2, "Fibromyalgia"),
+    (3, "Headaches/Migraines"),
+    (4, "Stroke"),
+    (5, "Arthritis"),
+    (6, "Heart Attack"),
+    (7, "Diabetes"),
+    (8, "Kidney Dysfunction"),
+    (9, "Joint Replacement(s)"),
+    (10, "Blood Clots"),
+    (11, "High/Low Blood Pressure"),
+    (12, "Numbness"),
+    (13, "Neuropathy"),
+    (14, "Sprains or Strains"),
+)
 
-class RemedialMedicalHistory(models.Model):
+MASSAGE_TYPE_CHOICES = (
+    (1, "Relaxation"),
+    (2, "Therapeutic/Deep Tissue"),
+)
+
+PRESSURE_CHOICES = (
+    (1, "Light"),
+    (2, "Medium"),
+    (3, "Deep"),
+)
+class ClientMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_remedial_medical_history'
-    remedial_client_info = models.ForeignKey(RemedialClientInfo, on_delete=models.CASCADE)
+    detail_client_info = models.ForeignKey(DetailClientInfo, on_delete=models.CASCADE)
     area_of_soreness_front = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+    area_of_soreness_left = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+    area_of_soreness_right = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
     area_of_soreness_back = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+
+    medication = models.BooleanField()
+    medication_detail = models.TextField()
+
+    pregnant = models.BooleanField()
+    pregnant_time = models.TextField()
+    pregnant_factor = models.TextField()
+
+    chronic_pain = models.BooleanField()
+    chronic_pain_detail = models.TextField()
+    chronic_pain_worse = models.TextField()
+    chronic_pain_better = models.TextField()
+
+    orthopedic_injuries = models.BooleanField()
+    orthopedic_injuries_detail = models.TextField()
+
+    conditions = MultiSelectField(choices=CONDITION_CHOICES, null=True, blank=True)
+    conditions_detail = models.TextField()
+
+    professional_massage = models.BooleanField()
+    
+    massage_type = MultiSelectField(choices=MASSAGE_TYPE_CHOICES, null=True, blank=True)
+    massage_type_other = models.TextField()
+    
+    pressure_preference = MultiSelectField(choices=PRESSURE_CHOICES, null=True, blank=True)
+
+    no_massage_area = models.BooleanField()
+    no_massage_area_detail = models.TextField()
 
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES, null=True, blank=True)
+    
     medication = models.TextField(
         null=True, 
         blank=True, 

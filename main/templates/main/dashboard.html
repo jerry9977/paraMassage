@@ -265,7 +265,7 @@
 
                 dashboardWebsocketHandler(data){
                     if(!data.action_type && !data.payload){
-                        console.err("Bad response message")
+                        console.error("Bad response message")
                         return
                     }
                     switch (data.action_type){

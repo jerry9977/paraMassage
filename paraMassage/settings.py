@@ -102,13 +102,21 @@ CHANNEL_LAYERS = {
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'paraMassage',
+    #     'USER': 'postgres',
+    #     'PASSWORD': 'Qazwsx123@',
+    #     'HOST': '',
+    #     'PORT': '5433',
+    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'paraMassage',
+        'NAME': 'tiffanymassage',
         'USER': 'postgres',
-        'PASSWORD': 'Qazwsx123@',
+        'PASSWORD': os.environ.get("PSQL_5433_PWD", None),
         'HOST': '',
-        'PORT': '5433',
+        'PORT': os.environ.get("TIFFANY_PSQL_PORT", "5432"),
     }
 }
 
