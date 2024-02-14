@@ -116,7 +116,7 @@ DATABASES = {
         'USER': 'postgres',
         'PASSWORD': os.environ.get("PSQL_5433_PWD", None),
         'HOST': '',
-        'PORT': os.environ.get("TIFFANY_PSQL_PORT", "5432"),
+        'PORT': os.environ.get("TIFFANY_PSQL_PORT", "5433"),
     }
 }
 

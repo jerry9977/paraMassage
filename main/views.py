@@ -319,75 +319,75 @@ def remedial_check_in_form(request,token):
 
     if request.method =="POST":
 
-        area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
-        area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
-        signature = request.POST.get("signature_hidden")
+        # area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
+        # area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
+        # signature = request.POST.get("signature_hidden")
 
         
        
-        remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
+        # remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
         client_form = f.CustomerCheckInForm(request.POST)
-        remedial_form = f.RemedialCustomerCheckInForm(request.POST)
+        # remedial_form = f.RemedialCustomerCheckInForm(request.POST)
 
-        front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
-        back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
-        signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
-
-
-        if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
-            if remedial_history_form.is_valid() and client_form.is_valid() and remedial_form.is_valid():
-
-                client = client_form.save()
-                detail_client_info = remedial_form.save(commit=False)
-                remedial_client_history = remedial_history_form.save(commit=False)
-                
-                detail_client_info.client = client
-                detail_client_info.save()
-
-                
-                remedial_client_history.detail_client_info = detail_client_info
-                
-                if front_image.memory_file:
-
-                    # remedial_client_history.area_of_soreness_front.save(
-                    #     "remedial_front.jpg",
-                    #     front_image.memory_file,
-                    #     save=False
-                    # )
-
-                    remedial_client_history.area_of_soreness_front = front_image.memory_file
+        # front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
+        # back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
+        # signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
 
 
-                if back_image.memory_file:
+        if client_form.is_valid():
 
-                    # remedial_client_history.area_of_soreness_back.save(
-                    #     "remedial_back.jpg",
-                    #     back_image.memory_file,
-                    #     save=False
-                    # )
-                    remedial_client_history.area_of_soreness_back = back_image.memory_file
+            # client = client_form.save()
+            # detail_client_info = remedial_form.save(commit=False)
+            # remedial_client_history = remedial_history_form.save(commit=False)
+            
+            # detail_client_info.client = client
+            # detail_client_info.save()
 
-                # remedial_client_history.signature.save(
-                #     "remedial_signature.jpg",
-                #     signature_image.memory_file,
-                #     save=False
-                # )
+            
+            # remedial_client_history.detail_client_info = detail_client_info
+            
+            # if front_image.memory_file:
 
-                remedial_client_history.signature = signature_image.memory_file
+            #     # remedial_client_history.area_of_soreness_front.save(
+            #     #     "remedial_front.jpg",
+            #     #     front_image.memory_file,
+            #     #     save=False
+            #     # )
 
-                remedial_client_history.save()
+            #     remedial_client_history.area_of_soreness_front = front_image.memory_file
 
-                return redirect("form_submitted", title="Client Intake Form")
-            else:
-                remedial_history_form = f.RemedialHistoryForm(
-                request.POST, 
-                request.FILES, 
-                initial={
-                    "area_of_soreness_front":area_of_soreness_front,
-                    "area_of_soreness_back": area_of_soreness_back,
-                    "signature":signature
-                }
-            )
+
+            # if back_image.memory_file:
+
+            #     # remedial_client_history.area_of_soreness_back.save(
+            #     #     "remedial_back.jpg",
+            #     #     back_image.memory_file,
+            #     #     save=False
+            #     # )
+            #     remedial_client_history.area_of_soreness_back = back_image.memory_file
+
+            # # remedial_client_history.signature.save(
+            # #     "remedial_signature.jpg",
+            # #     signature_image.memory_file,
+            # #     save=False
+            # # )
+
+            # remedial_client_history.signature = signature_image.memory_file
+
+            # remedial_client_history.save()
+
+            return redirect("form_submitted", title="Client Intake Form")
+            # else:
+            # client_form = f.CustomerCheckInForm(request.POST) 
+            # remedial_history_form = f.RemedialHistoryForm(
+            #     request.POST, 
+            #     request.FILES, 
+            #     initial={
+            #         "area_of_soreness_front":area_of_soreness_front,
+            #         "area_of_soreness_back": area_of_soreness_back,
+            #         "signature":signature
+            #     }
+            # )
 
     else:
         client_form = f.CustomerCheckInForm() 
@@ -398,8 +398,8 @@ def remedial_check_in_form(request,token):
     
     context = {
         "client_form": client_form,
-        "remedial_history_form":remedial_history_form,
-        "remedial_form": remedial_form
+        # "remedial_history_form":remedial_history_form,
+        # "remedial_form": remedial_form
     }
     return render(request, 'form/remedial_check_in_form.html', context)
 

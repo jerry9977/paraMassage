@@ -24,91 +24,101 @@ MARTIAL_STATUS_CHOICES = [
     (6, "Prefer not to say")
 ]
 
+YES_NO = [
+    (0, "No"),
+    (1, "Yes")
+]
+
 class CustomerCheckInForm(forms.ModelForm):
-    mobile = forms.CharField(max_length=20, required=False, empty_value=None)
-    home_phone = forms.CharField(max_length=20, required=False, empty_value=None)
     class Meta:
         model = m.Client
-        fields = ["email", "mobile", "home_phone", "first_name", "last_name", "DOB"]
+        fields = [
+            "first_name", 
+            "last_name", 
+            "health_insurance_number",
+            "reference_number",
+            "email",
+            "DOB",
+            "phone_day", 
+            "phone_night",
+        ]
 
         widgets = {
             'DOB': DatePickerInput(),
         }
 
-        labels = {
-            "first_name": "First Name",
-            "last_name": "Last Name",
-            "home_phone": "Home Phone"
-        }
 
     def clean(self):
         
         cleaned_data = super(CustomerCheckInForm, self).clean()
         
-        mobile = cleaned_data.get("mobile")
-        home_phone = cleaned_data.get("home_phone")
+        phone_day = cleaned_data.get("phone_day")
+        phone_night = cleaned_data.get("phone_night")
         email = cleaned_data.get("email")
 
-        if mobile is None and home_phone is None and email is None:
+        if phone_day is None and phone_night is None and email is None:
 
-            raise ValidationError(message='Please provide at least one contact detail. Mobile, Email or Home Phone')
+            raise ValidationError(message='Please provide at least one contact detail. Email or Phone (Day or Evening)')
 
 
 class RemedialCustomerCheckInForm(forms.ModelForm):
-    health_insurance_number = forms.CharField(max_length=20)
-    # suffix = forms.CharField(max_length=4)
-    # gender = forms.Select(choices=GENDER_CHOICES)
-    # martial_status = forms.Select(choices=MARTIAL_STATUS_CHOICES)
+    # health_insurance_number = forms.CharField(max_length=20)
     class Meta:
         model = m.DetailClientInfo
-        fields = '__all__'
+        fields = [
+            "address", 
+            "suburb",
+            "state",
+            "post_code",
+            "occupation",
+            "employer",
+            "primary_physician",
+            "emergency_contact_name",
+            "emergency_contact_number",
+            "emergency_contact_relation",
+            "hear_about_us"
+        ]
         exclude = ['client']
+
+        labels = {
+            "primary_physician": "Primary Physician",
+            "emergency_contact_name": "Emergency Contact Name",
+            "emergency_contact_number": "Emergency Contact Number",
+            "emergency_contact_relation": "Emergency Contact Relation",
+            "hear_about_us": "How did you hear about us ?"
+        }
+
         widgets = {
             "gender": forms.Select(choices=GENDER_CHOICES),
-            "martial_status" : forms.Select(choices=MARTIAL_STATUS_CHOICES)
+            "martial_status" : forms.Select(choices=MARTIAL_STATUS_CHOICES),
+            'suburb': forms.TextInput(),
+            'state': forms.TextInput(),
+            'post_code': forms.NumberInput(),
+            "hear_about_us": forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
         }
 
 
 class RemedialHistoryForm(forms.ModelForm):
-    # captcha = ReCaptchaField(
-    #     widget=ReCaptchaV3(
-    #     attrs={
-    #         'required_score':0,
-    #         'recaptcha': True,
-    #         'input_type': "hidden"
-    #     }
-    # ))
+
 
     class Meta:
         model = m.ClientMedicalHistory
-        fields = '__all__'
+        fields = [
+            "medication",
+            "medication_detail"
+        ]
         exclude = ['detail_client_info', 'receipt_image', 'remedial_treatment_plan']
 
         widgets = {
+            "medication": forms.RadioSelect(choices=YES_NO),
+            'medication_detail': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'area_of_soreness_front': forms.TextInput(attrs={"sore_area_front":True,"input_type":"hidden"}),
             'area_of_soreness_back': forms.TextInput(attrs={"sore_area_back":True,"input_type":"hidden"}),
+            'area_of_soreness_left': forms.TextInput(attrs={"sore_area_left":True,"input_type":"hidden"}),
+            'area_of_soreness_right': forms.TextInput(attrs={"sore_area_right":True,"input_type":"hidden"}),
             'reason_of_visit': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
-            'medication': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'health_care': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'signature': forms.TextInput(attrs={"signature":True,"input_type":"hidden"}),
             'additional_comments': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"})
         }
 
-
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     print("====================")
-    #     print("====================")
-    #     print("====================")
-    #     print("====================")
-    #     print(cleaned_data)
-    # def clean_area_of_soreness(self):
-    #     print("=========================")
-    #     print("=========================")
-    #     print("=========================")
-    #     print(self.cleaned_data)
-    #     # print(self)
-    #     # data = self.cleaned_data["area_of_soreness"]
-    #     pass
-
-        

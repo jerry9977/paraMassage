@@ -71,8 +71,27 @@ class Client(models.Model):
 
     email = models.EmailField(null=True, blank=True, unique=True)
     DOB = models.DateField(null=True, blank=True)
-    # employer
-    # primary physician
+
+        
+    health_insurance_number = models.TextField(
+        null=False, 
+        blank=False,
+        max_length=25, 
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+
+    reference_number = models.TextField(
+        null=True, 
+        blank=True,
+        max_length=4,
+        error_messages={
+            "invalid":"Please enter only digits"
+        }
+    )
+
+
 
     date_created = models.DateTimeField(auto_now_add=True)
     
@@ -80,12 +99,13 @@ class Client(models.Model):
         return self.first_name
 
     def clean(self):
-        if self.mobile is None and self.home_phone is None and self.email is None:
-            raise ValidationError({
-                "mobile":ValidationError(message=''),
-                "home_phone":ValidationError(message=''),
-                "email":ValidationError(message='')
-            })
+        pass
+        # if self.mobile is None and self.home_phone is None and self.email is None:
+        #     raise ValidationError({
+        #         "mobile":ValidationError(message=''),
+        #         "home_phone":ValidationError(message=''),
+        #         "email":ValidationError(message='')
+        #     })
         
         
 class Suburb(models.Model):
@@ -104,32 +124,13 @@ class PostCode(models.Model):
     number = models.CharField(max_length=10, null=False, blank=False)
             
 class DetailClientInfo(models.Model):
-    class Meta:
-        db_table = 'core_detail_client_info'
+
     
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     address = models.CharField(max_length=50, null=False, blank=False)
-    suburb = models.ForeignKey(Suburb)
-    state = models.ForeignKey(State)
-    post_code = models.ForeignKey(PostCode)
-    
-    health_insurance_number = models.TextField(
-        null=False, 
-        blank=False,
-        max_length=25, 
-        error_messages={
-            "invalid":"Please enter only digits"
-        }
-    )
-
-    suffix = models.TextField(
-        null=True, 
-        blank=True,
-        max_length=4,
-        error_messages={
-            "invalid":"Please enter only digits"
-        }
-    )
+    suburb = models.ForeignKey(Suburb, on_delete=models.CASCADE)
+    state = models.ForeignKey(State, on_delete=models.CASCADE)
+    post_code = models.ForeignKey(PostCode, on_delete=models.CASCADE)
 
     gender = models.IntegerField(null=True, blank=True)
     martial_status = models.IntegerField(null=True, blank=True)
@@ -138,10 +139,18 @@ class DetailClientInfo(models.Model):
     
     children = models.IntegerField(null=True, blank=True)
     occupation = models.TextField(null=True, blank=True)
+    employer = models.TextField(null=True, blank=True)
+    primary_physician = models.TextField(null=True, blank=True)
+    
     job = models.TextField(null=True, blank=True)
     emergency_contact_name = models.TextField(null=True, blank=True)
     emergency_contact_relation = models.TextField(null=True, blank=True, max_length=50)
     emergency_contact_number = models.TextField(null=True, blank=True, max_length=20)
+    hear_about_us = models.TextField(
+        null=True,
+        blank=True,
+        max_length=500,
+    )
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -213,7 +222,7 @@ PRESSURE_CHOICES = (
 )
 class ClientMedicalHistory(models.Model):
     class Meta:
-        db_table = 'core_remedial_medical_history'
+        db_table = 'core_client_medical_history'
     detail_client_info = models.ForeignKey(DetailClientInfo, on_delete=models.CASCADE)
     area_of_soreness_front = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
     area_of_soreness_left = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
@@ -221,7 +230,12 @@ class ClientMedicalHistory(models.Model):
     area_of_soreness_back = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
 
     medication = models.BooleanField()
-    medication_detail = models.TextField()
+    medication_detail = models.TextField(
+        null=True, 
+        blank=True, 
+        max_length=500,
+        verbose_name="Are you currently taking any medication? If so please provide the medication name."
+    )
 
     pregnant = models.BooleanField()
     pregnant_time = models.TextField()
@@ -251,12 +265,7 @@ class ClientMedicalHistory(models.Model):
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES, null=True, blank=True)
     
-    medication = models.TextField(
-        null=True, 
-        blank=True, 
-        max_length=500,
-        verbose_name="Are you currently taking any medication? If so please provide the medication name."
-    )
+
     health_care = models.TextField(
         null=True, 
         blank=True, 
