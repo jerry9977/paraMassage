@@ -13,7 +13,7 @@ class DashboardConsumer(WebsocketConsumer):
         today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
         three_days_ago = today - datetime.timedelta(days=3)
         # recently added remedial client  
-        recently_added_client = m.DetailClientInfo.objects\
+        recently_added_client = m.ClientDetailInfo.objects\
             .select_related("client")\
             .filter(date_created__gte=today)\
             .order_by("-date_created")\

@@ -156,7 +156,7 @@ def dashboard(request):
     today = datetime.datetime.combine(datetime.date.today(), datetime.datetime.min.time())
     seven_days_ago = today - datetime.timedelta(days=7)
     # recently added remedial client  
-    total_count_last_seven_days = m.DetailClientInfo.objects\
+    total_count_last_seven_days = m.ClientDetailInfo.objects\
         .select_related("client")\
         .filter(date_created__lt=today, date_created__gte=seven_days_ago)\
         .annotate(registered_date=TruncDate('date_created'))\
@@ -196,7 +196,7 @@ def dashboard(request):
 @login_required(login_url='/login/')
 def customer_view(request, id):
     client = m.Client.objects.filter(pk=id)
-    client_remedial_detail = m.DetailClientInfo.objects.filter(client=client.first())
+    client_remedial_detail = m.ClientDetailInfo.objects.filter(client=client.first())
     client_remedial_history = m.ClientMedicalHistory.objects.filter(detail_client_info=client_remedial_detail.first()).order_by("-date_created")
     
     client = client.values().first()
@@ -254,10 +254,10 @@ def customer_view(request, id):
 @login_required(login_url='/login/')
 def customer_edit(request, id):
     client = m.Client.objects.get(pk=id)
-    client_remedial_detail = m.DetailClientInfo.objects.get(client=client)
+    client_remedial_detail = m.ClientDetailInfo.objects.get(client=client)
     if request.method =="POST":
         client_form = f.CustomerCheckInForm(request.POST, instance=client)
-        remedial_form = f.RemedialCustomerCheckInForm(request.POST, instance=client_remedial_detail)
+        remedial_form = f.DetailedClientForm(request.POST, instance=client_remedial_detail)
 
         if client_form.is_valid() and remedial_form.is_valid():
 
@@ -270,7 +270,7 @@ def customer_edit(request, id):
 
     else:
         client_form = f.CustomerCheckInForm(instance=client) 
-        remedial_form = f.RemedialCustomerCheckInForm(instance=client_remedial_detail)
+        remedial_form = f.DetailedClientForm(instance=client_remedial_detail)
     
 
     
@@ -318,34 +318,34 @@ def remedial_check_in_form(request,token):
         return redirect("error_page", title="Paradise Massage")
 
     if request.method =="POST":
-
+        print(request.POST)
         # area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
         # area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
         # signature = request.POST.get("signature_hidden")
 
         
        
-        # remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
         client_form = f.CustomerCheckInForm(request.POST)
-        # remedial_form = f.RemedialCustomerCheckInForm(request.POST)
+        detailed_client_form = f.DetailedClientForm(request.POST)
+        client_medical_history_form = f.ClientMedicalHistoryForm(request.POST)
 
         # front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
         # back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
         # signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
 
 
-        if client_form.is_valid():
+        if client_form.is_valid() and detailed_client_form.is_valid() and client_medical_history_form.is_valid():
 
-            # client = client_form.save()
-            # detail_client_info = remedial_form.save(commit=False)
-            # remedial_client_history = remedial_history_form.save(commit=False)
+            client = client_form.save()
+            detail_client_info = detailed_client_form.save(commit=False)
+            client_medical_history = client_medical_history_form.save(commit=False)
             
-            # detail_client_info.client = client
-            # detail_client_info.save()
+            detail_client_info.client = client
+            detail_client_info.save()
 
             
-            # remedial_client_history.detail_client_info = detail_client_info
-            
+            client_medical_history.detail_client_info = detail_client_info
+            client_medical_history.save()
             # if front_image.memory_file:
 
             #     # remedial_client_history.area_of_soreness_front.save(
@@ -391,15 +391,15 @@ def remedial_check_in_form(request,token):
 
     else:
         client_form = f.CustomerCheckInForm() 
-        remedial_history_form = f.RemedialHistoryForm()
-        remedial_form = f.RemedialCustomerCheckInForm()
+        detailed_client_form = f.DetailedClientForm()
+        client_medical_history_form = f.ClientMedicalHistoryForm()
     
     # print(request.POST)
     
     context = {
         "client_form": client_form,
-        # "remedial_history_form":remedial_history_form,
-        # "remedial_form": remedial_form
+        "detailed_client_form": detailed_client_form,
+        "client_medical_history_form":client_medical_history_form
     }
     return render(request, 'form/remedial_check_in_form.html', context)
 
@@ -423,7 +423,7 @@ def existing_remedial_check_in_form(request, token):
 
         
        
-        remedial_history_form = f.RemedialHistoryForm(request.POST, request.FILES)
+        remedial_history_form = f.ClientMedicalHistoryForm(request.POST, request.FILES)
 
 
         front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
@@ -437,7 +437,7 @@ def existing_remedial_check_in_form(request, token):
                 
 
                 
-                remedial_client_history.detail_client_info = m.DetailClientInfo.objects.get(id=id)
+                remedial_client_history.detail_client_info = m.ClientDetailInfo.objects.get(id=id)
                 
                 if front_image.memory_file:
 
@@ -469,7 +469,7 @@ def existing_remedial_check_in_form(request, token):
 
                 return redirect("form_submitted", title="Client Intake Form")
             else:
-                remedial_history_form = f.RemedialHistoryForm(
+                remedial_history_form = f.ClientMedicalHistoryForm(
                 request.POST, 
                 request.FILES, 
                 initial={
@@ -481,7 +481,7 @@ def existing_remedial_check_in_form(request, token):
 
     else:
        
-        remedial_history_form = f.RemedialHistoryForm()
+        remedial_history_form = f.ClientMedicalHistoryForm()
     
 
     context = {
@@ -593,7 +593,7 @@ def set_treatment_plan_note(request):
     return response  
 
 class ClientListView(ListView):
-    model = m.DetailClientInfo
+    model = m.ClientDetailInfo
     template_name = 'main/client_list.html'
     paginate_by = 10
     def get_context_data(self, **kwargs):
@@ -637,7 +637,7 @@ class ClientListView(ListView):
     def get_queryset(self):
         filter_val = self.request.GET.get('filter', '')
 
-        new_context = m.DetailClientInfo.objects.filter(
+        new_context = m.ClientDetailInfo.objects.filter(
             Q(client__first_name__icontains=filter_val) | 
             Q(client__last_name__icontains=filter_val) | 
             Q(client__mobile__icontains=filter_val) | 

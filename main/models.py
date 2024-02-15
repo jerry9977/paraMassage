@@ -52,7 +52,6 @@ class Client(models.Model):
     phone_day = models.TextField(   
         null=True, 
         blank=True, 
-        unique=True, 
         max_length=20, 
         error_messages={
             "invalid":"Please enter only digits"
@@ -61,7 +60,6 @@ class Client(models.Model):
     phone_night = models.TextField(   
         null=True, 
         blank=True, 
-        unique=True, 
         max_length=20, 
         error_messages={
             "invalid":"Please enter only digits"
@@ -107,30 +105,18 @@ class Client(models.Model):
         #         "email":ValidationError(message='')
         #     })
         
-        
-class Suburb(models.Model):
-    class Meta:
-        db_table = 'core_suburb'
-    name = models.CharField(max_length=50, null=False, blank=False)
 
-class State(models.Model):
-    class Meta:
-        db_table = 'core_state'
-    name = models.CharField(max_length=20, null=False, blank=False)
-
-class PostCode(models.Model):
-    class Meta:
-        db_table = 'core_post_code'
-    number = models.CharField(max_length=10, null=False, blank=False)
             
-class DetailClientInfo(models.Model):
+class ClientDetailInfo(models.Model):
 
-    
+    class Meta:
+        db_table = 'core_client_detail_info'
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    address = models.CharField(max_length=50, null=False, blank=False)
-    suburb = models.ForeignKey(Suburb, on_delete=models.CASCADE)
-    state = models.ForeignKey(State, on_delete=models.CASCADE)
-    post_code = models.ForeignKey(PostCode, on_delete=models.CASCADE)
+    address = models.CharField(max_length=50, null=True, blank=True)
+    suburb = models.CharField(max_length=50, null=True, blank=True)
+    state = models.CharField(max_length=20, null=True, blank=True)
+    post_code = models.CharField(max_length=10,null=True, blank=True)
 
     gender = models.IntegerField(null=True, blank=True)
     martial_status = models.IntegerField(null=True, blank=True)
@@ -223,13 +209,13 @@ PRESSURE_CHOICES = (
 class ClientMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_client_medical_history'
-    detail_client_info = models.ForeignKey(DetailClientInfo, on_delete=models.CASCADE)
+    detail_client_info = models.ForeignKey(ClientDetailInfo, on_delete=models.CASCADE)
     area_of_soreness_front = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
     area_of_soreness_left = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
     area_of_soreness_right = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
     area_of_soreness_back = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
 
-    medication = models.BooleanField()
+    medication = models.BooleanField(null=True, blank=True)
     medication_detail = models.TextField(
         null=True, 
         blank=True, 
@@ -237,30 +223,33 @@ class ClientMedicalHistory(models.Model):
         verbose_name="Are you currently taking any medication? If so please provide the medication name."
     )
 
-    pregnant = models.BooleanField()
-    pregnant_time = models.TextField()
-    pregnant_factor = models.TextField()
+    pregnant = models.BooleanField(null=True, blank=True)
+    pregnant_time = models.TextField(null=True, blank=True)
+    pregnant_factor = models.TextField(null=True, blank=True)
 
-    chronic_pain = models.BooleanField()
-    chronic_pain_detail = models.TextField()
-    chronic_pain_worse = models.TextField()
-    chronic_pain_better = models.TextField()
+    chronic_pain = models.BooleanField(null=True, blank=True)
+    chronic_pain_detail = models.TextField(null=True, blank=True)
+    chronic_pain_worse = models.TextField(null=True, blank=True)
+    chronic_pain_better = models.TextField(null=True, blank=True)
 
-    orthopedic_injuries = models.BooleanField()
-    orthopedic_injuries_detail = models.TextField()
+    orthopedic_injuries = models.BooleanField(null=True, blank=True)
+    orthopedic_injuries_detail = models.TextField(null=True, blank=True)
 
     conditions = MultiSelectField(choices=CONDITION_CHOICES, null=True, blank=True)
-    conditions_detail = models.TextField()
+    conditions_detail = models.TextField(null=True, blank=True)
 
-    professional_massage = models.BooleanField()
+    professional_massage = models.BooleanField(null=True, blank=True)
     
     massage_type = MultiSelectField(choices=MASSAGE_TYPE_CHOICES, null=True, blank=True)
-    massage_type_other = models.TextField()
+    massage_type_other = models.TextField(null=True, blank=True)
     
     pressure_preference = MultiSelectField(choices=PRESSURE_CHOICES, null=True, blank=True)
 
-    no_massage_area = models.BooleanField()
-    no_massage_area_detail = models.TextField()
+    allergies = models.BooleanField(null=True, blank=True)
+    allergies_detail = models.TextField(null=True, blank=True)
+    
+    no_massage_area = models.BooleanField(null=True, blank=True)
+    no_massage_area_detail = models.TextField(null=True, blank=True)
 
     reason_of_visit = models.TextField(null=True, blank=True, max_length=500)
     symptoms = MultiSelectField(choices=SYMPTOM_CHOICES, null=True, blank=True)
