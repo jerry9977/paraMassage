@@ -318,11 +318,12 @@ def remedial_check_in_form(request,token):
         return redirect("error_page", title="Paradise Massage")
 
     if request.method =="POST":
-        print(request.POST)
-        # area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
-        # area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
+        # print(request.POST)
+        area_of_soreness_front = request.POST.get("area_of_soreness_front")
+        area_of_soreness_back = request.POST.get("area_of_soreness_back")
         # signature = request.POST.get("signature_hidden")
-
+        # print(area_of_soreness_back)
+        print(area_of_soreness_front)
         
        
         client_form = f.CustomerCheckInForm(request.POST)
