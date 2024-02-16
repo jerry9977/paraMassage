@@ -321,8 +321,7 @@
                     </label>
                     <textarea
                         class="form-control {%if detailed_client_form.hear_about_us.errors%}is-invalid{%elif detailed_client_form.hear_about_us.value%}is-valid{%endif%}"
-                        name="hear_about_us" rows="5">
-                    </textarea>
+                        name="hear_about_us" rows="5">{{detailed_client_form.hear_about_us.value|default_if_none:''}}</textarea>
                 </div>
 
 
@@ -337,7 +336,10 @@
                             class="form-check-input" 
                             type="radio" 
                             name="medication"
-                            id="medication-yes">
+                            id="medication-yes"
+                            value="true"
+                            {% if client_medical_history_form.medication.value %} checked {%endif%}>
+
                         <label class="form-check-label" for="medication-yes">
                             YES
                         </label>
@@ -347,7 +349,10 @@
                             class="form-check-input" 
                             type="radio" 
                             name="medication"
-                            id="medication-no">
+                            id="medication-no"
+                            value="false"
+                            {% if client_medical_history_form.medication.value is False %} checked {%endif%}>
+
                         <label class="form-check-label" for="medication-no">
                             NO
                         </label>
@@ -359,10 +364,9 @@
                       If yes, please list name and use
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.hear_about_us.errors%}is-invalid{%elif detailed_client_form.hear_about_us.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.medication_detail.errors%}is-invalid{%elif client_medical_history_form.medication_detail.value%}is-valid{%endif%}"
                         name="medication_detail" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.medication_detail.value|default_if_none:''}}</textarea>
                 </div>
 
                 <div class="g-col-12">
@@ -375,7 +379,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="pregnant"
-                            id="pregnant-yes">
+                            id="pregnant-yes"
+                            value="true"
+                            {% if client_medical_history_form.pregnant.value %} checked {%endif%}>
                         <label class="form-check-label" for="pregnant-yes">
                             YES
                         </label>
@@ -385,7 +391,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="pregnant"
-                            id="pregnant-no">
+                            id="pregnant-no"
+                            value="false"
+                            {% if client_medical_history_form.pregnant.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="pregnant-no">
                             NO
                         </label>
@@ -398,8 +406,9 @@
                     </label>
                     <input
                         type="text"
-                        class="form-control {%if detailed_client_form.pregnant_time.errors%}is-invalid{%elif detailed_client_form.pregnant_time.value%}is-valid{%endif%}"
-                        name="pregnant_time">
+                        class="form-control {%if client_medical_history_form.pregnant_time.errors%}is-invalid{%elif client_medical_history_form.pregnant_time.value%}is-valid{%endif%}"
+                        name="pregnant_time"
+                        value="{{client_medical_history_form.pregnant_time.value|default_if_none:''}}">
                 </div>
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -407,8 +416,9 @@
                     </label>
                     <input
                         type="text"
-                        class="form-control {%if detailed_client_form.pregnant_factor.errors%}is-invalid{%elif detailed_client_form.pregnant_factor.value%}is-valid{%endif%}"
-                        name="pregnant_factor">
+                        class="form-control {%if client_medical_history_form.pregnant_factor.errors%}is-invalid{%elif client_medical_history_form.pregnant_factor.value%}is-valid{%endif%}"
+                        name="pregnant_factor"
+                        value="{{client_medical_history_form.pregnant_factor.value|default_if_none:''}}">
                 </div>
 
 
@@ -422,7 +432,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="chronic_pain"
-                            id="chronic_pain-yes">
+                            id="chronic_pain-yes"
+                            value="true"
+                            {% if client_medical_history_form.chronic_pain.value %} checked {%endif%}>
                         <label class="form-check-label" for="chronic_pain-yes">
                             YES
                         </label>
@@ -432,7 +444,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="chronic_pain"
-                            id="chronic_pain-no">
+                            id="chronic_pain-no"
+                            value="false"
+                            {% if client_medical_history_form.chronic_pain.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="chronic_pain-no">
                             NO
                         </label>
@@ -445,8 +459,9 @@
                     </label>
                     <input
                         type="text"
-                        class="form-control {%if detailed_client_form.chronic_pain_detail.errors%}is-invalid{%elif detailed_client_form.chronic_pain_detail.value%}is-valid{%endif%}"
-                        name="chronic_pain_detail">
+                        class="form-control {%if client_medical_history_form.chronic_pain_detail.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_detail.value%}is-valid{%endif%}"
+                        name="chronic_pain_detail"
+                        value="{{client_medical_history_form.chronic_pain_detail.value|default_if_none:''}}">
                 </div>
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -454,8 +469,9 @@
                     </label>
                     <input
                         type="text"
-                        class="form-control {%if detailed_client_form.chronic_pain_better.errors%}is-invalid{%elif detailed_client_form.chronic_pain_better.value%}is-valid{%endif%}"
-                        name="chronic_pain_better">
+                        class="form-control {%if client_medical_history_form.chronic_pain_better.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_better.value%}is-valid{%endif%}"
+                        name="chronic_pain_better"
+                        value="{{client_medical_history_form.chronic_pain_better.value|default_if_none:''}}">
                 </div>
 
                 <div class="g-col-12">
@@ -464,8 +480,9 @@
                     </label>
                     <input
                         type="text"
-                        class="form-control {%if detailed_client_form.chronic_pain_worse.errors%}is-invalid{%elif detailed_client_form.chronic_pain_worse.value%}is-valid{%endif%}"
-                        name="chronic_pain_worse">
+                        class="form-control {%if client_medical_history_form.chronic_pain_worse.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_worse.value%}is-valid{%endif%}"
+                        name="chronic_pain_worse"
+                        value="{{client_medical_history_form.chronic_pain_worse.value|default_if_none:''}}">
                 </div>
 
 
@@ -480,7 +497,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="orthopedic_injuries"
-                            id="orthopedic_injuries-yes">
+                            id="orthopedic_injuries-yes"
+                            value="true"
+                            {% if client_medical_history_form.orthopedic_injuries.value %} checked {%endif%}>
                         <label class="form-check-label" for="orthopedic_injuries-yes">
                             YES
                         </label>
@@ -490,7 +509,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="orthopedic_injuries"
-                            id="orthopedic_injuries-no">
+                            id="orthopedic_injuries-no"
+                            value="false"
+                            {% if client_medical_history_form.orthopedic_injuries.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="orthopedic_injuries-no">
                             NO
                         </label>
@@ -502,10 +523,9 @@
                       If yes, please list
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.orthopedic_injuries_detail.errors%}is-invalid{%elif detailed_client_form.orthopedic_injuries_detail.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.orthopedic_injuries_detail.errors%}is-invalid{%elif client_medical_history_form.orthopedic_injuries_detail.value%}is-valid{%endif%}"
                         name="orthopedic_injuries_detail" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.orthopedic_injuries_detail.value|default_if_none:''}}</textarea>
                 </div>
 
 
@@ -513,6 +533,21 @@
                     <label class="form-label fw-semibold">
                       Please indicate any of the following that apply to you
                     </label>
+
+                    {% for value, label in client_medical_history_form.conditions.field.choices %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="conditions"
+                                id="conditions-{{value}}"
+                                value="{{value}}"
+                                {% if value in client_medical_history_form.conditions.value %} checked {% endif %}>
+                            <label class="form-check-label" for="conditions-{{value}}">
+                                {{label}}
+                            </label>
+                        </div>
+                    {% endfor %}
                 </div>
 
 
@@ -520,6 +555,10 @@
                     <label class="form-label fw-semibold">
                       Explain any condition you have marked above
                     </label>
+                    <textarea
+                        class="form-control {%if client_medical_history_form.conditions_detail.errors%}is-invalid{%elif client_medical_history_form.conditions_detail.value%}is-valid{%endif%}"
+                        name="conditions_detail" 
+                        rows="5">{{client_medical_history_form.conditions_detail.value|default_if_none:''}}</textarea>
                 </div>
 
 
@@ -533,7 +572,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="professional_massage"
-                            id="professional_massage-yes">
+                            id="professional_massage-yes"
+                            value="true"
+                            {% if client_medical_history_form.professional_massage.value %} checked {%endif%}>
                         <label class="form-check-label" for="professional_massage-yes">
                             YES
                         </label>
@@ -543,7 +584,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="professional_massage"
-                            id="professional_massage-no">
+                            id="professional_massage-no"
+                            value="false"
+                            {% if client_medical_history_form.professional_massage.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="professional_massage-no">
                             NO
                         </label>
@@ -554,28 +597,23 @@
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
                         What type of massage are you seeking ?
+                        
                     </label>
-
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="massage_type"
-                            id="massage_type-relax">
-                        <label class="form-check-label" for="massage_type-relax">
-                            Relaxation
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="massage_type"
-                            id="massage_type-deep">
-                        <label class="form-check-label" for="massage_type-deep">
-                            Therapeutic / Deep Tissue
-                        </label>
-                    </div>
+                    {% for value, label in client_medical_history_form.massage_type.field.choices %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="radio" 
+                                name="massage_type"
+                                id="massage_type-{{value}}"
+                                value="{{value}}"
+                                {% if value in client_medical_history_form.massage_type.value %} checked {% endif %}>
+                            <label class="form-check-label" for="massage_type-{{value}}">
+                                {{label}}
+                            </label>
+                        </div>
+                    {% endfor %}
+                   
                 </div>
 
                 <div class="g-col-12">
@@ -583,10 +621,9 @@
                       Other
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.massage_type_other.errors%}is-invalid{%elif detailed_client_form.massage_type_other.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.massage_type_other.errors%}is-invalid{%elif client_medical_history_form.massage_type_other.value%}is-valid{%endif%}"
                         name="massage_type_other" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.massage_type_other.value|default_if_none:''}}</textarea>
                 </div>
 
                 <div class="g-col-12">
@@ -594,36 +631,21 @@
                         What pressure do you prefer ?
                     </label>
 
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="pressure_preference"
-                            id="pressure_preference-light">
-                        <label class="form-check-label" for="pressure_preference-light">
-                            Light
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="pressure_preference"
-                            id="pressure_preference-medium">
-                        <label class="form-check-label" for="pressure_preference-medium">
-                            Medium
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="pressure_preference"
-                            id="pressure_preference-deep">
-                        <label class="form-check-label" for="pressure_preference-deep">
-                            Deep
-                        </label>
-                    </div>
+                    {% for value, label in client_medical_history_form.pressure_preference.field.choices %}
+                        <div class="form-check">
+                            <input 
+                                class="form-check-input" 
+                                type="radio" 
+                                name="pressure_preference"
+                                id="pressure_preference-{{value}}"
+                                value="{{value}}"
+                                {% if value in client_medical_history_form.pressure_preference.value %} checked {% endif %}>
+                            <label class="form-check-label" for="pressure_preference-{{value}}">
+                                {{label}}
+                            </label>
+                        </div>
+                    {% endfor %}
+
                 </div>
 
 
@@ -637,7 +659,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="allergies"
-                            id="allergies-yes">
+                            id="allergies-yes"
+                            value="true"
+                            {% if client_medical_history_form.allergies.value %} checked {%endif%}>
                         <label class="form-check-label" for="allergies-yes">
                             YES
                         </label>
@@ -647,7 +671,9 @@
                             class="form-check-input" 
                             type="radio" 
                             name="allergies"
-                            id="allergies-no">
+                            id="allergies-no"
+                            value="false"
+                            {% if client_medical_history_form.allergies.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="allergies-no">
                             NO
                         </label>
@@ -659,10 +685,9 @@
                       Please Explain
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.allergies_detail.errors%}is-invalid{%elif detailed_client_form.allergies_detail.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.allergies_detail.errors%}is-invalid{%elif client_medical_history_form.allergies_detail.value%}is-valid{%endif%}"
                         name="allergies_detail" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.allergies_detail.value|default_if_none:''}}</textarea>
                 </div>
 
 
@@ -678,7 +703,7 @@
                             name="no_massage_area"
                             id="no_massage_area-yes"
                             value="true"
-                            {% if detailed_client_form.no_massage_area.value == 'true' %} checked {%endif%}>
+                            {% if client_medical_history_form.no_massage_area.value %} checked {%endif%}>
                         <label class="form-check-label" for="no_massage_area-yes">
                             YES
                         </label>
@@ -689,7 +714,8 @@
                             type="radio" 
                             name="no_massage_area"
                             id="no_massage_area-no"
-                            value="false">
+                            value="false"
+                            {% if client_medical_history_form.no_massage_area.value is False %} checked {%endif%}>
                         <label class="form-check-label" for="no_massage_area-no">
                             NO
                         </label>
@@ -701,10 +727,9 @@
                       Please Explain
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.no_massage_area_detail.errors%}is-invalid{%elif detailed_client_form.no_massage_area_detail.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.no_massage_area_detail.errors%}is-invalid{%elif client_medical_history_form.no_massage_area_detail.value%}is-valid{%endif%}"
                         name="no_massage_area_detail" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.no_massage_area_detail.value|default_if_none:''}}</textarea>
                 </div>
 
                 <div class="g-col-12">
@@ -712,12 +737,29 @@
                       What are your goals for this treatment session ?
                     </label>
                     <textarea
-                        class="form-control {%if detailed_client_form.reason_of_visit.errors%}is-invalid{%elif detailed_client_form.reason_of_visit.value%}is-valid{%endif%}"
+                        class="form-control {%if client_medical_history_form.reason_of_visit.errors%}is-invalid{%elif client_medical_history_form.reason_of_visit.value%}is-valid{%endif%}"
                         name="reason_of_visit" 
-                        rows="5">
-                    </textarea>
+                        rows="5">{{client_medical_history_form.reason_of_visit.value|default_if_none:''}}</textarea>
                 </div>
                 
+
+                
+                <div class="text-md-start g-col-3">
+                    <label  for="signature" 
+                            class="form-label fw-semibold">
+                            signature <span style="color:red;">*</span>
+                    </label>
+                    
+                    <input
+                        class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                        id="signature" 
+                        name="signature" 
+                        value="{{client_medical_history_form.signature.value|default_if_none:''}}"
+                        hidden>
+
+                    <canvas class="js-paint signature" width="300" height="100"></canvas>
+                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
+                </div>
                 
             </div>
 
