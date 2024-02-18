@@ -1,12 +1,12 @@
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV3
 from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from main.image_verifier.image_verifier import ImageVerifier
+from main.widget import DatePickerInput, DateTimePickerInput, TimePickerInput, CustomImageField
 
 import main.models as m
-from main.widget import DatePickerInput, DateTimePickerInput, TimePickerInput, CustomImageField
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
 GENDER_CHOICES = [
     (0, ""),
     (1, "Male"),
@@ -126,10 +126,7 @@ class ClientMedicalHistoryForm(forms.ModelForm):
             "no_massage_area_detail",
 
             "reason_of_visit",
-            'area_of_soreness_front',
-            'area_of_soreness_back',
-            'area_of_soreness_left',
-            'area_of_soreness_right',
+            "area_of_soreness",
             "signature",
 
         ]
@@ -137,8 +134,7 @@ class ClientMedicalHistoryForm(forms.ModelForm):
         widgets = {
             # "medication": forms.RadioSelect(choices=YES_NO),
             # 'medication_detail': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
-            'area_of_soreness_front': forms.TextInput(),
-            'area_of_soreness_back': forms.TextInput(),
+            'area_of_soreness': forms.TextInput(),
             # 'area_of_soreness_left': forms.TextInput(attrs={"sore_area_left":True,"input_type":"hidden"}),
             # 'area_of_soreness_right': forms.TextInput(attrs={"sore_area_right":True,"input_type":"hidden"}),
             # 'reason_of_visit': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
@@ -148,7 +144,18 @@ class ClientMedicalHistoryForm(forms.ModelForm):
         }
 
 
-    def clean_area_of_soreness_front(self):
-        front = self.cleaned_data['area_of_soreness_front']
-        
-        return front
+    def clean_area_of_soreness(self):
+        image = self.data['area_of_soreness_hidden']
+        image_verifier = ImageVerifier(image, allow_null=True)
+        if image_verifier.is_valid():
+            # print(image)
+            return image
+        raise ValidationError(message='Internal Server Error')
+    
+    def clean_signature(self):
+        image = self.data['signature_hidden']
+        image_verifier = ImageVerifier(image, allow_null=False)
+        if image_verifier.is_valid():
+            return image
+        raise ValidationError(message='Internal Server Error')
+ 

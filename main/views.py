@@ -24,7 +24,7 @@ import jwt
 import datetime
 import json
 
-from main.image_verifier.image_verifier import ImageVerifier
+from main.image_verifier.image_verifier import ImageVerifier, CustomMemoryFile
 from django.db.models import Q
 
 from io import BytesIO
@@ -318,23 +318,12 @@ def remedial_check_in_form(request,token):
         return redirect("error_page", title="Paradise Massage")
 
     if request.method =="POST":
-        # print(request.POST)
-        area_of_soreness_front = request.POST.get("area_of_soreness_front")
-        area_of_soreness_back = request.POST.get("area_of_soreness_back")
-        # signature = request.POST.get("signature_hidden")
-        # print(area_of_soreness_back)
-        print(area_of_soreness_front)
-        
        
         client_form = f.CustomerCheckInForm(request.POST)
         detailed_client_form = f.DetailedClientForm(request.POST)
-        client_medical_history_form = f.ClientMedicalHistoryForm(request.POST)
+        client_medical_history_form = f.ClientMedicalHistoryForm(request.POST, request.FILES)
 
-        # front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
-        # back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
-        # signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
-
-
+      
         if client_form.is_valid() and detailed_client_form.is_valid() and client_medical_history_form.is_valid():
 
             client = client_form.save()
@@ -346,49 +335,15 @@ def remedial_check_in_form(request,token):
 
             
             client_medical_history.detail_client_info = detail_client_info
+
+            client_medical_history.area_of_soreness = CustomMemoryFile(client_medical_history.area_of_soreness.name).memory_file
+            client_medical_history.signature = CustomMemoryFile(client_medical_history.signature.name).memory_file
+            
             client_medical_history.save()
-            # if front_image.memory_file:
-
-            #     # remedial_client_history.area_of_soreness_front.save(
-            #     #     "remedial_front.jpg",
-            #     #     front_image.memory_file,
-            #     #     save=False
-            #     # )
-
-            #     remedial_client_history.area_of_soreness_front = front_image.memory_file
-
-
-            # if back_image.memory_file:
-
-            #     # remedial_client_history.area_of_soreness_back.save(
-            #     #     "remedial_back.jpg",
-            #     #     back_image.memory_file,
-            #     #     save=False
-            #     # )
-            #     remedial_client_history.area_of_soreness_back = back_image.memory_file
-
-            # # remedial_client_history.signature.save(
-            # #     "remedial_signature.jpg",
-            # #     signature_image.memory_file,
-            # #     save=False
-            # # )
-
-            # remedial_client_history.signature = signature_image.memory_file
-
-            # remedial_client_history.save()
+       
 
             return redirect("form_submitted", title="Client Intake Form")
-            # else:
-            # client_form = f.CustomerCheckInForm(request.POST) 
-            # remedial_history_form = f.RemedialHistoryForm(
-            #     request.POST, 
-            #     request.FILES, 
-            #     initial={
-            #         "area_of_soreness_front":area_of_soreness_front,
-            #         "area_of_soreness_back": area_of_soreness_back,
-            #         "signature":signature
-            #     }
-            # )
+
 
     else:
         client_form = f.CustomerCheckInForm() 
@@ -572,9 +527,6 @@ def set_treatment_plan_note(request):
         try:
             id = request.POST.get("id")
             note = request.POST.get("note")
-            print(id)
-            print(request.POST)
-            print(request)
             remedial_history = m.ClientMedicalHistory.objects.get(id=id)
             remedial_history.remedial_treatment_plan = note
             remedial_history.save()

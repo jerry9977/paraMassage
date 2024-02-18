@@ -210,10 +210,7 @@ class ClientMedicalHistory(models.Model):
     class Meta:
         db_table = 'core_client_medical_history'
     detail_client_info = models.ForeignKey(ClientDetailInfo, on_delete=models.CASCADE)
-    area_of_soreness_front = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
-    area_of_soreness_left = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
-    area_of_soreness_right = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
-    area_of_soreness_back = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
+    area_of_soreness = models.ImageField(upload_to='area_of_soreness/%Y/%m/%d/', null=True, blank=True)
 
     medication = models.BooleanField(null=True, blank=True)
     medication_detail = models.TextField(

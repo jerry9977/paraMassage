@@ -9,34 +9,22 @@ $("form").on('submit', function () {
 })
 
 
-let frontBackCanvas = {
-    frontDataUrl: "",
-    backDataUrl: "",
-}
+let dataURL = ""
 let signature = $("#id_signature").val();
 
 
-console.log($("#id_area_of_soreness_front").val())
-if ($("#id_area_of_soreness_front").val()) {
-    frontBackCanvas.frontDataUrl = $("#id_area_of_soreness_front").val()
+if ($("#area_of_soreness").val()) {
+    dataURL = $("#area_of_soreness").val()
 }
 
-if ($("#id_area_of_soreness_back").val()) {
-    frontBackCanvas.backDataUrl = $("#id_area_of_soreness_back").val()
-}
 
 // define canvas
-const frontCanvas = document.querySelector('.js-paint.front')
-const frontContext = frontCanvas.getContext('2d')
-frontContext.lineCap = 'round';
-frontContext.strokeStyle = '#000000';
-frontContext.lineWidth = 1;
+const bodyCanvas = document.querySelector('.js-paint.body')
+const bodyContext = bodyCanvas.getContext('2d')
+bodyContext.lineCap = 'round';
+bodyContext.strokeStyle = '#000000';
+bodyContext.lineWidth = 1;
 
-const backCanvas = document.querySelector('.js-paint.back')
-const backContext = backCanvas.getContext('2d')
-backContext.lineCap = 'round';
-backContext.strokeStyle = '#000000';
-backContext.lineWidth = 1;
 
 
 const signatureCanvas = document.querySelector('.js-paint.signature')
@@ -46,25 +34,27 @@ signatureContext.strokeStyle = '#000000';
 signatureContext.lineWidth = 1;
 
 
-// load image
-let originalFrontImage = new Image();
-let originalBackImage = new Image();
+let originalBodyImage = new Image();
+originalBodyImage.src = '/static/img/body.png'
+let bodyImage = new Image();
 
-originalFrontImage.src = '/static/img/front_body.png';
-originalBackImage.src = '/static/img/back_body.png';
+bodyImage.src = dataURL != "" ? dataURL : originalBodyImage.src;
 
-let frontImage = new Image();
-let backImage = new Image();
-frontImage.src = frontBackCanvas.frontDataUrl != "" ? frontBackCanvas.frontDataUrl : originalFrontImage.src;
-backImage.src = frontBackCanvas.backDataUrl != "" ? frontBackCanvas.backDataUrl : originalBackImage.src;
-
-frontImage.onload = function () {
-    frontContext.drawImage(frontImage, 0, 0, 300, 600);
+bodyImage.onload = function () {
+    bodyCanvas.width = bodyCanvas.offsetWidth
+    bodyCanvas.height = bodyCanvas.offsetHeight
+    bodyContext.drawImage(bodyImage, 0, 0, bodyCanvas.offsetWidth,bodyCanvas.offsetHeight);
 }
 
-backImage.onload = function () {
-    backContext.drawImage(backImage, 0, 0, 300, 600);
-}
+addEventListener("resize", (event) => {
+    bodyCanvas.width = bodyCanvas.offsetWidth
+    bodyCanvas.height = bodyCanvas.offsetHeight
+    bodyContext.clearRect(0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight)
+    let img = new Image()
+    img.src = dataURL != "" ? dataURL : '/static/img/body.png';
+    bodyContext.drawImage(img, 0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight);
+
+});
 
 if (signature) {
 
@@ -72,7 +62,7 @@ if (signature) {
     signatureImage.src = signature
 
     signatureImage.onload = function () {
-        signatureContext.drawImage(signatureImage, 0, 0, 300, 100)
+        signatureContext.drawImage(signatureImage, 0, 0, 600, 600)
     }
 
 }
@@ -81,7 +71,7 @@ if (signature) {
 let x = 0, y = 0;
 let isMouseDown = false;
 let isBack = false;
-let isFront = false;
+let isBody = false;
 let isSignature = false;
 let pointerAmount = []
 
@@ -90,25 +80,16 @@ let pointerAmount = []
 const stopDrawing = () => {
 
     if (isMouseDown) {
-        frontBackCanvas.backDataUrl = backCanvas.toDataURL()
-        frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
+        dataURL = bodyCanvas.toDataURL()
         isMouseDown = false;
-        if (isBack) {
-            $("#id_area_of_soreness_back").val(frontBackCanvas.backDataUrl)
-        } else if (isFront) {
-            $("#id_area_of_soreness_front").val(frontBackCanvas.frontDataUrl)
+        if (isBody) {
+            $("#area_of_soreness").val(dataURL)
         } else if (isSignature) {
             $("#id_signature").val(signatureCanvas.toDataURL())
         }
-        isBack = false;
-        isFront = false;
+        isBody = false;
         isSignature = false;
         pointerAmount = [];
-
-
-
-
-
 
     }
 }
@@ -118,7 +99,7 @@ const startDrawing = event => {
     [x, y] = [event.offsetX, event.offsetY];
 }
 
-const drawingFront = event => {
+const drawingBody = event => {
     pointerAmount.push(event)
 
     let eventAmount = 0
@@ -128,25 +109,10 @@ const drawingFront = event => {
         }
     }
 
-    frontCanvas.style.touchAction = "None"
-    isFront = true
-
+    bodyCanvas.style.touchAction = "None"
+    isBody = true
 }
 
-const drawingBack = event => {
-    pointerAmount.push(event)
-
-    let eventAmount = 0
-    for (let i = 0; i < pointerAmount.length; i++) {
-        if (event instanceof PointerEvent) {
-            eventAmount++
-        }
-    }
-
-
-    backCanvas.style.touchAction = "None"
-    isBack = true
-}
 
 const drawingSignature = event => {
     pointerAmount.push(event)
@@ -171,10 +137,8 @@ const drawLine = event => {
 
         let context;
 
-        if (isFront) {
-            context = frontContext
-        } else if (isBack) {
-            context = backContext
+        if (isBody) {
+            context = bodyContext
         } else {
             context = signatureContext
         }
@@ -189,24 +153,17 @@ const drawLine = event => {
 }
 
 
-function clearFrontCanvas() {
+function clearBodyCanvas() {
+    bodyCanvas.width = bodyCanvas.offsetWidth
+    bodyCanvas.height = bodyCanvas.offsetHeight
+    bodyContext.clearRect(0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight)
+    bodyContext.drawImage(originalBodyImage, 0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight);
 
-
-
-    frontContext.clearRect(0, 0, 300, 600)
-    frontContext.drawImage(originalFrontImage, 0, 0, 300, 600);
-
-    frontBackCanvas.frontDataUrl = frontCanvas.toDataURL()
-    $("#id_area_of_soreness_front").val("")
+    dataURL = bodyCanvas.toDataURL()
+    $("#area_of_soreness").val("")
 }
 
-function clearBackCanvas() {
 
-    backContext.clearRect(0, 0, 300, 600)
-    backContext.drawImage(originalBackImage, 0, 0, 300, 600);
-    frontBackCanvas.backDataUrl = backCanvas.toDataURL()
-    $("#id_area_of_soreness_back").val("")
-}
 
 function clearSignatureCanvas() {
     signatureContext.clearRect(0, 0, 300, 100)
@@ -214,17 +171,11 @@ function clearSignatureCanvas() {
 }
 
 
-frontCanvas.addEventListener('mousedown', startDrawing);
-frontCanvas.addEventListener('mousedown', drawingFront);
-frontCanvas.addEventListener('mousemove', drawLine);
-frontCanvas.addEventListener('mouseup', stopDrawing);
-frontCanvas.addEventListener('mouseout', stopDrawing);
-
-backCanvas.addEventListener('mousedown', startDrawing);
-backCanvas.addEventListener('mousedown', drawingBack);
-backCanvas.addEventListener('mousemove', drawLine);
-backCanvas.addEventListener('mouseup', stopDrawing);
-backCanvas.addEventListener('mouseout', stopDrawing);
+bodyCanvas.addEventListener('mousedown', startDrawing);
+bodyCanvas.addEventListener('mousedown', drawingBody);
+bodyCanvas.addEventListener('mousemove', drawLine);
+bodyCanvas.addEventListener('mouseup', stopDrawing);
+bodyCanvas.addEventListener('mouseout', stopDrawing);
 
 signatureCanvas.addEventListener('mousedown', startDrawing);
 signatureCanvas.addEventListener('mousedown', drawingSignature);
@@ -232,17 +183,12 @@ signatureCanvas.addEventListener('mousemove', drawLine);
 signatureCanvas.addEventListener('mouseup', stopDrawing);
 signatureCanvas.addEventListener('mouseout', stopDrawing);
 
-frontCanvas.addEventListener('pointerdown', startDrawing);
-frontCanvas.addEventListener('pointerdown', drawingFront);
-frontCanvas.addEventListener('pointermove', drawLine);
-frontCanvas.addEventListener('pointerup', stopDrawing);
-frontCanvas.addEventListener('pointerout', stopDrawing);
+bodyCanvas.addEventListener('pointerdown', startDrawing);
+bodyCanvas.addEventListener('pointerdown', drawingBody);
+bodyCanvas.addEventListener('pointermove', drawLine);
+bodyCanvas.addEventListener('pointerup', stopDrawing);
+bodyCanvas.addEventListener('pointerout', stopDrawing);
 
-backCanvas.addEventListener('pointerdown', startDrawing);
-backCanvas.addEventListener('pointerdown', drawingBack);
-backCanvas.addEventListener('pointermove', drawLine);
-backCanvas.addEventListener('pointerup', stopDrawing);
-backCanvas.addEventListener('pointerout', stopDrawing);
 
 signatureCanvas.addEventListener('pointerdown', startDrawing);
 signatureCanvas.addEventListener('pointerdown', drawingSignature);

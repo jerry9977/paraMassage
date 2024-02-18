@@ -733,27 +733,21 @@
                         name="no_massage_area_detail" 
                         rows="5">{{client_medical_history_form.no_massage_area_detail.value|default_if_none:''}}</textarea>
                 </div>
-
-                <input
-                    class="form-control" 
-                    id="id_area_of_soreness_back" 
-                    name="area_of_soreness_back" 
-                    value="{{client_medical_history_form.area_of_soreness_back.value|default_if_none:''}}"
-                    type="hidden">
-                <input
-                    class="form-control" 
-                    id="id_area_of_soreness_front" 
-                    name="area_of_soreness_front" 
-                    value="{{client_medical_history_form.area_of_soreness_front.value|default_if_none:''}}"
-                    type="hidden">
-                <div class="text-center text-md-end g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-8 g-col-xl-4 g-start-xl-9" style="margin-top:-20px; margin-bottom: 20px;">
-                    <canvas class="js-paint back" width="300" height="600"></canvas>
-                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearBackCanvas()">Reset</button>
-                </div>
-                <div class="text-center text-md-start g-col-12 g-col-md-6 g-col-lg-5 g-start-lg-1 g-col-xl-4 g-start-xl-1" style="margin-top:-20px; margin-bottom: 20px;">
-                    <canvas class="js-paint front" width="300" height="600"></canvas>
-                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearFrontCanvas()">Reset</button>
-                </div>         
+                
+                <div class="g-col-12">
+                    <input
+                        class="form-control" 
+                        id="area_of_soreness" 
+                        name="area_of_soreness_hidden" 
+                        value="{{client_medical_history_form.area_of_soreness.value|default_if_none:''}}"
+                        type="hidden">
+                  
+                    <input type="file" name="area_of_soreness" style="display: none;">
+                    <div class="text-center text-md-start g-col-12 ">
+                        <canvas class="js-paint body" style="width: 100%;aspect-ratio: 671 / 452;"></canvas>
+                        <button class="btn btn-secondary" style="width:100%" type="button" onclick="clearBodyCanvas()">Reset</button>
+                    </div>         
+                </div> 
 
                     
                 <div class="g-col-12">
@@ -777,10 +771,11 @@
                     <input
                         class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
                         id="id_signature" 
-                        name="signature" 
+                        name="signature_hidden" 
                         value="{{client_medical_history_form.signature.value|default_if_none:''}}"
                         hidden>
-
+                    <input type="file" name="signature" style="display: none;">
+                    
                     <canvas class="js-paint signature" width="300" height="100"></canvas>
                     <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
                 </div>
