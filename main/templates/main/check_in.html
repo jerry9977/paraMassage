@@ -7,12 +7,16 @@
     @media only screen and (min-width: 1900px){
         .qr-code-wrapper{
             height: 600px;
+            width: 600px;
+
         }
     }
 
     @media only screen and (max-width: 1900px){
         .qr-code-wrapper{
             height: 500px;
+            width: 500px;
+
         }
     }
 
@@ -20,6 +24,8 @@
     @media only screen and (max-width: 1800px){
         .qr-code-wrapper{
             height: 400px;
+            width: 400px;
+
         }
     }
 
@@ -110,103 +116,56 @@
 {%block content%}
 {% load qr_code %}
     <div class="position-relative w-100 h-100">
-        <div id="qr-wrapper" class="grid position-relative top-50 start-50 translate-middle w-100" style="--bs-columns:19;">
-            <div class="flip-box qr-code-wrapper cards g-start-3 g-start-sm-7 g-col-lg-8 g-start-lg-2 g-col-xl-6 g-start-xl-4">
-                <div class="flip-box-inner w-100 h-100">
-                    <div class="remedial-check-in flip-box-front w-100 h-100">
-                        <div style="height:20%">
-                            <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
-                                REMEDIAL CHECK IN
-                            </div>
-                        </div>
-        
-                        <div style="height:60%; margin-top: 5%;">
-                            <svg width="100%" height="100%" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_6_178)">
-                                <path d="M75 140.625C57.5952 140.625 40.9032 133.711 28.5961 121.404C16.289 109.097 9.375 92.4048 9.375 75C9.375 57.5952 16.289 40.9032 28.5961 28.5961C40.9032 16.289 57.5952 9.375 75 9.375C92.4048 9.375 109.097 16.289 121.404 28.5961C133.711 40.9032 140.625 57.5952 140.625 75C140.625 92.4048 133.711 109.097 121.404 121.404C109.097 133.711 92.4048 140.625 75 140.625ZM75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150Z" fill="white"/>
-                                <path d="M102.844 46.5938C102.777 46.6585 102.714 46.7274 102.656 46.8L70.0969 88.2844L50.475 68.6531C49.1421 67.4111 47.3792 66.735 45.5576 66.7671C43.736 66.7993 41.998 67.5372 40.7098 68.8254C39.4215 70.1137 38.6836 71.8517 38.6515 73.6732C38.6193 75.4948 39.2955 77.2577 40.5375 78.5906L65.3437 103.406C66.012 104.073 66.8078 104.599 67.6836 104.952C68.5594 105.305 69.4973 105.477 70.4414 105.46C71.3854 105.442 72.3163 105.235 73.1784 104.85C74.0405 104.465 74.8163 103.91 75.4594 103.219L112.884 56.4375C114.159 55.1 114.855 53.3147 114.824 51.4675C114.792 49.6204 114.035 47.8598 112.716 46.5665C111.397 45.2732 109.622 44.551 107.774 44.5561C105.927 44.5612 104.156 45.2932 102.844 46.5938Z" fill="white"/>
-                                </g>
-                                <defs>
-                                <clipPath id="clip0_6_178">
-                                <rect width="150" height="150" fill="white"/>
-                                </clipPath>
-                                </defs>
-                            </svg>
-                                
-                        </div>
-        
-
-                    </div>
-
-                    <div class="remedial-check-in flip-box-back w-100 h-100">
-                        <div style="height:20%">
-                            <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
-                                SCAN ME
-                            </div>
-                        </div>
-        
-                        <div style="height:60%">
-                            <div class="position-relative top-50 start-50 translate-middle h-100" style="height:100%;" >
-                                <div class="position-absolute top-50 start-50 translate-middle h-100" id="remedial-check-in-qr" ></div>
-                            </div>
-                        </div>
-        
-                        <div style="height:20%">
-                            <div class="position-relative top-50 start-50 translate-middle qr-description" style="display:inline-block">
-                                <a class="qr-description" href="/remedial_check_in_form/{{token}}/" target="_blank">CLICK HERE TO REDIRECT</a>
-                            </div>
+        <div class="flip-box qr-code-wrapper cards position-absolute top-50 start-50 translate-middle">
+            <div class="flip-box-inner w-100 h-100 ">
+                <div class="remedial-check-in flip-box-front w-100 h-100">
+                    <div style="height:20%">
+                        <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
+                            REMEDIAL CHECK IN
                         </div>
                     </div>
+    
+                    <div style="height:60%; margin-top: 5%;">
+                        <svg width="100%" height="100%" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_6_178)">
+                            <path d="M75 140.625C57.5952 140.625 40.9032 133.711 28.5961 121.404C16.289 109.097 9.375 92.4048 9.375 75C9.375 57.5952 16.289 40.9032 28.5961 28.5961C40.9032 16.289 57.5952 9.375 75 9.375C92.4048 9.375 109.097 16.289 121.404 28.5961C133.711 40.9032 140.625 57.5952 140.625 75C140.625 92.4048 133.711 109.097 121.404 121.404C109.097 133.711 92.4048 140.625 75 140.625ZM75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150Z" fill="white"/>
+                            <path d="M102.844 46.5938C102.777 46.6585 102.714 46.7274 102.656 46.8L70.0969 88.2844L50.475 68.6531C49.1421 67.4111 47.3792 66.735 45.5576 66.7671C43.736 66.7993 41.998 67.5372 40.7098 68.8254C39.4215 70.1137 38.6836 71.8517 38.6515 73.6732C38.6193 75.4948 39.2955 77.2577 40.5375 78.5906L65.3437 103.406C66.012 104.073 66.8078 104.599 67.6836 104.952C68.5594 105.305 69.4973 105.477 70.4414 105.46C71.3854 105.442 72.3163 105.235 73.1784 104.85C74.0405 104.465 74.8163 103.91 75.4594 103.219L112.884 56.4375C114.159 55.1 114.855 53.3147 114.824 51.4675C114.792 49.6204 114.035 47.8598 112.716 46.5665C111.397 45.2732 109.622 44.551 107.774 44.5561C105.927 44.5612 104.156 45.2932 102.844 46.5938Z" fill="white"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_6_178">
+                            <rect width="150" height="150" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>
+                            
+                    </div>
+    
+
                 </div>
-                
-                    
-                
-            </div>
 
-            <div class="flip-box qr-code-wrapper cards g-start-3 g-start-sm-7 g-col-lg-8 g-start-lg-11 g-col-xl-6 g-start-xl-11">
-                <div class="flip-box-inner w-100 h-100">
-                    <div class="customer-check-in flip-box-front w-100 h-100">
-                        <div style="height:20%">
-                            <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
-                                CUSTOMER CHECK IN
-                            </div>
-                        </div>
-        
-                        <div style="height:60%; margin-top: 5%;">
-                            <svg width="100%" height="100%" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g clip-path="url(#clip0_6_178)">
-                                <path d="M75 140.625C57.5952 140.625 40.9032 133.711 28.5961 121.404C16.289 109.097 9.375 92.4048 9.375 75C9.375 57.5952 16.289 40.9032 28.5961 28.5961C40.9032 16.289 57.5952 9.375 75 9.375C92.4048 9.375 109.097 16.289 121.404 28.5961C133.711 40.9032 140.625 57.5952 140.625 75C140.625 92.4048 133.711 109.097 121.404 121.404C109.097 133.711 92.4048 140.625 75 140.625ZM75 150C94.8912 150 113.968 142.098 128.033 128.033C142.098 113.968 150 94.8912 150 75C150 55.1088 142.098 36.0322 128.033 21.967C113.968 7.90176 94.8912 0 75 0C55.1088 0 36.0322 7.90176 21.967 21.967C7.90176 36.0322 0 55.1088 0 75C0 94.8912 7.90176 113.968 21.967 128.033C36.0322 142.098 55.1088 150 75 150Z" fill="white"/>
-                                <path d="M102.844 46.5938C102.777 46.6585 102.714 46.7274 102.656 46.8L70.0969 88.2844L50.475 68.6531C49.1421 67.4111 47.3792 66.735 45.5576 66.7671C43.736 66.7993 41.998 67.5372 40.7098 68.8254C39.4215 70.1137 38.6836 71.8517 38.6515 73.6732C38.6193 75.4948 39.2955 77.2577 40.5375 78.5906L65.3437 103.406C66.012 104.073 66.8078 104.599 67.6836 104.952C68.5594 105.305 69.4973 105.477 70.4414 105.46C71.3854 105.442 72.3163 105.235 73.1784 104.85C74.0405 104.465 74.8163 103.91 75.4594 103.219L112.884 56.4375C114.159 55.1 114.855 53.3147 114.824 51.4675C114.792 49.6204 114.035 47.8598 112.716 46.5665C111.397 45.2732 109.622 44.551 107.774 44.5561C105.927 44.5612 104.156 45.2932 102.844 46.5938Z" fill="white"/>
-                                </g>
-                                <defs>
-                                <clipPath id="clip0_6_178">
-                                <rect width="150" height="150" fill="white"/>
-                                </clipPath>
-                                </defs>
-                            </svg>
-                                
+                <div class="remedial-check-in flip-box-back w-100 h-100">
+                    <div style="height:20%">
+                        <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
+                            SCAN ME
                         </div>
                     </div>
-
-                    <div class="customer-check-in flip-box-back w-100 h-100">
-                        <div style="height:20%">
-                            <div class="position-relative top-50 start-50 translate-middle qr-title" style="display:inline-block">
-                                SCAN ME
-                            </div>
+    
+                    <div style="height:60%">
+                        <div class="position-relative top-50 start-50 translate-middle h-100" style="height:100%;" >
+                            <div class="position-absolute top-50 start-50 translate-middle h-100" id="remedial-check-in-qr" ></div>
                         </div>
-        
-                        <div style="height:60%">
-                            <!-- <img class="position-relative top-50 start-50 translate-middle h-100" style="height:100%;" src="{% qr_url_from_text "Hello World!" dark_color="white" border="1" %}" alt="Hello World!"> -->
-                        </div>
-        
-                        <div style="height:20%">
-                            <!-- <div class="position-relative top-50 start-50 translate-middle qr-description" style="display:inline-block">
-                                CLICK HERE TO REDIRECT
-                            </div> -->
+                    </div>
+    
+                    <div style="height:20%">
+                        <div class="position-relative top-50 start-50 translate-middle qr-description" style="display:inline-block">
+                            <a class="qr-description" href="/remedial_check_in_form/{{token}}/" target="_blank">CLICK HERE TO REDIRECT</a>
                         </div>
                     </div>
                 </div>
             </div>
+            
+                
+            
         </div>
     </div>
     

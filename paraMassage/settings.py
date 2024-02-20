@@ -83,20 +83,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'paraMassage.wsgi.application'
 
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
-#     },
-# }
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("localhost", 6379)],
-        }
-    },
-}
+if DEBUG:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        },
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("localhost", 6379)],
+            }
+        },
+    }
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -224,15 +225,11 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://192.168.1.19:8000",
-    "https://paramassage.herokuapp.com"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://paramassage.herokuapp.com"
-]
 
 # login session age in second
 SESSION_COOKIE_AGE = 43200

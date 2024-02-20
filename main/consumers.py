@@ -17,7 +17,7 @@ class DashboardConsumer(WebsocketConsumer):
             .select_related("client")\
             .filter(date_created__gte=today)\
             .order_by("-date_created")\
-            .values("id", "client__id", "client__first_name", "client__last_name", "health_insurance_number", "suffix", "date_created")
+            .values("id", "client__id", "client__first_name", "client__last_name", "client__health_insurance_number","client__reference_number", "date_created")
 
         recently_added_client_container = []
         
@@ -27,8 +27,8 @@ class DashboardConsumer(WebsocketConsumer):
                 "client_id": client["client__id"],
                 "first_name": client["client__first_name"],
                 "last_name": client["client__last_name"],
-                "health_insurance_number": str(client["health_insurance_number"]),
-                "suffix": str(client["suffix"]),
+                "health_insurance_number": str(client["client__health_insurance_number"]),
+                "reference_number": str(client["client__reference_number"]),
                 "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M")
             })
 

@@ -56,7 +56,7 @@
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Remedial Number / Suffix</th>
+                                    <th>Remedial Number / Reference Number</th>
                                     <th>Created At</th>
                                 </tr>
                             </thead>
@@ -66,7 +66,7 @@
                                 </tr>
                                 <tr v-else v-for="[clientId, client] in newRemedialClient">
                                     <td><a :href="'../customers/'+ client.client_id +'/'">[[client.first_name]] [[client.last_name]]</a></td>
-                                    <td>[[client.health_insurance_number]] / [[client.suffix]]</td>
+                                    <td>[[client.health_insurance_number]] / [[client.reference_number]]</td>
                                     <td>[[client.date_created]]</td>
                                 </tr>
                             </tbody>
@@ -234,7 +234,7 @@
                 dashboardConnectSocket(){
                     let _this = this
                     const dashboardSocket = new WebSocket(
-                        'wss://'
+                        {% if DEBUG %}'ws://' {% else %} 'wss://' {% endif %}
                         + window.location.host
                         + '/ws/dashboard_update/'
                     );

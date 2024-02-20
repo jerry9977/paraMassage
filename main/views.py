@@ -403,67 +403,22 @@ def existing_remedial_check_in_form(request, token):
 
         
 
-        area_of_soreness_front = request.POST.get("area_of_soreness_front_hidden")
-        area_of_soreness_back = request.POST.get("area_of_soreness_back_hidden")
-        signature = request.POST.get("signature_hidden")
-
         
        
         remedial_history_form = f.ClientMedicalHistoryForm(request.POST, request.FILES)
 
 
-        front_image = ImageVerifier(area_of_soreness_front, field_name="area_of_soreness_front", allow_null=True, form=remedial_history_form)
-        back_image = ImageVerifier(area_of_soreness_back, field_name="area_of_soreness_back", allow_null=True, form=remedial_history_form)
-        signature_image = ImageVerifier(signature, field_name="signature", allow_null=False, form=remedial_history_form)
 
+        if remedial_history_form.is_valid():
+            remedial_client_history = remedial_history_form.save(commit=False)
+            
+            remedial_client_history.detail_client_info = m.ClientDetailInfo.objects.get(id=id)
+            remedial_client_history.area_of_soreness = CustomMemoryFile(remedial_client_history.area_of_soreness.name).memory_file
+            remedial_client_history.signature = CustomMemoryFile(remedial_client_history.signature.name).memory_file
+            remedial_client_history.save()
 
-        if front_image.is_valid() and back_image.is_valid() and signature_image.is_valid():
-            if remedial_history_form.is_valid():
-                remedial_client_history = remedial_history_form.save(commit=False)
-                
-
-                
-                remedial_client_history.detail_client_info = m.ClientDetailInfo.objects.get(id=id)
-                
-                if front_image.memory_file:
-
-                    # remedial_client_history.area_of_soreness_front.save(
-                    #     "remedial_front.jpg",
-                    #     front_image.memory_file,
-                    #     save=False
-                    # )
-
-                    remedial_client_history.area_of_soreness_front = front_image.memory_file
-
-                if back_image.memory_file:
-
-                    # remedial_client_history.area_of_soreness_back.save(
-                    #     "remedial_back.jpg",
-                    #     back_image.memory_file,
-                    #     save=False
-                    # )
-
-                    remedial_client_history.area_of_soreness_back = back_image.memory_file
-
-                # remedial_client_history.signature.save(
-                #     "remedial_signature.jpg",
-                #     signature_image.memory_file,
-                #     save=False
-                # )
-                remedial_client_history.signature = signature_image.memory_file
-                remedial_client_history.save()
-
-                return redirect("form_submitted", title="Client Intake Form")
-            else:
-                remedial_history_form = f.ClientMedicalHistoryForm(
-                request.POST, 
-                request.FILES, 
-                initial={
-                    "area_of_soreness_front":area_of_soreness_front,
-                    "area_of_soreness_back": area_of_soreness_back,
-                    "signature":signature
-                }
-            )
+            return redirect("form_submitted", title="Client Intake Form")
+        
 
     else:
        
@@ -585,7 +540,7 @@ class ClientListView(ListView):
         for client in context["object_list"]:
             jwt_token = jwt.encode(
                 {
-                    "id": client.id, 
+                    "id": client.clientdetailinfo_set.all()[0].id, 
                     "time": datetime.datetime.now().strftime("%H:%M:S"),
                     "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=30)
                 }, 
