@@ -201,29 +201,30 @@ def customer_view(request, id):
     
     client = client.values().first()
     client_remedial_detail = client_remedial_detail.values().first()
-    client_remedial_history = client_remedial_history
 
-    # print(client["id"])
+    
     client_info = {
         "id": client["id"],
         "first_name": client["first_name"],
         "last_name": client["last_name"],
+        "health_insurance_number": str(client["health_insurance_number"]),
+        "reference_number": str(client["reference_number"]),
         "email": client["email"],
         "DOB": client["DOB"],
-        "mobile": str(client["mobile"]),
-        "home_phone": str(client["home_phone"]),
-        "health_insurance_number": str(client_remedial_detail["health_insurance_number"]),
-        "suffix": str(client_remedial_detail["suffix"]),
-        "gender": client_remedial_detail["gender"],
-        "martial_status": client_remedial_detail["martial_status"],
-        "weight": str(client_remedial_detail["weight"]),
-        "height": str(client_remedial_detail["height"]),
-        "children": client_remedial_detail["children"],
-        "occupation": client_remedial_detail["occupation"],
+        "phone_day": client["phone_day"],
+        "phone_night": client["phone_night"],
         "address": client_remedial_detail["address"],
-        "job": client_remedial_detail["job"],
-        "emergency_contact_number": client_remedial_detail["emergency_contact_number"],
+        "suburb": client_remedial_detail["suburb"],
+        "state": client_remedial_detail["state"],
+        "post_code": client_remedial_detail["post_code"],
+        "occupation": client_remedial_detail["occupation"],
+        "employer": client_remedial_detail["employer"],
+        "primary_physician": client_remedial_detail["primary_physician"],
+
         "emergency_contact_name": client_remedial_detail["emergency_contact_name"],
+        "emergency_contact_number": client_remedial_detail["emergency_contact_number"],
+        "emergency_contact_relation": client_remedial_detail["emergency_contact_relation"],
+        "hear_about_us": client_remedial_detail["hear_about_us"],
         "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M"),
     }
 
@@ -231,12 +232,41 @@ def customer_view(request, id):
     for history in client_remedial_history:
         history_container.append({
             "id": history.id,
-            "area_of_soreness_front":history.area_of_soreness_front.url if history.area_of_soreness_front else "",
-            "area_of_soreness_back":history.area_of_soreness_back.url if history.area_of_soreness_back else "",
+            "medication": "YES" if history.medication else "N/A" if history.medication is None else "No",
+            "medication_detail": history.medication_detail,
+
+            
+            "pregnant": "YES" if history.pregnant else "N/A" if history.pregnant is None else "No",
+            "pregnant_time": history.pregnant_time,
+            "pregnant_factor": history.pregnant_factor,
+
+            "chronic_pain": "YES" if history.chronic_pain else "N/A" if history.chronic_pain is None else "No",
+            "chronic_pain_detail": history.chronic_pain_detail,
+            "chronic_pain_worse": history.chronic_pain_worse,
+            "chronic_pain_better": history.chronic_pain_better,
+
+            "orthopedic_injuries": "YES" if history.orthopedic_injuries else "N/A" if history.orthopedic_injuries is None else "No",
+            "orthopedic_injuries_detail": history.orthopedic_injuries_detail,
+
+            "conditions": f"{history.conditions}",
+            "conditions_detail": history.conditions_detail,
+
+            "professional_massage": "YES" if history.professional_massage else "N/A" if history.professional_massage is None else "No",
+
+            "massage_type": f"{history.massage_type}",
+            "massage_type_other": history.massage_type_other,
+
+            "pressure_preference": f"{history.pressure_preference}",
+
+            "allergies": "YES" if history.allergies else "N/A" if history.allergies is None else "No",
+            "allergies_detail": history.allergies_detail,
+            
+            "no_massage_area": "YES" if history.no_massage_area else "N/A" if history.no_massage_area is None else "No",
+            "no_massage_area_detail": history.no_massage_area_detail,
+
+            "area_of_soreness":history.area_of_soreness.url if history.area_of_soreness else "",
             "reason_of_visit": history.reason_of_visit,
-            "symptoms": f"{history.symptoms}",
-            "medication": history.medication,
-            "health_care": history.health_care,
+            
             "additional_comments": history.additional_comments,
             "receipt_image": history.receipt_image.url if history.receipt_image else "",
             "remedial_treatment_plan": history.remedial_treatment_plan if history.remedial_treatment_plan else "",
@@ -546,16 +576,16 @@ def set_treatment_plan_note(request):
     return response  
 
 class ClientListView(ListView):
-    model = m.ClientDetailInfo
+    model = m.Client
     template_name = 'main/client_list.html'
     paginate_by = 10
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         client_json = []
-        for remedial_client in context["object_list"]:
+        for client in context["object_list"]:
             jwt_token = jwt.encode(
                 {
-                    "id": remedial_client.id, 
+                    "id": client.id, 
                     "time": datetime.datetime.now().strftime("%H:%M:S"),
                     "exp": datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(minutes=30)
                 }, 
@@ -564,12 +594,12 @@ class ClientListView(ListView):
             )
 
             client_json.append({
-                "id": remedial_client.client.id,
-                "first_name": remedial_client.client.first_name,
-                "last_name": remedial_client.client.last_name,
-                "health_insurance_number": str(remedial_client.health_insurance_number),
-                "suffix": str(remedial_client.suffix),
-                "date_created": datetime.datetime.strftime(remedial_client.client.date_created, "%d %b %Y %H:%M"),
+                "id": client.id,
+                "first_name": client.first_name,
+                "last_name": client.last_name,
+                "health_insurance_number": str(client.health_insurance_number),
+                "reference_number": str(client.reference_number),
+                "date_created": datetime.datetime.strftime(client.date_created, "%d %b %Y %H:%M"),
                 "token": jwt_token
             })
         context["client_json"] = json.dumps(client_json)
@@ -587,19 +617,17 @@ class ClientListView(ListView):
         return super(ClientListView, self).dispatch(request, *args, **kwargs)
     
     
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         filter_val = self.request.GET.get('filter', '')
-
-        new_context = m.ClientDetailInfo.objects.filter(
-            Q(client__first_name__icontains=filter_val) | 
-            Q(client__last_name__icontains=filter_val) | 
-            Q(client__mobile__icontains=filter_val) | 
-            Q(client__home_phone__icontains=filter_val) | 
-            Q(client__email__icontains=filter_val) | 
+        qs = super().get_queryset(**kwargs)
+        return qs.filter(
+            Q(first_name__icontains=filter_val) | 
+            Q(last_name__icontains=filter_val) | 
+            Q(phone_day__icontains=filter_val) | 
+            Q(phone_night__icontains=filter_val) | 
             Q(health_insurance_number__icontains=filter_val))\
-            .order_by("-client__date_created")
-        
-        return new_context
+            .order_by("-date_created")
+    
 
 
     def _get_start_end_page(self, total_pages, current_page):

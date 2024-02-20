@@ -31,6 +31,13 @@
                             <div class="g-col-8">{{client_info.last_name}}</div>
                         </div>
                     </div>
+                    
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Health Insurance / Reference Number</div>
+                            <div class="g-col-8">{{client_info.health_insurance_number}} / {{client_info.reference_number}}</div>
+                        </div>
+                    </div>
 
                     <div class="g-col-12">
                         <div class="grid">
@@ -48,53 +55,21 @@
 
                     <div class="g-col-12">
                         <div class="grid">
-                            <div class="g-col-4 fw-semibold">Mobile</div>
-                            <div class="g-col-8">{{client_info.mobile|default:"N/A"}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Home Phone</div>
-                            <div class="g-col-8">{{client_info.home_phone|default:"N/A"}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Health Insurance / Suffix</div>
-                            <div class="g-col-8">{{client_info.health_insurance_number}} / {{client_info.suffix}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Gender</div>
-                            <div class="g-col-8">{{client_info.gender|default:"N/A"}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Martial Status</div>
-                            <div class="g-col-8">{{client_info.martial_status|default:"N/A"}}</div>
+                            <div class="g-col-4 fw-semibold">Phone (day) / (night)</div>
+                            <div class="g-col-8">{{client_info.phone_day|default:"N/A"}} / {{client_info.phone_night|default:"N/A"}}</div>
                         </div>
                     </div>
 
 
                     <div class="g-col-12">
                         <div class="grid">
-                            <div class="g-col-4 fw-semibold">Weight / Height</div>
-                            <div class="g-col-8">{{client_info.Weight|default:"N/A"}} / {{client_info.Height|default:"N/A"}}</div>
+                            <div class="g-col-4 fw-semibold">Address / Suburb / State / Post Code</div>
+                            <div class="g-col-8">{{client_info.address|default:"N/A"}} {{client_info.suburb|default:"N/A"}} {{client_info.state|default:"N/A"}} {{client_info.post_code|default:"N/A"}}</div>
                         </div>
                     </div>
 
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Children</div>
-                            <div class="g-col-8">{{client_info.Children|default:"N/A"}}</div>
-                        </div>
-                    </div>
+
+
 
                     <div class="g-col-12">
                         <div class="grid">
@@ -103,13 +78,20 @@
                         </div>
                     </div>
 
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Employer</div>
+                            <div class="g-col-8">{{client_info.employer|default:"N/A"}}</div>
+                        </div>
+                    </div>
 
                     <div class="g-col-12">
                         <div class="grid">
-                            <div class="g-col-4 fw-semibold">Address</div>
-                            <div class="g-col-8">{{client_info.address|default:"N/A"}}</div>
+                            <div class="g-col-4 fw-semibold">Primary Physician</div>
+                            <div class="g-col-8">{{client_info.primary_physician|default:"N/A"}}</div>
                         </div>
                     </div>
+
                     
                     <div class="g-col-12">
                         <div class="grid">
@@ -124,6 +106,14 @@
                             <div class="g-col-8">{{client_info.emergency_contact_number|default:"N/A"}}</div>
                         </div>
                     </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Emergency Contact Relationship</div>
+                            <div class="g-col-8">{{client_info.emergency_contact_relationship|default:"N/A"}}</div>
+                        </div>
+                    </div>
+
 
                     <div class="g-col-12">
                         <div class="grid">
@@ -156,64 +146,190 @@
                                 <div class="grid px-4 py-4">
                                     <div class="g-col-12">
                                         <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Area of soreness (Front)</div>
-                                            <img class="g-col-6"style="width: 100%;" :src="history.area_of_soreness_front" v-if="history.area_of_soreness_front.length">
-                                            <div class="g-col-8" v-else>N/A</div>
-                                            
+                                            <div class="g-col-4 fw-semibold">Medications</div>
+                                            <div class="g-col-8" >[[history.medication]]</div>
                                         </div>
                                     </div>
-
+                                    
                                     <div class="g-col-12">
                                         <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Area of soreness (Back)</div>
-                                            <img class="g-col-6" style="width: 100%;" :src="history.area_of_soreness_back" v-if="history.area_of_soreness_back.length">
+                                            <div class="g-col-4 fw-semibold">Medication Details</div>
+                                            <div class="g-col-8" v-if="history.medication_detail.length">[[history.medication_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
-                                            
                                         </div>
                                     </div>
                                     
 
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Pregnant</div>
+                                            <div class="g-col-8" >[[history.pregnant]]</div>
+                                        </div>
+                                    </div>
 
                                     <div class="g-col-12">
                                         <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Reason of Visit</div>
+                                            <div class="g-col-4 fw-semibold">Pregnant Time</div>
+                                            <div class="g-col-8" v-if="history.pregnant_time.length">[[history.pregnant_time]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Pregnant High Risk Factor</div>
+                                            <div class="g-col-8" v-if="history.pregnant_factor.length">[[history.pregnant_factor]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Chronic Pain</div>
+                                            <div class="g-col-8" >[[history.chronic_pain]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Chronic Pain Detail</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_detail.length">[[history.chronic_pain_detail]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Chronic Pain Worse</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_worse.length">[[history.chronic_pain_worse]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Chronic Pain Better</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_better.length">[[history.chronic_pain_better]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Orthopedic Injuries</div>
+                                            <div class="g-col-8" >[[history.orthopedic_injuries]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Orthopedic Injuries Detail</div>
+                                            <div class="g-col-8" v-if="history.orthopedic_injuries_detail.length">[[history.orthopedic_injuries_detail]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Conditions</div>
+                                            <div class="g-col-8" >[[history.conditions]]</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Conditions Detail</div>
+                                            <div class="g-col-8" v-if="history.conditions_detail.length">[[history.conditions_detail]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Had Professional Massage?</div>
+                                            <div class="g-col-8" >[[history.professional_massage]]</div>
+                                        </div>
+                                    </div>
+                                    
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Prefer Massage Type</div>
+                                            <div class="g-col-8" >[[history.massage_type]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Massage Type Other</div>
+                                            <div class="g-col-8" v-if="history.massage_type_other.length">[[history.massage_type_other]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Pressure Preference</div>
+                                            <div class="g-col-8" >[[history.pressure_preference]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Allergies</div>
+                                            <div class="g-col-8" >[[history.allergies]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Allergies Detail</div>
+                                            <div class="g-col-8" v-if="history.allergies_detail.length">[[history.allergies_detail]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">No Massage Area</div>
+                                            <div class="g-col-8" >[[history.no_massage_area]]</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">No Massage Area Detail</div>
+                                            <div class="g-col-8" v-if="history.no_massage_area_detail.length">[[history.no_massage_area_detail]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Area of soreness</div>
+                                            <img class="g-col-6"style="width: 100%;" :src="history.area_of_soreness" v-if="history.area_of_soreness.length">
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Goal for this treatment session</div>
                                             <div class="g-col-8" v-if="history.reason_of_visit.length">[[history.reason_of_visit]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
 
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Symptoms</div>
-                                            <div class="g-col-8" v-if="history.symptoms.length">[[history.symptoms]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Currently taking any medication?</div>
-                                            <div class="g-col-8" v-if="history.medication.length">[[history.medication]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Currently under the care of a health care professional?</div>
-                                            <div class="g-col-8" v-if="history.health_care.length">[[history.health_care]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
+                                    
 
 
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Additional comments</div>
-                                            <div class="g-col-8" v-if="history.additional_comments.length">[[history.additional_comments]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
 
                                     <div class="g-col-12">
                                         <div class="grid">
