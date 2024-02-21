@@ -25,7 +25,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--qsy6lzawpve(7skc1s(x@d9=qvthr@vaa-n9r56yhdbjx5owv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -103,17 +102,9 @@ else:
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'paraMassage',
-    #     'USER': 'postgres',
-    #     'PASSWORD': 'Qazwsx123@',
-    #     'HOST': '',
-    #     'PORT': '5433',
-    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tiffanymassage',
+        'NAME': os.environ.get("TIFFANY_DB_NAME", None),
         'USER': 'postgres',
         'PASSWORD': os.environ.get("PSQL_5433_PWD", None),
         'HOST': '',
@@ -187,7 +178,7 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
+    'SIGNING_KEY': os.environ.get("JWT_SK", None),
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,
@@ -247,7 +238,7 @@ ASGI_APPLICATION = "paraMassage.asgi.application"
 
 MEDIA_ROOT = "mediafiles/"
 
-RECAPTCHA_PUBLIC_KEY = '6Le513EhAAAAALJYECpzIXylAj14mhvx_F6WcXVJ'
-RECAPTCHA_PRIVATE_KEY = '6Le513EhAAAAADZCm2mDWF2p7-5Ymf0sicMidISt'
+RECAPTCHA_PUBLIC_KEY = os.environ.get("TIFFANY_RECAP_PUB_KEY", None),
+RECAPTCHA_PRIVATE_KEY = os.environ.get("TIFFANY_RECAP_PRIV_KEY", None),
 
 CSRF_FAILURE_VIEW = 'main.views.csrf_failure'
