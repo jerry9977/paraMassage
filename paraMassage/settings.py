@@ -238,7 +238,7 @@ ASGI_APPLICATION = "paraMassage.asgi.application"
 
 MEDIA_ROOT = "mediafiles/"
 
-RECAPTCHA_PUBLIC_KEY = os.environ.get("TIFFANY_RECAP_PUB_KEY", None),
-RECAPTCHA_PRIVATE_KEY = os.environ.get("TIFFANY_RECAP_PRIV_KEY", None),
+RECAPTCHA_PUBLIC_KEY = os.environ.get("TIFFANY_RECAP_PUB_KEY", None)
+RECAPTCHA_PRIVATE_KEY = os.environ.get("TIFFANY_RECAP_PRIV_KEY", None)
 
 CSRF_FAILURE_VIEW = 'main.views.csrf_failure'
