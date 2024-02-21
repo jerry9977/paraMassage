@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'qr_code',
     'multiselectfield',
     'channels',
-    'captcha'
+    # 'captcha'
 ]
 
 MIDDLEWARE = [
