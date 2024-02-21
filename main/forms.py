@@ -1,5 +1,4 @@
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV3
+
 from django import forms
 from django.db import models
 from django.core.exceptions import ValidationError
