@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("JWT_SK", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get("DEBUG", False))
 
 ALLOWED_HOSTS = ['*']
 
@@ -146,7 +146,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_ROOT = "static_root/static/"
+STATIC_ROOT = os.environ.get("STATIC_ROOT", None)
 
 STATIC_URL = 'static/'
 
@@ -235,7 +235,7 @@ SESSION_COOKIE_AGE = 43200
 ASGI_APPLICATION = "paraMassage.asgi.application"
 
 
-MEDIA_ROOT = "mediafiles/"
+MEDIA_ROOT = os.environ.get("MEDIA_ROOT", None)
 
 RECAPTCHA_PUBLIC_KEY = os.environ.get("TIFFANY_RECAP_PUB_KEY", None)
 RECAPTCHA_PRIVATE_KEY = os.environ.get("TIFFANY_RECAP_PRIV_KEY", None)
