@@ -213,6 +213,7 @@ def customer_view(request, id):
         "DOB": client["DOB"],
         "phone_day": client["phone_day"],
         "phone_night": client["phone_night"],
+        "client_detail_id": client_remedial_detail["id"],
         "address": client_remedial_detail["address"],
         "suburb": client_remedial_detail["suburb"],
         "state": client_remedial_detail["state"],
@@ -232,6 +233,7 @@ def customer_view(request, id):
     for history in client_remedial_history:
         history_container.append({
             "id": history.id,
+            "is_photo_only": history.is_photo_only,
             "medication": "YES" if history.medication else "N/A" if history.medication is None else "No",
             "medication_detail": history.medication_detail,
 
@@ -271,6 +273,7 @@ def customer_view(request, id):
             "receipt_image": history.receipt_image.url if history.receipt_image else "",
             "remedial_treatment_plan": history.remedial_treatment_plan if history.remedial_treatment_plan else "",
             "signature": history.signature.url if history.signature else "",
+            "form_image": history.form_image.url if history.form_image else "",
             "date_created": datetime.datetime.strftime(history.date_created, "%d %b %Y %H:%M")
         })
 
@@ -530,6 +533,41 @@ def set_treatment_plan_note(request):
     response['Content-Type'] = 'application/json'
     return response  
 
+def upload_form_image(request):
+    data_uri = """data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAGdYAABnWARjRyu0AAAAMSURBVBhXY/j//z8ABf4C/qc1gYQAAAAASUVORK5CYII="""
+    if request.method == "POST":
+        if request.FILES.get("image", None) is not None:
+            img = request.FILES["image"]
+            client_id = request.POST.get("client_id", )
+            try:
+                client_medical_history = m.ClientMedicalHistory()
+                client_medical_history.detail_client_info = m.ClientDetailInfo.objects.get(id=client_id)
+                client_medical_history.signature = CustomMemoryFile(data_uri).memory_file
+                client_medical_history.is_photo_only = True
+                i = Image.open(img)
+                thumb_io = BytesIO()
+                i.save(thumb_io, format='JPEG', quality=80)
+                in_memory_uploaded_file = InMemoryUploadedFile(thumb_io, None, 'remedial_form_{id}.jpg'.format(id=client_id), 'image/jpeg', thumb_io.tell(), None)
+                client_medical_history.form_image = in_memory_uploaded_file
+                client_medical_history.save()
+
+                response = HttpResponse()
+                response['Content-Type'] = 'application/json'
+                return response
+
+            except Exception as e:
+                print(e, flush=True)
+                context = {
+                    "error": e
+                }
+                response = HttpResponse(json.dumps(context), status=400)
+                response['Content-Type'] = 'application/json'
+                return response
+
+            
+    response = HttpResponse(status=400)
+    response['Content-Type'] = 'application/json'
+    return response
 class ClientListView(ListView):
     model = m.Client
     template_name = 'main/client_list.html'

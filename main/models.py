@@ -270,12 +270,13 @@ class ClientMedicalHistory(models.Model):
         blank=True
     )
 
+    is_photo_only = models.BooleanField(null=True, blank=True, default=False)
 
     signature = models.ImageField(upload_to='signature/%Y/%m/%d/', null=False, blank=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
 
     receipt_image = models.ImageField(upload_to='receipt/%Y/%m/%d/', null=True, blank=True)
-
+    form_image = models.ImageField(upload_to='form/%Y/%m/%d/', null=True, blank=True)
     def __str__(self):
         return str(self.id)

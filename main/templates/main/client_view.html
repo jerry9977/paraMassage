@@ -143,7 +143,7 @@
                                 </button>
                             </h2>
                             <div :id="'history-collapse-' + history.id" class="accordion-collapse collapse" :aria-labelledby="'history-' + history.id" data-bs-parent="#according-wrapper">
-                                <div class="grid px-4 py-4">
+                                <div class="grid px-4 py-4" v-if="!history.is_photo_only">
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Medications</div>
@@ -154,7 +154,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Medication Details</div>
-                                            <div class="g-col-8" v-if="history.medication_detail.length">[[history.medication_detail]]</div>
+                                            <div class="g-col-8" v-if="history.medication_detail">[[history.medication_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -170,7 +170,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Pregnant Time</div>
-                                            <div class="g-col-8" v-if="history.pregnant_time.length">[[history.pregnant_time]]</div>
+                                            <div class="g-col-8" v-if="history.pregnant_time">[[history.pregnant_time]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -178,7 +178,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Pregnant High Risk Factor</div>
-                                            <div class="g-col-8" v-if="history.pregnant_factor.length">[[history.pregnant_factor]]</div>
+                                            <div class="g-col-8" v-if="history.pregnant_factor">[[history.pregnant_factor]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Chronic Pain Detail</div>
-                                            <div class="g-col-8" v-if="history.chronic_pain_detail.length">[[history.chronic_pain_detail]]</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_detail">[[history.chronic_pain_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -201,7 +201,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Chronic Pain Worse</div>
-                                            <div class="g-col-8" v-if="history.chronic_pain_worse.length">[[history.chronic_pain_worse]]</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_worse">[[history.chronic_pain_worse]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -210,7 +210,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Chronic Pain Better</div>
-                                            <div class="g-col-8" v-if="history.chronic_pain_better.length">[[history.chronic_pain_better]]</div>
+                                            <div class="g-col-8" v-if="history.chronic_pain_better">[[history.chronic_pain_better]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -227,7 +227,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Orthopedic Injuries Detail</div>
-                                            <div class="g-col-8" v-if="history.orthopedic_injuries_detail.length">[[history.orthopedic_injuries_detail]]</div>
+                                            <div class="g-col-8" v-if="history.orthopedic_injuries_detail">[[history.orthopedic_injuries_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -243,7 +243,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Conditions Detail</div>
-                                            <div class="g-col-8" v-if="history.conditions_detail.length">[[history.conditions_detail]]</div>
+                                            <div class="g-col-8" v-if="history.conditions_detail">[[history.conditions_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -267,7 +267,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Massage Type Other</div>
-                                            <div class="g-col-8" v-if="history.massage_type_other.length">[[history.massage_type_other]]</div>
+                                            <div class="g-col-8" v-if="history.massage_type_other">[[history.massage_type_other]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -289,7 +289,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Allergies Detail</div>
-                                            <div class="g-col-8" v-if="history.allergies_detail.length">[[history.allergies_detail]]</div>
+                                            <div class="g-col-8" v-if="history.allergies_detail">[[history.allergies_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -304,7 +304,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">No Massage Area Detail</div>
-                                            <div class="g-col-8" v-if="history.no_massage_area_detail.length">[[history.no_massage_area_detail]]</div>
+                                            <div class="g-col-8" v-if="history.no_massage_area_detail">[[history.no_massage_area_detail]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -322,7 +322,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Goal for this treatment session</div>
-                                            <div class="g-col-8" v-if="history.reason_of_visit.length">[[history.reason_of_visit]]</div>
+                                            <div class="g-col-8" v-if="history.reason_of_visit">[[history.reason_of_visit]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -334,7 +334,7 @@
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Remedial Treatment Plan</div>
-                                            <div class="g-col-8" v-if="history.remedial_treatment_plan.length" >[[history.remedial_treatment_plan]]</div>
+                                            <div class="g-col-8" v-if="history.remedial_treatment_plan" >[[history.remedial_treatment_plan]]</div>
                                             <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
@@ -371,10 +371,23 @@
                                     </div>
 
                                 </div>
+                                <div class="grid px-4 py-4" v-else>
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Form Image</div>
+                                            <img class="g-col-6"style="width: 100%;" :src="history.form_image" v-if="history.form_image.length">
+                                            <div class="g-col-6" v-else>N/A</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <input class="form-control " id="uploadFormImage" type="file" hidden @change="uploadFormImage($event)">
+                <label for="uploadFormImage" type="button" class="btn btn-primary btn-lg btn-block">
+                    Upload Form Image
+                </label>
             </div>
 
             
@@ -418,6 +431,7 @@
                 
                 return {
                     histories: histories,
+                    clientDetailId: {{client_info.client_detail_id}},
                     treatmentPlanNote: "",
                     treatmentPlanNoteId: null
                 }
@@ -452,6 +466,36 @@
                             openErrorToast({message:JSON.stringify(error.message)})
                         })
                 },
+
+                uploadFormImage(event){
+                    let image = event.target.files[0]
+                    let url = "/upload_form_img/"
+                    let data = new FormData()
+                    
+                    data.append("image", image)
+                    data.append("client_id", this.clientDetailId)
+                    
+                    let config = {
+                        headers: {
+                            "X-CSRFToken": csrftoken,
+                            "content-type": "multipart/form-data"
+                        }
+                    }
+
+                    removeToast($("#loading-toast"))
+                    openLoadingToast({message:"Uploading image...", id:"loading-toast"})
+                    axios
+                        .post(url, data, config)
+                        .then(response=>{
+                            removeToast($("#loading-toast"))
+                            openSuccessToast({message:"Image uploaded. Refresh page to see changes."})
+                        })
+                        .catch(error =>{
+                            removeToast($("#loading-toast"))
+                            openErrorToast({message:JSON.stringify(error.message)})
+                        })
+                },
+
 
                 getTreatmentPlanNote(id){
                     this.treatmentPlanNoteId = id

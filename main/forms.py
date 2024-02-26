@@ -131,15 +131,7 @@ class ClientMedicalHistoryForm(forms.ModelForm):
         ]
         exclude = ['detail_client_info', 'receipt_image', 'remedial_treatment_plan']
         widgets = {
-            # "medication": forms.RadioSelect(choices=YES_NO),
-            # 'medication_detail': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
             'area_of_soreness': forms.TextInput(),
-            # 'area_of_soreness_left': forms.TextInput(attrs={"sore_area_left":True,"input_type":"hidden"}),
-            # 'area_of_soreness_right': forms.TextInput(attrs={"sore_area_right":True,"input_type":"hidden"}),
-            # 'reason_of_visit': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
-            # 'health_care': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"}),
-            # 'signature': forms.TextInput(attrs={"signature":True,"input_type":"hidden"}),
-            # 'additional_comments': forms.Textarea(attrs={"input_type":"textarea", "rows":"5"})
         }
 
 
@@ -157,4 +149,3 @@ class ClientMedicalHistoryForm(forms.ModelForm):
         if image_verifier.is_valid():
             return image
         raise ValidationError(message='Internal Server Error')
- 
