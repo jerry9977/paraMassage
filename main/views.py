@@ -202,29 +202,35 @@ def customer_view(request, id):
     client = client.values().first()
     client_remedial_detail = client_remedial_detail.values().first()
 
+    gender = client["gender"]
     
+    if gender == 1:
+        gender_str = "Male"
+    elif gender == 2:
+        gender_str = "Female"
+    else:
+        gender_str = "Not Applicable"
     client_info = {
         "id": client["id"],
         "first_name": client["first_name"],
         "last_name": client["last_name"],
+        "gender": gender_str,
+        "health_fund": client["health_fund"],
         "health_insurance_number": str(client["health_insurance_number"]),
         "reference_number": str(client["reference_number"]),
         "email": client["email"],
         "DOB": client["DOB"],
         "phone_day": client["phone_day"],
-        "phone_night": client["phone_night"],
         "client_detail_id": client_remedial_detail["id"],
         "address": client_remedial_detail["address"],
         "suburb": client_remedial_detail["suburb"],
         "state": client_remedial_detail["state"],
         "post_code": client_remedial_detail["post_code"],
-        "occupation": client_remedial_detail["occupation"],
-        "employer": client_remedial_detail["employer"],
+      
         "primary_physician": client_remedial_detail["primary_physician"],
 
         "emergency_contact_name": client_remedial_detail["emergency_contact_name"],
         "emergency_contact_number": client_remedial_detail["emergency_contact_number"],
-        "emergency_contact_relation": client_remedial_detail["emergency_contact_relation"],
         "hear_about_us": client_remedial_detail["hear_about_us"],
         "date_created": datetime.datetime.strftime(client["date_created"], "%d %b %Y %H:%M"),
     }
@@ -250,18 +256,13 @@ def customer_view(request, id):
             "orthopedic_injuries": "YES" if history.orthopedic_injuries else "N/A" if history.orthopedic_injuries is None else "No",
             "orthopedic_injuries_detail": history.orthopedic_injuries_detail,
 
-            "conditions": f"{history.conditions}",
+            "conditions": history.get_conditions_str(),
             "conditions_detail": history.conditions_detail,
 
-            "professional_massage": "YES" if history.professional_massage else "N/A" if history.professional_massage is None else "No",
+       
+            "pressure_preference": history.get_pressure_pref_str(),
 
-            "massage_type": f"{history.massage_type}",
-            "massage_type_other": history.massage_type_other,
-
-            "pressure_preference": f"{history.pressure_preference}",
-
-            "allergies": "YES" if history.allergies else "N/A" if history.allergies is None else "No",
-            "allergies_detail": history.allergies_detail,
+    
             
             "no_massage_area": "YES" if history.no_massage_area else "N/A" if history.no_massage_area is None else "No",
             "no_massage_area_detail": history.no_massage_area_detail,
@@ -269,7 +270,7 @@ def customer_view(request, id):
             "area_of_soreness":history.area_of_soreness.url if history.area_of_soreness else "",
             "reason_of_visit": history.reason_of_visit,
             
-            "additional_comments": history.additional_comments,
+     
             "receipt_image": history.receipt_image.url if history.receipt_image else "",
             "remedial_treatment_plan": history.remedial_treatment_plan if history.remedial_treatment_plan else "",
             "signature": history.signature.url if history.signature else "",
@@ -408,7 +409,7 @@ def existing_remedial_check_in_form(request, token):
 
         
        
-        remedial_history_form = f.ClientMedicalHistoryForm(request.POST, request.FILES)
+        remedial_history_form = f.SimpleMedicalHistoryForm(request.POST, request.FILES)
 
 
 
@@ -425,11 +426,11 @@ def existing_remedial_check_in_form(request, token):
 
     else:
        
-        remedial_history_form = f.ClientMedicalHistoryForm()
+        remedial_history_form = f.SimpleMedicalHistoryForm()
     
 
     context = {
-        "remedial_history_form":remedial_history_form
+        "simple_remedial_history_form":remedial_history_form
     }
     return render(request, 'form/remedial_check_in_form.html', context)
 

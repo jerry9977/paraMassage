@@ -132,6 +132,68 @@
                         value="{{client_form.last_name.value|default_if_none:''}}"
                         maxlength="{{client_form.last_name.field.max_length}}">
                 </div>
+                <div class="g-col-12">
+                    <label class="form-label fw-semibold">
+                        Gender
+                        <span style="color:red;">*</span>
+                    </label>
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="radio" 
+                            name="gender"
+                            id="gender-m"
+                            value="1"
+                            {% if client_form.gender.value == "1" %} checked {%endif%}>
+
+                        <label class="form-check-label" for="gender-m">
+                            Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="radio" 
+                            name="gender"
+                            id="gender-f"
+                            value="2"
+                            {% if client_form.gender.value == "2" %} checked {%endif%}>
+
+                        <label class="form-check-label" for="gender-f">
+                            Female
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="radio" 
+                            name="gender"
+                            id="gender-no"
+                            value="3"
+                            {% if client_form.gender.value == "3" %} checked {%endif%}>
+
+                        <label class="form-check-label" for="gender-no">
+                            Not Applicable
+                        </label>
+                    </div>
+
+                </div>
+
+                <div class="g-col-12">
+                    <label class="form-label fw-semibold">
+                        Health Fund
+                        <span style="color:red;">*</span>
+                    </label>
+
+                    <input 
+                        type="text"
+                        class="form-control {%if client_form.health_fund.errors%}is-invalid{%elif client_form.health_fund.value%}is-valid{%endif%}"
+                        name="health_fund"
+                        value="{{client_form.health_fund.value|default_if_none:''}}"
+                        maxlength="{{client_form.health_fund.field.max_length}}">
+                </div>
+
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -140,7 +202,7 @@
                     </label>
 
                     <input 
-                        type="number"
+                        type="text"
                         class="form-control {%if client_form.health_insurance_number.errors%}is-invalid{%elif client_form.health_insurance_number.value%}is-valid{%endif%}"
                         name="health_insurance_number"
                         value="{{client_form.health_insurance_number.value|default_if_none:''}}"
@@ -162,31 +224,8 @@
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
-                        Email
-                    </label>
-
-                    <input 
-                        type="email"
-                        class="form-control {%if client_form.email.errors%}is-invalid{%elif client_form.email.value%}is-valid{%endif%}"
-                        name="email" 
-                        value="{{client_form.email.value|default_if_none:''}}">
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        DOB
-                    </label>
-
-                    <input 
-                        type="date"
-                        class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}"
-                        name="DOB" 
-                        value="{{client_form.DOB.value|default_if_none:''}}">
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Phone (Day)
+                        Phone
+                        <span style="color:red;">*</span>
                     </label>
 
                     <input 
@@ -198,15 +237,35 @@
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
-                        Phone (Evening)
+                        DOB
+                        <span style="color:red;">*</span>
                     </label>
 
                     <input 
-                        type="number"
-                        class="form-control {%if client_form.phone_night.errors%}is-invalid{%elif client_form.phone_evening.value%}is-valid{%endif%}"
-                        name="phone_night" 
-                        value="{{client_form.phone_night.value|default_if_none:''}}">
+                        type="date"
+                        class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}"
+                        name="DOB" 
+                        value="{{client_form.DOB.value|default_if_none:''}}">
                 </div>
+
+            
+
+                <div class="g-col-12">
+                    <label class="form-label fw-semibold">
+                        Email
+                    </label>
+
+                    <input 
+                        type="email"
+                        class="form-control {%if client_form.email.errors%}is-invalid{%elif client_form.email.value%}is-valid{%endif%}"
+                        name="email" 
+                        value="{{client_form.email.value|default_if_none:''}}">
+                </div>
+
+
+              
+
+           
                 {% endif %}
 
                 {% if detailed_client_form %}
@@ -254,25 +313,6 @@
                         name="post_code" value="{{detailed_client_form.post_code.value|default_if_none:''}}">
                 </div>
 
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Occupation
-                    </label>
-
-                    <input type="text"
-                        class="form-control {%if detailed_client_form.occupation.errors%}is-invalid{%elif detailed_client_form.occupation.value%}is-valid{%endif%}"
-                        name="occupation" value="{{detailed_client_form.occupation.value|default_if_none:''}}">
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Employer
-                    </label>
-
-                    <input type="text"
-                        class="form-control {%if detailed_client_form.employer.errors%}is-invalid{%elif detailed_client_form.employer.value%}is-valid{%endif%}"
-                        name="employer" value="{{detailed_client_form.employer.value|default_if_none:''}}">
-                </div>
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -287,7 +327,7 @@
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
-                        Emergency Contact Name
+                        Emergency Contact Name (Optional)
                     </label>
 
                     <input type="text"
@@ -298,7 +338,7 @@
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
-                        Emergency Contact Number
+                        Emergency Contact Number (Optional)
                     </label>
 
                     <input type="text"
@@ -308,16 +348,6 @@
                 </div>
 
 
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Relationship
-                    </label>
-
-                    <input type="text"
-                        class="form-control {%if detailed_client_form.emergency_contact_relation.errors%}is-invalid{%elif detailed_client_form.emergency_contact_relation.value%}is-valid{%endif%}"
-                        name="emergency_contact_relation"
-                        value="{{detailed_client_form.emergency_contact_relation.value|default_if_none:''}}">
-                </div>
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -330,6 +360,7 @@
 
                 {% endif %}
 
+                {% if client_medical_history_form %}
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
                         Are you taking any medication ?
@@ -467,28 +498,7 @@
                         name="chronic_pain_detail"
                         value="{{client_medical_history_form.chronic_pain_detail.value|default_if_none:''}}">
                 </div>
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                      What makes it better?
-                    </label>
-                    <input
-                        type="text"
-                        class="form-control {%if client_medical_history_form.chronic_pain_better.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_better.value%}is-valid{%endif%}"
-                        name="chronic_pain_better"
-                        value="{{client_medical_history_form.chronic_pain_better.value|default_if_none:''}}">
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        What makes it worse?
-                    </label>
-                    <input
-                        type="text"
-                        class="form-control {%if client_medical_history_form.chronic_pain_worse.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_worse.value%}is-valid{%endif%}"
-                        name="chronic_pain_worse"
-                        value="{{client_medical_history_form.chronic_pain_worse.value|default_if_none:''}}">
-                </div>
-
+            
 
 
                 <div class="g-col-12">
@@ -568,70 +578,6 @@
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
-                        Have you had a professional massage before ?
-                    </label>
-
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="professional_massage"
-                            id="professional_massage-yes"
-                            value="true"
-                            {% if client_medical_history_form.professional_massage.value %} checked {%endif%}>
-                        <label class="form-check-label" for="professional_massage-yes">
-                            YES
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="professional_massage"
-                            id="professional_massage-no"
-                            value="false"
-                            {% if client_medical_history_form.professional_massage.value is False %} checked {%endif%}>
-                        <label class="form-check-label" for="professional_massage-no">
-                            NO
-                        </label>
-                    </div>
-                </div>
-                
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        What type of massage are you seeking ?
-                        
-                    </label>
-                    {% for value, label in client_medical_history_form.massage_type.field.choices %}
-                        <div class="form-check">
-                            <input 
-                                class="form-check-input" 
-                                type="radio" 
-                                name="massage_type"
-                                id="massage_type-{{value}}"
-                                value="{{value}}"
-                                {% if value in client_medical_history_form.massage_type.value %} checked {% endif %}>
-                            <label class="form-check-label" for="massage_type-{{value}}">
-                                {{label}}
-                            </label>
-                        </div>
-                    {% endfor %}
-                   
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                      Other
-                    </label>
-                    <textarea
-                        class="form-control {%if client_medical_history_form.massage_type_other.errors%}is-invalid{%elif client_medical_history_form.massage_type_other.value%}is-valid{%endif%}"
-                        name="massage_type_other" 
-                        rows="5">{{client_medical_history_form.massage_type_other.value|default_if_none:''}}</textarea>
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
                         What pressure do you prefer ?
                     </label>
 
@@ -650,48 +596,6 @@
                         </div>
                     {% endfor %}
 
-                </div>
-
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Do you have any allergies or sensitivities ?
-                    </label>
-
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="allergies"
-                            id="allergies-yes"
-                            value="true"
-                            {% if client_medical_history_form.allergies.value %} checked {%endif%}>
-                        <label class="form-check-label" for="allergies-yes">
-                            YES
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="radio" 
-                            name="allergies"
-                            id="allergies-no"
-                            value="false"
-                            {% if client_medical_history_form.allergies.value is False %} checked {%endif%}>
-                        <label class="form-check-label" for="allergies-no">
-                            NO
-                        </label>
-                    </div>
-                </div>
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                      Please Explain
-                    </label>
-                    <textarea
-                        class="form-control {%if client_medical_history_form.allergies_detail.errors%}is-invalid{%elif client_medical_history_form.allergies_detail.value%}is-valid{%endif%}"
-                        name="allergies_detail" 
-                        rows="5">{{client_medical_history_form.allergies_detail.value|default_if_none:''}}</textarea>
                 </div>
 
 
@@ -752,17 +656,7 @@
                 </div> 
 
                     
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                      What are your goals for this treatment session ?
-                    </label>
-                    <textarea
-                        class="form-control {%if client_medical_history_form.reason_of_visit.errors%}is-invalid{%elif client_medical_history_form.reason_of_visit.value%}is-valid{%endif%}"
-                        name="reason_of_visit" 
-                        rows="5">{{client_medical_history_form.reason_of_visit.value|default_if_none:''}}</textarea>
-                </div>
-                
-
+   
                 
                 <div class="text-md-start g-col-3">
                     <label  for="signature" 
@@ -781,7 +675,47 @@
                     <canvas class="js-paint signature" width="300" height="100"></canvas>
                     <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
                 </div>
+                {% endif %}
+
+                {% if simple_remedial_history_form%}
+         
+                <div class="g-col-12">
+                    <input
+                        class="form-control" 
+                        id="area_of_soreness" 
+                        name="area_of_soreness_hidden" 
+                        value="{{client_medical_history_form.area_of_soreness.value|default_if_none:''}}"
+                        type="hidden">
+                  
+                    <input type="file" name="area_of_soreness" style="display: none;">
+                    <div class="text-center text-md-start g-col-12 ">
+                        <canvas class="js-paint body" style="width: 100%;aspect-ratio: 671 / 452;"></canvas>
+                        <button class="btn btn-secondary" style="width:100%" type="button" onclick="clearBodyCanvas()">Reset</button>
+                    </div>         
+                </div> 
+
+                    
+   
                 
+                <div class="text-md-start g-col-3">
+                    <label  for="signature" 
+                            class="form-label fw-semibold">
+                            signature <span style="color:red;">*</span>
+                    </label>
+                    
+                    <input
+                        class="form-control {%if field.errors%}is-invalid{%elif field.value%}is-valid{%endif%}" 
+                        id="id_signature" 
+                        name="signature_hidden" 
+                        value="{{client_medical_history_form.signature.value|default_if_none:''}}"
+                        hidden>
+                    <input type="file" name="signature" style="display: none;">
+                    
+                    <canvas class="js-paint signature" width="300" height="100"></canvas>
+                    <button class="btn btn-secondary" style="width:302px" type="button" onclick="clearSignatureCanvas()">Reset</button>
+                </div>
+                {% endif %}
+
             </div>
 
 

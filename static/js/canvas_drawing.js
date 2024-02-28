@@ -22,7 +22,6 @@ if ($("#area_of_soreness").val()) {
 const bodyCanvas = document.querySelector('.js-paint.body')
 const bodyContext = bodyCanvas.getContext('2d')
 bodyContext.lineCap = 'round';
-bodyContext.strokeStyle = '#000000';
 bodyContext.lineWidth = 1;
 
 
@@ -139,6 +138,7 @@ const drawLine = event => {
 
         if (isBody) {
             context = bodyContext
+            context.strokeStyle = 'red';
         } else {
             context = signatureContext
         }

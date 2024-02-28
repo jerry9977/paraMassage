@@ -31,6 +31,20 @@
                             <div class="g-col-8">{{client_info.last_name}}</div>
                         </div>
                     </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Gender</div>
+                            <div class="g-col-8">{{client_info.gender}}</div>
+                        </div>
+                    </div>
+
+                    <div class="g-col-12">
+                        <div class="grid">
+                            <div class="g-col-4 fw-semibold">Health Fund</div>
+                            <div class="g-col-8">{{client_info.health_fund}}</div>
+                        </div>
+                    </div>
                     
                     <div class="g-col-12">
                         <div class="grid">
@@ -55,8 +69,8 @@
 
                     <div class="g-col-12">
                         <div class="grid">
-                            <div class="g-col-4 fw-semibold">Phone (day) / (night)</div>
-                            <div class="g-col-8">{{client_info.phone_day|default:"N/A"}} / {{client_info.phone_night|default:"N/A"}}</div>
+                            <div class="g-col-4 fw-semibold">Phone</div>
+                            <div class="g-col-8">{{client_info.phone_day|default:"N/A"}}</div>
                         </div>
                     </div>
 
@@ -64,26 +78,12 @@
                     <div class="g-col-12">
                         <div class="grid">
                             <div class="g-col-4 fw-semibold">Address / Suburb / State / Post Code</div>
-                            <div class="g-col-8">{{client_info.address|default:"N/A"}} {{client_info.suburb|default:"N/A"}} {{client_info.state|default:"N/A"}} {{client_info.post_code|default:"N/A"}}</div>
+                            <div class="g-col-8">{{client_info.address|default:""}} / {{client_info.suburb|default:""}} / {{client_info.state|default:""}} / {{client_info.post_code|default:""}}</div>
                         </div>
                     </div>
 
 
 
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Occupation</div>
-                            <div class="g-col-8">{{client_info.occupation|default:"N/A"}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Employer</div>
-                            <div class="g-col-8">{{client_info.employer|default:"N/A"}}</div>
-                        </div>
-                    </div>
 
                     <div class="g-col-12">
                         <div class="grid">
@@ -104,13 +104,6 @@
                         <div class="grid">
                             <div class="g-col-4 fw-semibold">Emergency Contact Number</div>
                             <div class="g-col-8">{{client_info.emergency_contact_number|default:"N/A"}}</div>
-                        </div>
-                    </div>
-
-                    <div class="g-col-12">
-                        <div class="grid">
-                            <div class="g-col-4 fw-semibold">Emergency Contact Relationship</div>
-                            <div class="g-col-8">{{client_info.emergency_contact_relationship|default:"N/A"}}</div>
                         </div>
                     </div>
 
@@ -251,46 +244,8 @@
 
                                     <div class="g-col-12">
                                         <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Had Professional Massage?</div>
-                                            <div class="g-col-8" >[[history.professional_massage]]</div>
-                                        </div>
-                                    </div>
-                                    
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Prefer Massage Type</div>
-                                            <div class="g-col-8" >[[history.massage_type]]</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Massage Type Other</div>
-                                            <div class="g-col-8" v-if="history.massage_type_other">[[history.massage_type_other]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
                                             <div class="g-col-4 fw-semibold">Pressure Preference</div>
                                             <div class="g-col-8" >[[history.pressure_preference]]</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Allergies</div>
-                                            <div class="g-col-8" >[[history.allergies]]</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Allergies Detail</div>
-                                            <div class="g-col-8" v-if="history.allergies_detail">[[history.allergies_detail]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
                                         </div>
                                     </div>
 
@@ -319,17 +274,6 @@
 
 
 
-                                    <div class="g-col-12">
-                                        <div class="grid">
-                                            <div class="g-col-4 fw-semibold">Goal for this treatment session</div>
-                                            <div class="g-col-8" v-if="history.reason_of_visit">[[history.reason_of_visit]]</div>
-                                            <div class="g-col-8" v-else>N/A</div>
-                                        </div>
-                                    </div>
-
-                                    
-
-
 
                                     <div class="g-col-12">
                                         <div class="grid">
@@ -344,9 +288,6 @@
                                             <div class="g-col-4 fw-semibold">Receipt</div>
                                             <img class="g-col-6" style="width: 100%;" :src="history.receipt_image" v-if="history.receipt_image.length">
                                             <div class="g-col-6" v-else>N/A</div>
-                                            
-                                            
-
                                         </div>
                                     </div>
 
@@ -372,13 +313,46 @@
 
                                 </div>
                                 <div class="grid px-4 py-4" v-else>
+
+
                                     <div class="g-col-12">
                                         <div class="grid">
                                             <div class="g-col-4 fw-semibold">Form Image</div>
-                                            <img class="g-col-6"style="width: 100%;" :src="history.form_image" v-if="history.form_image.length">
+                                            <a :href="history.form_image"  v-if="history.form_image.length">
+                                                <img class="g-col-6"style="width: 100%;" :src="history.form_image">
+                                            </a>
                                             <div class="g-col-6" v-else>N/A</div>
                                         </div>
                                     </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Remedial Treatment Plan</div>
+                                            <div class="g-col-8" v-if="history.remedial_treatment_plan" >[[history.remedial_treatment_plan]]</div>
+                                            <div class="g-col-8" v-else>N/A</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Receipt</div>
+                                            <img class="g-col-6" style="width: 100%;" :src="history.receipt_image" v-if="history.receipt_image.length">
+                                            <div class="g-col-6" v-else>N/A</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="g-col-12">
+                                        <div class="grid">
+                                            <div class="g-col-4 fw-semibold">Upload Receipt / Add Treatment Plan</div>
+                                            <div class="g-col-6 input-group">
+                                                <input class="form-control " id="formFileSm" type="file" @change="uploadReceipt([[history.id]])">
+                                                <button style="" type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" @click="getTreatmentPlanNote(history.id)">
+                                                    Add Treatment Plan
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>

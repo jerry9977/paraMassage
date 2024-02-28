@@ -49,9 +49,10 @@ class Client(models.Model):
     
     first_name = models.CharField(max_length=50, null=False, blank=False)
     last_name = models.CharField(max_length=50, null=False, blank=False)
+    gender = models.IntegerField(null=True, blank=True)
     phone_day = models.TextField(   
-        null=True, 
-        blank=True, 
+        null=False, 
+        blank=False, 
         max_length=20, 
         error_messages={
             "invalid":"Please enter only digits"
@@ -68,16 +69,17 @@ class Client(models.Model):
 
 
     email = models.EmailField(null=True, blank=True, unique=True)
-    DOB = models.DateField(null=True, blank=True)
+    DOB = models.DateField(null=False, blank=False)
 
-        
+    health_fund = models.TextField(
+        null=False, 
+        blank=False,
+    )
+
     health_insurance_number = models.TextField(
         null=False, 
         blank=False,
-        max_length=25, 
-        error_messages={
-            "invalid":"Please enter only digits"
-        }
+        max_length=25,
     )
 
     reference_number = models.TextField(
@@ -118,7 +120,7 @@ class ClientDetailInfo(models.Model):
     state = models.CharField(max_length=20, null=True, blank=True)
     post_code = models.CharField(max_length=10,null=True, blank=True)
 
-    gender = models.IntegerField(null=True, blank=True)
+
     martial_status = models.IntegerField(null=True, blank=True)
     weight = models.DecimalField(max_digits=500, decimal_places=2, null=True, blank=True)
     height = models.DecimalField(max_digits=300, decimal_places=2, null=True, blank=True)
@@ -280,3 +282,19 @@ class ClientMedicalHistory(models.Model):
     form_image = models.ImageField(upload_to='form/%Y/%m/%d/', null=True, blank=True)
     def __str__(self):
         return str(self.id)
+
+    def get_conditions_str(self):
+        conditions_str = ""
+        for condition in CONDITION_CHOICES:
+            if condition[0] in repr(self.conditions):
+                conditions_str += f"{condition[1]}, "
+
+        return conditions_str
+
+    def get_pressure_pref_str(self):
+        pressure_str = ""
+        for pressure in PRESSURE_CHOICES:
+            if pressure[0] in repr(self.pressure_preference):
+                pressure_str += f"{pressure[1]}, "
+
+        return pressure_str

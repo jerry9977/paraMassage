@@ -34,12 +34,13 @@ class CustomerCheckInForm(forms.ModelForm):
         fields = [
             "first_name", 
             "last_name", 
+            "gender",
+            "health_fund",
             "health_insurance_number",
             "reference_number",
             "email",
             "DOB",
-            "phone_day", 
-            "phone_night",
+            "phone_day",
         ]
 
         widgets = {
@@ -68,23 +69,13 @@ class DetailedClientForm(forms.ModelForm):
             "suburb",
             "state",
             "post_code",
-            "occupation",
-            "employer",
             "primary_physician",
             "emergency_contact_name",
             "emergency_contact_number",
-            "emergency_contact_relation",
             "hear_about_us"
         ]
         exclude = ['client']
 
-        labels = {
-            "primary_physician": "Primary Physician",
-            "emergency_contact_name": "Emergency Contact Name",
-            "emergency_contact_number": "Emergency Contact Number",
-            "emergency_contact_relation": "Emergency Contact Relation",
-            "hear_about_us": "How did you hear about us ?"
-        }
 
 
 class ClientMedicalHistoryForm(forms.ModelForm):
@@ -102,8 +93,6 @@ class ClientMedicalHistoryForm(forms.ModelForm):
 
             "chronic_pain",
             "chronic_pain_detail",
-            "chronic_pain_better",
-            "chronic_pain_worse",
 
             "orthopedic_injuries",
             "orthopedic_injuries_detail",
@@ -111,20 +100,44 @@ class ClientMedicalHistoryForm(forms.ModelForm):
             "conditions",
             "conditions_detail",
 
-            "professional_massage",
-
-            "massage_type",
-            "massage_type_other",
-
             "pressure_preference",
-
-            "allergies",
-            "allergies_detail",
 
             "no_massage_area",
             "no_massage_area_detail",
 
-            "reason_of_visit",
+            "area_of_soreness",
+            "signature",
+
+        ]
+        exclude = ['detail_client_info', 'receipt_image', 'remedial_treatment_plan']
+        widgets = {
+            'area_of_soreness': forms.TextInput(),
+        }
+
+
+    def clean_area_of_soreness(self):
+        image = self.data['area_of_soreness_hidden']
+        image_verifier = ImageVerifier(image, allow_null=True)
+        if image_verifier.is_valid():
+            # print(image)
+            return image
+        raise ValidationError(message='Internal Server Error')
+    
+    def clean_signature(self):
+        image = self.data['signature_hidden']
+        image_verifier = ImageVerifier(image, allow_null=False)
+        if image_verifier.is_valid():
+            return image
+        raise ValidationError(message='Internal Server Error')
+
+
+class SimpleMedicalHistoryForm(forms.ModelForm):
+
+
+    class Meta:
+        model = m.ClientMedicalHistory
+        fields = [
+
             "area_of_soreness",
             "signature",
 
