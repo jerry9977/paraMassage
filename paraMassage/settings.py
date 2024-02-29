@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("JWT_SK", None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get("DEBUG", False))
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['hfbm.com.au']
 
 
 # Application definition
