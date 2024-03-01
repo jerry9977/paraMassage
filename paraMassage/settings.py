@@ -26,7 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("JWT_SK", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG", False))
+
+DEBUG = not(os.environ.get("DEBUG", 'False') == 'False')
 
 ALLOWED_HOSTS = ['hfbm.com.au']
 
