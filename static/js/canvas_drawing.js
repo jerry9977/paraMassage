@@ -45,15 +45,29 @@ bodyImage.onload = function () {
     bodyContext.drawImage(bodyImage, 0, 0, bodyCanvas.offsetWidth,bodyCanvas.offsetHeight);
 }
 
-addEventListener("resize", (event) => {
+function resizeBodyCanvas(){
     bodyCanvas.width = bodyCanvas.offsetWidth
     bodyCanvas.height = bodyCanvas.offsetHeight
     bodyContext.clearRect(0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight)
     let img = new Image()
     img.src = dataURL != "" ? dataURL : '/static/img/body.png';
-    bodyContext.drawImage(img, 0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight);
+    img.onload = () =>{
+        bodyContext.drawImage(img, 0, 0, bodyCanvas.offsetWidth, bodyCanvas.offsetHeight);
+    }
+}
 
+var delayResizeBody
+addEventListener("resize", (event) => {
+    clearTimeout(delayResizeBody)
+    delayResizeBody = setTimeout(resizeBodyCanvas, 100)
 });
+
+
+screen.orientation.addEventListener("change", (event)=>{
+    clearTimeout(delayResizeBody)
+    delayResizeBody = setTimeout(resizeBodyCanvas, 100)
+})
+
 
 if (signature) {
 
