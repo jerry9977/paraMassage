@@ -56,17 +56,10 @@ function resizeBodyCanvas(){
     }
 }
 
-var delayResizeBody
 addEventListener("resize", (event) => {
-    clearTimeout(delayResizeBody)
-    delayResizeBody = setTimeout(resizeBodyCanvas, 100)
+    resizeBodyCanvas()
 });
 
-
-screen.orientation.addEventListener("change", (event)=>{
-    clearTimeout(delayResizeBody)
-    delayResizeBody = setTimeout(resizeBodyCanvas, 100)
-})
 
 
 if (signature) {
