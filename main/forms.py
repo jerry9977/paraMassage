@@ -69,7 +69,6 @@ class DetailedClientForm(forms.ModelForm):
             "suburb",
             "state",
             "post_code",
-            "primary_physician",
             "emergency_contact_name",
             "emergency_contact_number",
             "hear_about_us"

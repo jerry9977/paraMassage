@@ -240,14 +240,51 @@
                         DOB
                         <span style="color:red;">*</span>
                     </label>
-
-                    <input 
-                        type="date"
-                        class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}"
-                        name="DOB" 
-                        value="{{client_form.DOB.value|default_if_none:''}}">
+                    <div class="grid">
+                        <div class="g-col-3">
+                            <label class="form-label fw-semibold">
+                                Day
+                            </label>
+                            
+                            <input 
+                                type="number"
+                                v-model="DOBDay"
+                                min="1"
+                                max="31"
+                                class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}">
+                        </div>
+        
+                        <div class="g-col-3">
+                            <label class="form-label fw-semibold">
+                                Month
+                            </label>
+                            
+                            <input 
+                                type="number"
+                                v-model="DOBMonth"
+                                min="1"
+                                max="12"
+                                class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}">
+                        </div>
+        
+                        <div class="g-col-6">
+                            <label class="form-label fw-semibold">
+                                Year
+                            </label>
+                            
+                            <input 
+                                type="number"
+                                v-model="DOBYear"
+                                min="1800"
+                                max="3000"
+                                class="form-control {%if client_form.DOB.errors%}is-invalid{%elif client_form.DOB.value%}is-valid{%endif%}">
+                        </div>
+                    </div>
                 </div>
 
+                <div class="g-col-12">
+                    <input class="w-100" type="date" name="DOB" v-model="DOB" hidden> 
+                </div>
             
 
                 <div class="g-col-12">
@@ -313,17 +350,6 @@
                         name="post_code" value="{{detailed_client_form.post_code.value|default_if_none:''}}">
                 </div>
 
-
-                <div class="g-col-12">
-                    <label class="form-label fw-semibold">
-                        Primary Physician
-                    </label>
-
-                    <input type="text"
-                        class="form-control {%if detailed_client_form.primary_physician.errors%}is-invalid{%elif detailed_client_form.primary_physician.value%}is-valid{%endif%}"
-                        name="primary_physician"
-                        value="{{detailed_client_form.primary_physician.value|default_if_none:''}}">
-                </div>
 
                 <div class="g-col-12">
                     <label class="form-label fw-semibold">
@@ -732,5 +758,97 @@
     </div>
 </div>
 
+<script>
+       
+    const app = Vue.createApp({
+
+        data() {
+            
+            return {
+                DOB: null,
+                DOBYear: null, 
+                DOBMonth: null, 
+                DOBDay: null,
+            }
+        },
+        watch:{
+            DOBYear:{
+                handler(newYear){
+                    let newDOB = new Date(newYear, this.DOBMonth - 1, this.DOBDay)
+                    if (isNaN(newDOB)){
+                        this.DOB = null
+                    }else{
+                        this.DOB = newDOB.toLocaleDateString("en-CA")
+                    }
+                }
+            },
+            DOBMonth:{
+                handler(newMonth){
+                    if(newMonth == ""){
+                        this.DOB = null
+                        return
+                    }
+                    if(newMonth > 12){
+                        this.DOBMonth = 12
+                        return
+                    }else if(newMonth < 1){
+                        this.DOBMonth = 1
+                        return
+                    }
+                    let newDOB = new Date(this.DOBYear, newMonth - 1, this.DOBDay)
+                    if (isNaN(newDOB)){
+                        this.DOB = null
+                    }else{
+                        this.DOB = newDOB.toLocaleDateString("en-CA")
+                    }
+                }
+            },
+            DOBDay:{
+                handler(newDay){
+                    let newDOB = new Date(this.DOBYear, this.DOBMonth - 1, newDay)
+                    if (isNaN(newDOB)){
+                        this.DOB = null
+                    }else{
+                        this.DOB = newDOB.toLocaleDateString("en-CA")
+                    }
+                }
+            }
+
+        },
+        methods: {
+            getDOBYear(){
+                let date = new Date(this.DOB)
+                if(isNaN(date)){
+                    this.DOBYear = null
+                }
+                this.DOBYear = date.getFullYear()
+            },
+            getDOBMonth(){
+                let date = new Date(this.DOB)
+                if(isNaN(date)){
+                    this.DOBMonth = null
+                }
+                this.DOBMonth = date.getMonth()+1
+            },
+            getDOBDay(){
+                let date = new Date(this.DOB)
+                if(isNaN(date)){
+                    this.DOBDay = null
+                }
+                this.DOBDay = date.getDate()
+            }
+        },
+        mounted() {
+            this.DOB = "{{client_form.DOB.value|default_if_none:''}}"
+            this.getDOBYear()
+            this.getDOBMonth()
+            this.getDOBDay()
+        },
+    })
+
+    app.config.compilerOptions.delimiters = ['[[', ']]'];
+    app.config.devtools = true
+    app.mount("#form-card")
+</script>
 
 {%endblock%}
