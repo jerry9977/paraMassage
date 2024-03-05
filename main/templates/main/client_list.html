@@ -64,7 +64,7 @@
                             <td class="align-middle">[[client.health_insurance_number]]/[[client.reference_number]]</td>
                             <td class="align-middle">[[client.date_created]]</td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" v-on:click="setQRCode(client.token)">
+                                <button type="button" class="btn btn-primary" v-on:click="setQRCode(client.token)">
                                     Check In
                                 </button>
                             </td>
@@ -165,8 +165,9 @@
             methods: {
 
                 setQRCode(token){
-                    $("#qrcode").empty();
-                    new QRCode(document.getElementById("qrcode"), `${location.origin}/existing_check_in/${token}/`);
+                    window.location.href = `${location.origin}/existing_check_in/${token}/`;
+                    // $("#qrcode").empty();
+                    // new QRCode(document.getElementById("qrcode"), `${location.origin}/existing_check_in/${token}/`);
                     this.redirect = `${location.origin}/existing_check_in/${token}/`;
                 }
 

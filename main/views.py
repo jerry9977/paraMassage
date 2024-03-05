@@ -326,8 +326,7 @@ def check_in(request):
         settings.SECRET_KEY,
         algorithm="HS256"
     )
-    context = {"token":jwt_token}
-    return render(request, 'main/check_in.html', context)
+    return redirect("remedial_check_in_form", token=jwt_token)
 
 
 def customer_check_in_form(request):
@@ -349,7 +348,7 @@ def remedial_check_in_form(request,token):
         jwt.decode(token, settings.SECRET_KEY, "HS256")
     except jwt.ExpiredSignatureError as e:
         print(e)
-        return redirect("error_page", title="Paradise Massage")
+        return redirect("error_page", title="Session Expired")
 
     if request.method =="POST":
        
@@ -400,7 +399,7 @@ def existing_remedial_check_in_form(request, token):
         id = data["id"]
     except jwt.ExpiredSignatureError as e:
         print(e)
-        return redirect("error_page", title="Paradise Massage")
+        return redirect("error_page", title="Session Expired")
     
 
     if request.method =="POST":

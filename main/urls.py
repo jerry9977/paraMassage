@@ -16,7 +16,7 @@ urlpatterns=[
     path('existing_check_in/<str:token>/', views.existing_remedial_check_in_form),
     # path('customers/list/', views.customer_list),
     # path('customer_check_in_form/', views.customer_check_in_form),
-    path('remedial_check_in_form/<str:token>/', views.remedial_check_in_form),
+    path('remedial_check_in_form/<str:token>/', views.remedial_check_in_form, name="remedial_check_in_form"),
     path('form_submitted/<str:title>', views.form_submitted, name="form_submitted"),
     path('error/<str:title>', views.error_page, name="error_page"),
     path('upload_receipt/', views.upload_receipt),
