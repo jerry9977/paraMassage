@@ -112,7 +112,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="text"
                         class="form-control {%if client_form.first_name.errors%}is-invalid{%elif client_form.first_name.value%}is-valid{%endif%}"
                         name="first_name" 
@@ -127,7 +127,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="text"
                         class="form-control {%if client_form.last_name.errors%}is-invalid{%elif client_form.last_name.value%}is-valid{%endif%}"
                         name="last_name" 
@@ -189,7 +189,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="text"
                         class="form-control {%if client_form.health_fund.errors%}is-invalid{%elif client_form.health_fund.value%}is-valid{%endif%}"
                         name="health_fund"
@@ -205,7 +205,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="text"
                         class="form-control {%if client_form.health_insurance_number.errors%}is-invalid{%elif client_form.health_insurance_number.value%}is-valid{%endif%}"
                         name="health_insurance_number"
@@ -219,7 +219,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="number"
                         class="form-control {%if client_form.reference_number.errors%}is-invalid{%elif client_form.reference_number.value%}is-valid{%endif%}"
                         name="reference_number" 
@@ -234,7 +234,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="number"
                         class="form-control {%if client_form.phone_day.errors%}is-invalid{%elif client_form.phone_day.value%}is-valid{%endif%}"
                         name="phone_day" 
@@ -253,7 +253,7 @@
                             </label>
                             
                             <input 
-                                autocomplete="stopchrome" 
+                                autocomplete="off" 
                                 type="number"
                                 v-model="DOBDay"
                                 min="1"
@@ -267,7 +267,7 @@
                             </label>
                             
                             <input 
-                                autocomplete="stopchrome" 
+                                autocomplete="off" 
                                 type="number"
                                 v-model="DOBMonth"
                                 min="1"
@@ -281,7 +281,7 @@
                             </label>
                             
                             <input 
-                                autocomplete="stopchrome" 
+                                autocomplete="off" 
                                 type="number"
                                 v-model="DOBYear"
                                 min="1800"
@@ -302,7 +302,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="email"
                         class="form-control {%if client_form.email.errors%}is-invalid{%elif client_form.email.value%}is-valid{%endif%}"
                         name="email" 
@@ -322,7 +322,7 @@
                     </label>
                     {{detailed_client_form.address.errors}}
                     <input 
-                        autocomplete="stopchrome" 
+                        autocomplete="off" 
                         type="text"
                         class="form-control {%if detailed_client_form.address.errors%}is-invalid{%elif detailed_client_form.address.value%}is-valid{%endif%}"
                         name="address" 
@@ -336,7 +336,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" type="text"
+                        autocomplete="off" type="text"
                         class="form-control {%if detailed_client_form.suburb.errors%}is-invalid{%elif detailed_client_form.suburb.value%}is-valid{%endif%}"
                         name="suburb" value="{{detailed_client_form.suburb.value|default_if_none:''}}">
                 </div>
@@ -348,7 +348,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" type="text"
+                        autocomplete="off" type="text"
                         class="form-control {%if detailed_client_form.state.errors%}is-invalid{%elif detailed_client_form.state.value%}is-valid{%endif%}"
                         name="state" value="{{detailed_client_form.state.value|default_if_none:''}}">
                 </div>
@@ -359,7 +359,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" type="text"
+                        autocomplete="off" type="text"
                         class="form-control {%if detailed_client_form.post_code.errors%}is-invalid{%elif detailed_client_form.post_code.value%}is-valid{%endif%}"
                         name="post_code" value="{{detailed_client_form.post_code.value|default_if_none:''}}">
                 </div>
@@ -371,7 +371,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" type="text"
+                        autocomplete="off" type="text"
                         class="form-control {%if detailed_client_form.emergency_contact_name.errors%}is-invalid{%elif detailed_client_form.emergency_contact_name.value%}is-valid{%endif%}"
                         name="emergency_contact_name"
                         value="{{detailed_client_form.emergency_contact_name.value|default_if_none:''}}">
@@ -383,7 +383,7 @@
                     </label>
 
                     <input 
-                        autocomplete="stopchrome" type="text"
+                        autocomplete="off" type="text"
                         class="form-control {%if detailed_client_form.emergency_contact_number.errors%}is-invalid{%elif detailed_client_form.emergency_contact_number.value%}is-valid{%endif%}"
                         name="emergency_contact_number"
                         value="{{detailed_client_form.emergency_contact_number.value|default_if_none:''}}">
@@ -482,7 +482,7 @@
                       If yes, how far along?
                     </label>
                     <input 
-                        autocomplete="stopchrome"
+                        autocomplete="off"
                         type="text"
                         class="form-control {%if client_medical_history_form.pregnant_time.errors%}is-invalid{%elif client_medical_history_form.pregnant_time.value%}is-valid{%endif%}"
                         name="pregnant_time"
@@ -493,7 +493,7 @@
                       Any high risk factors?
                     </label>
                     <input 
-                        autocomplete="stopchrome"
+                        autocomplete="off"
                         type="text"
                         class="form-control {%if client_medical_history_form.pregnant_factor.errors%}is-invalid{%elif client_medical_history_form.pregnant_factor.value%}is-valid{%endif%}"
                         name="pregnant_factor"
@@ -537,7 +537,7 @@
                       If yes, please explain?
                     </label>
                     <input 
-                        autocomplete="stopchrome"
+                        autocomplete="off"
                         type="text"
                         class="form-control {%if client_medical_history_form.chronic_pain_detail.errors%}is-invalid{%elif client_medical_history_form.chronic_pain_detail.value%}is-valid{%endif%}"
                         name="chronic_pain_detail"
