@@ -148,7 +148,7 @@
     
 
     <script>
-        const clients = JSON.parse('{{client_json|safe}}')
+        const clients = JSON.parse('{{client_json|escapejs}}')
         const app = Vue.createApp({
 
             data() {
